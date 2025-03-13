@@ -17,7 +17,17 @@ export const countries: Country[] = [
   { name: "Brazil", slug: "br", currency: "R$" },
 ];
 
-export const banners = {
+export interface Banner {
+  image: string;
+  headline: string;
+  subtitle: string;
+}
+
+export type Banners = {
+  [key: string]: Banner[];
+};
+
+export const banners: Banners = {
   in: [
     {
       image: "/banners/CountryHeroBanners/in-hero-banner.webp",

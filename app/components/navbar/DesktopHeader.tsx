@@ -165,13 +165,15 @@ export default function DesktopHeader({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full bg-neutral-100 dark:bg-neutral-900"
-                >
-                  <User className="h-4 w-4" />
-                </Button>
+                <Link href={`/account`}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-full bg-neutral-100 dark:bg-neutral-900"
+                  >
+                    <User className="h-4 w-4" />
+                  </Button>
+                </Link>
               </motion.div>
 
               {/* Shopping Cart */}
@@ -179,13 +181,15 @@ export default function DesktopHeader({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full bg-neutral-100 dark:bg-neutral-900 relative"
-                >
-                  <ShoppingCart className="h-4 w-4" />
-                </Button>
+                <Link href={`/cart`}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-full bg-neutral-100 dark:bg-neutral-900 relative"
+                  >
+                    <ShoppingCart className="h-4 w-4" />
+                  </Button>
+                </Link>
               </motion.div>
 
               {/* Theme Switcher */}

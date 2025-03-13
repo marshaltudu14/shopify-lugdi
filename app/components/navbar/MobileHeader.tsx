@@ -188,17 +188,6 @@ export default function MobileHeader({
               </Button>
             </motion.div>
 
-            {/* Cart Button */}
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full bg-neutral-100 dark:bg-neutral-900 relative"
-              >
-                <ShoppingCart className="h-4 w-4" />
-              </Button>
-            </motion.div>
-
             {/* Theme Switcher */}
             <ThemeSwitcher />
           </div>
