@@ -11,7 +11,7 @@ interface CountryHomePageProps {
 export default async function CountryHomePage({
   params,
 }: CountryHomePageProps) {
-  const { country: countrySlug } = params;
+  const { country: countrySlug } = await params;
 
   const country: Country | null =
     countries.find((c) => c.slug === countrySlug) || null;
