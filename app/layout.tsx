@@ -1,15 +1,21 @@
+// app/layout.tsx
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "next-themes";
+import ApolloWrapper from "@/lib/apollo/apollo-wrapper";
+import Header from "./components/navbar/Header";
+import localFont from "next/font/local";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const blippo = localFont({
+  src: "/fonts/blippo-blk-bt.ttf",
+  variable: "--font-blippo",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const baumans = localFont({
+  src: "/fonts/Baumans-Regular.ttf",
+  variable: "--font-baumans",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -23,11 +29,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${blippo.variable} ${baumans.variable} antialiased`}>
+        <ApolloWrapper>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem={true}
+          >
+            <Header />
+            <main>{children}</main>
+          </ThemeProvider>
+        </ApolloWrapper>
       </body>
     </html>
   );
