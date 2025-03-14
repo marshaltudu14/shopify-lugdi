@@ -1,3 +1,5 @@
+//components/navbar/Header.tsx
+
 "use client";
 
 import React, { useState, useEffect, Suspense } from "react";
@@ -23,6 +25,7 @@ export default function Header() {
 
   const client = initializeApollo();
   const { data, loading } = useQuery<GetMenuResponse>(GET_MENU, {
+    variables: { handle: "main-menu" },
     client,
   });
 

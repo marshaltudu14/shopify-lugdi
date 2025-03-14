@@ -16,7 +16,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
         country.slug.toLowerCase() === activeCountryCode.toLowerCase()
     );
 
-    const isCountryActive = !!activeCountry;
+    const isCountryActive = activeCountry?.active || false;
     const countryName = activeCountry?.name || "";
 
     let response = NextResponse.next();
@@ -33,14 +33,20 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
     }
 
     const pathName = request.nextUrl.pathname || "";
-    const excludedPaths = ["/coming-soon", "/api"];
+    const excludedPaths = ["/api"];
     const isExcludedPath = excludedPaths.some((excluded) =>
       pathName.startsWith(excluded)
     );
 
-    const isComingSoonPage = pathName === "/coming-soon";
+    const isComingSoonPage = pathName.includes("/coming-soon");
+
+    // Redirect to /coming-soon if country is not active
     if (!isCountryActive && !isComingSoonPage) {
-      response = NextResponse.redirect(new URL("/coming-soon", request.url));
+      const redirectUrl = new URL(
+        `/${activeCountryCode}/coming-soon`,
+        request.url
+      );
+      response = NextResponse.redirect(redirectUrl);
       response.cookies.set(LugdiUtils.location_cookieName, activeCountryCode, {
         path: "/",
       });
@@ -52,6 +58,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
       return response;
     }
 
+    // Redirect to home if country is active and trying to access /coming-soon
     if (isCountryActive && isComingSoonPage) {
       response = NextResponse.redirect(new URL("/", request.url));
       response.cookies.set(LugdiUtils.location_cookieName, activeCountryCode, {
@@ -65,10 +72,12 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
       return response;
     }
 
+    // Skip further processing for excluded paths
     if (isExcludedPath) {
       return response;
     }
 
+    // Handle URL country slug logic
     const validCountrySlugs = countries.map((c) => c.slug.toLowerCase());
     const urlSegments = pathName.split("/").filter(Boolean);
     const detectedSlugs = urlSegments.filter((segment) =>
