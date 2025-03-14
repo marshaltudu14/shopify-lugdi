@@ -16,6 +16,10 @@ export const GET_COLLECTION_PRODUCTS = gql`
         title
         description
       }
+      image {
+        originalSrc
+        altText
+      }
       products(
         first: $first
         sortKey: $sortKey

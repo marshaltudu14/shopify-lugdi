@@ -19,8 +19,19 @@ function createApolloClient(): ApolloClient<NormalizedCacheObject> {
   });
 }
 
-export function initializeApollo(): ApolloClient<NormalizedCacheObject> {
-  if (typeof window === "undefined") return createApolloClient();
-  if (!apolloClient) apolloClient = createApolloClient();
-  return apolloClient;
+export function initializeApollo(
+  initialState: NormalizedCacheObject | null = null
+): ApolloClient<NormalizedCacheObject> {
+  const client = apolloClient ?? createApolloClient();
+
+  if (initialState) {
+    const existingCache = client.extract();
+    client.cache.restore({ ...existingCache, ...initialState });
+  }
+
+  if (typeof window === "undefined") return client;
+
+  if (!apolloClient) apolloClient = client;
+
+  return client;
 }

@@ -5,13 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-type SortOption =
-  | "relevance"
-  | "trending"
-  | "new-arrivals"
-  | "price-low-to-high"
-  | "price-high-to-low";
+import { SortOption } from "@/lib/SortConfig";
 
 interface SortSelectProps {
   value: SortOption;
@@ -20,22 +14,23 @@ interface SortSelectProps {
 
 export default function SortSelect({ value, onValueChange }: SortSelectProps) {
   const handleChange = (newValue: SortOption) => {
-    console.log("SortSelect: Sort option changed to:", newValue);
     onValueChange(newValue);
   };
 
   return (
-    <Select value={value} onValueChange={handleChange}>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Sort by" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="relevance">Relevance</SelectItem>
-        <SelectItem value="trending">Trending</SelectItem>
-        <SelectItem value="new-arrivals">New Arrivals</SelectItem>
-        <SelectItem value="price-low-to-high">Price: Low to High</SelectItem>
-        <SelectItem value="price-high-to-low">Price: High to Low</SelectItem>
-      </SelectContent>
-    </Select>
+    <div>
+      <Select value={value} onValueChange={handleChange}>
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Sort by" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="relevance">Relevance</SelectItem>
+          <SelectItem value="best-selling">Trending</SelectItem>
+          <SelectItem value="new-arrivals">New Arrivals</SelectItem>
+          <SelectItem value="price-low-to-high">Price: Low to High</SelectItem>
+          <SelectItem value="price-high-to-low">Price: High to Low</SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
   );
 }
