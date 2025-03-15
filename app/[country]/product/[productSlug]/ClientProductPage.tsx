@@ -10,16 +10,37 @@ import { getCurrencySymbol } from "@/lib/countries";
 import { GetSingleProductResponse } from "@/lib/types/product";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  Check,
+  AlertTriangle,
+  AlertCircle,
+  ShoppingCart,
+  XCircle,
+} from "lucide-react";
 
 interface ClientProductPageProps {
   product: GetSingleProductResponse;
 }
 
 export default function ClientProductPage({ product }: ClientProductPageProps) {
-  const [selectedVariant, setSelectedVariant] = useState(
-    product?.productByHandle?.variants.edges[0]?.node
-  );
+  const [selectedOptions, setSelectedOptions] = useState<
+    Record<string, string>
+  >({});
+
+  useEffect(() => {
+    if (product?.productByHandle?.variants.edges[0]) {
+      const firstVariant = product.productByHandle.variants.edges[0].node;
+      const initialOptions = firstVariant.selectedOptions.reduce(
+        (acc, option) => ({
+          ...acc,
+          [option.name]: option.value,
+        }),
+        {}
+      );
+      setSelectedOptions(initialOptions);
+    }
+  }, [product]);
 
   if (!product?.productByHandle) {
     return (
@@ -56,102 +77,316 @@ export default function ClientProductPage({ product }: ClientProductPageProps) {
   const currencyCode = productByHandle.priceRange.maxVariantPrice.currencyCode;
   const currencySymbol = getCurrencySymbol(currencyCode);
 
-  // Handle variant selection
-  const handleVariantChange = (variantId: string) => {
-    const variant = productByHandle.variants.edges.find(
-      (edge) => edge.node.id === variantId
-    )?.node;
-    setSelectedVariant(variant);
+  const selectedVariant = productByHandle.variants.edges.find((edge) => {
+    const variantOptions = edge.node.selectedOptions;
+    return productByHandle.options.every((option) =>
+      variantOptions.some(
+        (opt) =>
+          opt.name === option.name &&
+          opt.value === (selectedOptions[option.name] || "")
+      )
+    );
+  })?.node;
+
+  const handleOptionChange = (optionName: string, value: string) => {
+    setSelectedOptions((prev) => ({
+      ...prev,
+      [optionName]: value,
+    }));
+  };
+
+  const handleAddToCart = () => {
+    if (
+      selectedVariant?.availableForSale &&
+      selectedVariant?.quantityAvailable > 0
+    ) {
+      // Add your cart logic here
+      console.log("Added to cart:", selectedVariant.id);
+    }
+  };
+
+  const variantItemVariants = {
+    initial: { opacity: 0, scale: 0.9 },
+    animate: { opacity: 1, scale: 1, transition: { duration: 0.2 } },
+    hover: { scale: 1.1, transition: { duration: 0.2 } },
+    tap: { scale: 0.95, transition: { duration: 0.1 } },
+    selected: { scale: 1.05, boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.1)" },
+  };
+
+  const checkmarkVariants = {
+    initial: { opacity: 0, scale: 0 },
+    animate: {
+      opacity: 1,
+      scale: 1,
+      transition: { type: "spring", stiffness: 500, damping: 15 },
+    },
   };
 
   return (
     <div className="min-h-screen px-2 py-2 md:px-3 md:py-3 lg:px-20 lg:py-5">
       <div className="flex flex-col md:flex-row gap-9 pb-10 relative">
         {/* LEFT */}
-        <div className="flex-[2] w-full md:w-1/2 md:sticky md:top-20 self-start relative">
-          <img
+        <motion.div
+          className="flex-[2] w-full md:w-1/2 md:sticky md:top-20 self-start relative"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <motion.img
             src={productByHandle.featuredImage?.originalSrc}
             alt={
               productByHandle.featuredImage?.altText || productByHandle.title
             }
-            className="w-full h-auto"
+            className="w-full h-auto rounded-lg shadow-md"
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.3 }}
           />
-        </div>
+        </motion.div>
 
         {/* RIGHT */}
-        <div className="flex-[1] w-full md:w-1/2 md:sticky md:top-20 self-start space-y-1 md:space-y-2 lg:space-y-3">
-          <div className="space-y-2 md:space-y-4">
-            <p className="text-2xl md:text-3xl lg:text-4xl font-bold">
+        <motion.div
+          className="flex-[1] w-full md:w-1/2 md:sticky md:top-20 self-start space-y-1 md:space-y-2 lg:space-y-3"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          <div className="space-y-4 md:space-y-6">
+            <motion.p
+              className="text-2xl md:text-3xl lg:text-4xl font-bold"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
               {productByHandle.title}
-            </p>
+            </motion.p>
 
             {/* Pricing */}
-            <div className="space-y-1 md:space-y-2">
-              <div className="flex items-center gap-2 md:gap-4">
-                <span className="text-2xl md:text-3xl font-bold text-primary">
-                  {currencySymbol}
-                  {selectedVariant?.price.amount}
-                </span>
-                {selectedVariant?.compareAtPrice?.amount && (
-                  <span className="text-lg md:text-xl text-muted-foreground line-through">
+            {selectedVariant && (
+              <motion.div
+                className="space-y-1 md:space-y-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                <div className="flex items-center gap-2 md:gap-4">
+                  <span className="text-2xl md:text-3xl font-bold text-primary">
                     {currencySymbol}
-                    {selectedVariant.compareAtPrice.amount}
+                    {selectedVariant.price.amount}
                   </span>
-                )}
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Inclusive of all taxes
-              </p>
-            </div>
-
-            {/* Variant Selector */}
-            <div className="space-y-2">
-              {productByHandle.options.map((option) => (
-                <div key={option.id} className="flex flex-col gap-2">
-                  <label className="font-medium">{option.name}</label>
-                  <div className="flex gap-2 flex-wrap">
-                    {option.values.map((value) => {
-                      // Find variant with this option value
-                      const variant = productByHandle.variants.edges.find(
-                        (edge) =>
-                          edge.node.selectedOptions.some(
-                            (opt) =>
-                              opt.name === option.name && opt.value === value
-                          )
-                      )?.node;
-
-                      return (
-                        <Button
-                          key={value}
-                          variant={
-                            selectedVariant?.id === variant?.id
-                              ? "default"
-                              : "outline"
-                          }
-                          onClick={() =>
-                            variant && handleVariantChange(variant.id)
-                          }
-                          disabled={!variant?.availableForSale}
-                          className="text-sm"
-                        >
-                          {value}
-                          {!variant?.availableForSale && " (Sold Out)"}
-                        </Button>
-                      );
-                    })}
-                  </div>
+                  {selectedVariant.compareAtPrice?.amount && (
+                    <span className="text-lg md:text-xl text-muted-foreground line-through">
+                      {currencySymbol}
+                      {selectedVariant.compareAtPrice.amount}
+                    </span>
+                  )}
                 </div>
-              ))}
-            </div>
+                <p className="text-sm text-muted-foreground">
+                  Inclusive of all taxes
+                </p>
+              </motion.div>
+            )}
 
-            {/* Availability */}
-            <p className="text-sm">
-              {selectedVariant?.availableForSale
-                ? `In Stock (${selectedVariant.quantityAvailable} available)`
-                : "Out of Stock"}
-            </p>
+            {/* Variant Selectors */}
+            <motion.div
+              className="space-y-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              {productByHandle.options.map((option, optionIndex) => {
+                const isColorOption = option.name
+                  .toLowerCase()
+                  .includes("color");
+
+                return (
+                  <motion.div
+                    key={option.id}
+                    className="flex flex-col gap-3"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 0.1 * optionIndex }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <label className="font-medium text-lg">
+                        {option.name}
+                      </label>
+                      {isColorOption && selectedOptions[option.name] && (
+                        <span className="text-sm text-muted-foreground">
+                          ({selectedOptions[option.name]})
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex gap-3 flex-wrap">
+                      {option.values.map((value, valueIndex) => {
+                        const isAvailable = productByHandle.variants.edges.some(
+                          (edge) =>
+                            edge.node.availableForSale &&
+                            edge.node.quantityAvailable > 0 &&
+                            edge.node.selectedOptions.every((opt) =>
+                              opt.name === option.name
+                                ? opt.value === value
+                                : opt.value ===
+                                  (selectedOptions[opt.name] || "")
+                            )
+                        );
+
+                        const isSelected =
+                          selectedOptions[option.name] === value;
+                        const isLightColor =
+                          value.toLowerCase() === "white" ||
+                          value.toLowerCase().includes("light") ||
+                          value.toLowerCase() === "cream" ||
+                          value.toLowerCase() === "beige";
+
+                        return (
+                          <motion.div
+                            key={value}
+                            className="relative"
+                            initial="initial"
+                            animate="animate"
+                            whileHover={isAvailable ? "hover" : undefined}
+                            whileTap={isAvailable ? "tap" : undefined}
+                            variants={variantItemVariants}
+                            custom={valueIndex}
+                            transition={{ delay: 0.05 * valueIndex }}
+                          >
+                            <Button
+                              variant={isSelected ? "default" : "outline"}
+                              onClick={() =>
+                                isAvailable &&
+                                handleOptionChange(option.name, value)
+                              }
+                              disabled={!isAvailable}
+                              className={`
+                                ${
+                                  isColorOption
+                                    ? "w-12 h-12 p-0 rounded-full relative"
+                                    : "rounded-full px-4 py-2"
+                                }
+                                ${
+                                  isSelected && !isColorOption
+                                    ? "ring-2 ring-offset-2 ring-primary"
+                                    : ""
+                                }
+                                ${!isAvailable ? "opacity-60" : ""}
+                              `}
+                              style={
+                                isColorOption
+                                  ? {
+                                      backgroundColor: value,
+                                      borderColor: isLightColor
+                                        ? "rgb(100, 100, 100)"
+                                        : "rgb(230, 230, 230)",
+                                      borderWidth: "2px",
+                                    }
+                                  : undefined
+                              }
+                            >
+                              {!isColorOption && value}
+                              {!isAvailable && !isColorOption && (
+                                <XCircle className="ml-1 w-4 h-4 inline" />
+                              )}
+                            </Button>
+                            {isSelected && (
+                              <motion.div
+                                className="absolute top-0 right-0 bg-primary rounded-full p-0.5 shadow-md"
+                                variants={checkmarkVariants}
+                                style={{
+                                  top: "-4px",
+                                  right: "-4px",
+                                }}
+                              >
+                                <Check className="w-4 h-4 text-white dark:text-black border rounded-full" />
+                              </motion.div>
+                            )}
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+
+            {/* Add to Cart Button and Stock Info */}
+            {selectedVariant && (
+              <motion.div
+                className="space-y-2 pt-4"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Button
+                    onClick={handleAddToCart}
+                    disabled={
+                      !selectedVariant.availableForSale ||
+                      selectedVariant.quantityAvailable === 0
+                    }
+                    className="w-full rounded-md py-6 text-lg font-medium shadow-md transition-all hover:shadow-lg"
+                    variant={
+                      selectedVariant.availableForSale &&
+                      selectedVariant.quantityAvailable > 0
+                        ? "default"
+                        : "outline"
+                    }
+                  >
+                    {selectedVariant.availableForSale &&
+                    selectedVariant.quantityAvailable > 0 ? (
+                      <div className="flex items-center gap-2">
+                        <ShoppingCart className="w-5 h-5" />
+                        <span>Add to Cart</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <XCircle className="w-5 h-5" />
+                        <span>Out of Stock</span>
+                      </div>
+                    )}
+                  </Button>
+                </motion.div>
+
+                {selectedVariant.availableForSale &&
+                  selectedVariant.quantityAvailable > 0 &&
+                  selectedVariant.quantityAvailable < 10 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4, duration: 0.5 }}
+                      className={`flex items-center justify-center gap-2 p-2 rounded-md ${
+                        selectedVariant.quantityAvailable < 5
+                          ? "bg-red-50 text-red-600 dark:bg-red-900/30 dark:text-red-400"
+                          : "bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400"
+                      }`}
+                    >
+                      <motion.div
+                        animate={{ scale: [1, 1.1, 1] }}
+                        transition={{
+                          repeat: Infinity,
+                          repeatDelay: 1.5,
+                          duration: 0.6,
+                        }}
+                      >
+                        {selectedVariant.quantityAvailable < 5 ? (
+                          <AlertCircle className="w-5 h-5" />
+                        ) : (
+                          <AlertTriangle className="w-5 h-5" />
+                        )}
+                      </motion.div>
+                      <p className="font-medium text-sm">
+                        Hurry! Only {selectedVariant.quantityAvailable} left in
+                        stock
+                      </p>
+                    </motion.div>
+                  )}
+              </motion.div>
+            )}
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
