@@ -5,18 +5,14 @@ import LugdiUtils from "@/utils/LugdiUtils";
 import { cookies } from "next/headers";
 import React from "react";
 import ClientCollctionPage from "./ClientCollectionPage";
-
-function convertSlugToTitle(slug: string): string {
-  return slug
-    .replace(/[-_]/g, " ") // Replace hyphens or underscores with spaces
-    .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize each word
-}
+import { convertSlugToTitle } from "@/utils/SlugToTitle";
+import { CollectionData, CollectionProductEdge } from "@/lib/types/collection";
 
 // Collection Page Metadata
 export async function generateMetadata({
   params,
 }: {
-  params: { collectionSlug: string };
+  params: Promise<{ collectionSlug: string }>;
 }): Promise<Metadata> {
   const { collectionSlug } = await params;
   const client = initializeApollo();
@@ -26,29 +22,25 @@ export async function generateMetadata({
   const isoCountryCode = countrySlug ? countrySlug.toUpperCase() : "IN";
 
   try {
-    const { data } = await client.query({
+    const { data } = await client.query<CollectionData>({
       query: GET_COLLECTION_PRODUCTS,
       variables: {
         handle: collectionSlug,
-        first: 1, // Minimal fetch for metadata
+        first: 1,
         sortKey: "RELEVANCE",
         reverse: false,
         country: isoCountryCode,
       },
     });
 
-    const collection = data?.collectionByHandle;
+    const collection = data.collectionByHandle;
 
     const seoTitle =
-      collection?.seo?.title ||
-      `Buy ${convertSlugToTitle(
-        collectionSlug
-      )} Fashion Apparels & Accessories Online`;
+      collection?.seo.title ||
+      `Buy ${collection?.title} Fashion Apparels & Accessories Online`;
     const seoDescription =
-      collection?.seo?.description ||
-      `Discover a wide selection of ${convertSlugToTitle(
-        collectionSlug
-      )} fashion apparels & accessories. Enjoy new arrivals, exclusive deals, and premium quality.`;
+      collection?.seo.description ||
+      `Discover a wide selection of ${collection?.title} fashion apparels & accessories. Enjoy new arrivals, exclusive deals, and premium quality.`;
     const seoImage = collection?.image?.originalSrc || "";
 
     return {
@@ -81,7 +73,7 @@ export async function generateMetadata({
 export default async function CollectionPage({
   params,
 }: {
-  params: { collectionSlug: string };
+  params: Promise<{ collectionSlug: string }>;
 }) {
   const { collectionSlug } = await params;
 
@@ -92,10 +84,10 @@ export default async function CollectionPage({
   )?.value;
   const isoCountryCode = countrySlug ? countrySlug.toUpperCase() : "IN";
 
-  let initialData;
+  let initialData: CollectionData | null;
   try {
     const client = initializeApollo();
-    const { data } = await client.query({
+    const { data } = await client.query<CollectionData>({
       query: GET_COLLECTION_PRODUCTS,
       variables: {
         handle: collectionSlug,
@@ -105,19 +97,69 @@ export default async function CollectionPage({
         country: isoCountryCode,
       },
     });
-
     initialData = data;
   } catch (error) {
     console.error("Error fetching collection:", error);
     initialData = null;
   }
 
+  // Prepare JSON-LD for the collection
+  const collection = initialData?.collectionByHandle;
+  const collectionJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: collection?.title || convertSlugToTitle(collectionSlug),
+    description:
+      collection?.seo.description ||
+      `Discover a wide selection of ${
+        collection?.title || convertSlugToTitle(collectionSlug)
+      } fashion apparels & accessories.`,
+    image: collection?.image?.originalSrc || "",
+    url: `${process.env.NEXT_PUBLIC_SITE_URL}/collections/${collectionSlug}`,
+    itemListElement: (collection?.products.edges || []).map(
+      (edge: CollectionProductEdge, index: number) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "Product",
+          name: edge.node.title,
+          url: `${process.env.NEXT_PUBLIC_SITE_URL}/product/${edge.node.handle}`,
+          image: edge.node.images.edges[0]?.node.originalSrc || "",
+          offers: {
+            "@type": "Offer",
+            price: edge.node.variants.edges[0]?.node.price.amount,
+            priceCurrency: edge.node.variants.edges[0]?.node.price.currencyCode,
+            availability: edge.node.variants.edges[0]?.node.availableForSale
+              ? "https://schema.org/InStock"
+              : "https://schema.org/OutOfStock",
+            ...(edge.node.variants.edges[0]?.node.compareAtPrice && {
+              compareAtPrice: {
+                "@type": "Offer",
+                price: edge.node.variants.edges[0].node.compareAtPrice.amount,
+                priceCurrency:
+                  edge.node.variants.edges[0].node.compareAtPrice.currencyCode,
+              },
+            }),
+          },
+        },
+      })
+    ),
+  };
+
   return (
-    <ClientCollctionPage
-      initialData={initialData}
-      collectionSlug={collectionSlug}
-      isoCountryCode={isoCountryCode}
-      countryName={countryName}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(collectionJsonLd),
+        }}
+      />
+      <ClientCollctionPage
+        initialData={initialData}
+        collectionSlug={collectionSlug}
+        isoCountryCode={isoCountryCode}
+        countryName={countryName}
+      />
+    </>
   );
 }

@@ -3,17 +3,15 @@ import { notFound } from "next/navigation";
 import { countries } from "@/lib/countries";
 import ComingSoonClient from "./ComingSoonClient";
 
-interface CountryPageProps {
-  params: {
-    country: string;
-  };
-}
-
 export async function generateMetadata({
   params,
-}: CountryPageProps): Promise<Metadata> {
-  const countrySlug = params.country.toLowerCase();
-  const country = countries.find((c) => c.slug.toLowerCase() === countrySlug);
+}: {
+  params: Promise<{ countrySlug: string }>;
+}): Promise<Metadata> {
+  const { countrySlug } = await params;
+  const country = countries.find(
+    (c) => c.slug.toLowerCase() === countrySlug.toLowerCase()
+  );
 
   if (!country) {
     return {
@@ -37,9 +35,15 @@ export async function generateMetadata({
   };
 }
 
-export default async function CountryPage({ params }: CountryPageProps) {
-  const countrySlug = params.country.toLowerCase();
-  const country = countries.find((c) => c.slug.toLowerCase() === countrySlug);
+export default async function CountryPage({
+  params,
+}: {
+  params: Promise<{ countrySlug: string }>;
+}) {
+  const { countrySlug } = await params;
+  const country = countries.find(
+    (c) => c.slug.toLowerCase() === countrySlug.toLowerCase()
+  );
 
   if (!country) {
     notFound();

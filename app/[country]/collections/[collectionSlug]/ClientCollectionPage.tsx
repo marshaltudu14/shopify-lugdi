@@ -16,65 +16,14 @@ import {
   itemVariants,
 } from "@/app/components/FramerMotion";
 import ProductCard from "@/app/components/ProductCard";
-
-// Define TypeScript interfaces (unchanged)
-interface Price {
-  amount: string;
-  currencyCode: string;
-}
-
-interface ImageNode {
-  originalSrc: string;
-  altText: string | null;
-}
-
-interface ProductVariant {
-  id: string;
-  availableForSale: boolean;
-  quantityAvailable: number;
-  price: Price;
-  compareAtPrice?: Price | null;
-}
-
-interface ProductNode {
-  id: string;
-  title: string;
-  handle: string;
-  images: { edges: { node: ImageNode }[] };
-  variants: { edges: { node: ProductVariant }[] };
-}
-
-interface ProductEdge {
-  node: ProductNode;
-  cursor: string;
-}
-
-interface PageInfo {
-  hasNextPage: boolean;
-  endCursor: string | null;
-}
-
-interface Products {
-  edges: ProductEdge[];
-  pageInfo: PageInfo;
-}
-
-interface Collection {
-  id: string;
-  title: string;
-  products: Products;
-}
-
-interface CollectionData {
-  collectionByHandle: Collection | null;
-}
+import { CollectionData } from "@/lib/types/collection";
 
 interface QueryVariables {
   handle: string;
   first: number;
   sortKey: "RELEVANCE" | "BEST_SELLING" | "CREATED" | "PRICE";
-  reverse: boolean;
-  after: string | null;
+  reverse?: boolean;
+  after?: string | null;
   country: string;
 }
 
@@ -188,7 +137,7 @@ export default function ClientCollectionPage({
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center space-y-3">
+      <div className="min-h-screen flex flex-col items-center justify-center space-y-3">
         <h1 className="text-3xl text-center">Error Occured</h1>
 
         <p className="text-center">{error.message}</p>

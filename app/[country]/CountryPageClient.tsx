@@ -2,21 +2,14 @@ import React from "react";
 import { Banner, Country } from "@/lib/countries";
 import { Loader2 } from "lucide-react";
 import BannerCarousel from "../components/BannerCarousel";
-import { AnimatedSection } from "@/utils/FramerAnimation";
-import CategoryMenWomenSection from "../components/CategoryMenWomenSection";
-
 interface CountryPageClientProps {
   country: Country | null;
   banners: Banner[];
-  categories?: any[];
-  newArrivals?: any[];
 }
 
 const CountryPageClient: React.FC<CountryPageClientProps> = ({
   country,
   banners,
-  categories = [],
-  newArrivals = [],
 }) => {
   if (!country) {
     return (

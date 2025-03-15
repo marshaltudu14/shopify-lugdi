@@ -2,15 +2,11 @@ import { banners, countries, Country, Banner } from "@/lib/countries";
 import React from "react";
 import CountryPageClient from "./CountryPageClient";
 
-interface CountryHomePageProps {
-  params: {
-    country: string;
-  };
-}
-
 export default async function CountryHomePage({
   params,
-}: CountryHomePageProps) {
+}: {
+  params: Promise<{ country: string; countrySlug: string }>;
+}) {
   const { country: countrySlug } = await params;
 
   const country: Country | null =

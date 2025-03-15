@@ -1,20 +1,4 @@
-export interface CollectionProductImage {
-  originalSrc: string;
-  altText: string | null;
-}
-
-export interface CollectionProductVariantPrice {
-  amount: string;
-  currencyCode: string;
-}
-
-export interface CollectionProductVariant {
-  id: string;
-  availableForSale: boolean;
-  quantityAvailable: number;
-  price: CollectionProductVariantPrice;
-  compareAtPrice: CollectionProductVariantPrice | null;
-}
+import { Image, ProductVariant, SEO } from "./type";
 
 export interface CollectionProductNode {
   id: string;
@@ -22,12 +6,12 @@ export interface CollectionProductNode {
   handle: string;
   images: {
     edges: {
-      node: CollectionProductImage;
+      node: Image;
     }[];
   };
   variants: {
     edges: {
-      node: CollectionProductVariant;
+      node: ProductVariant;
     }[];
   };
 }
@@ -42,15 +26,11 @@ export interface CollectionPageInfo {
   endCursor: string | null;
 }
 
-export interface CollectionSEO {
-  title: string;
-  description: string;
-}
-
 export interface CollectionNode {
   id: string;
   title: string;
-  seo: CollectionSEO;
+  seo: SEO;
+  image: Image;
   products: {
     edges: CollectionProductEdge[];
     pageInfo: CollectionPageInfo;

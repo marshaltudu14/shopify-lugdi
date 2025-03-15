@@ -1,74 +1,42 @@
 "use client";
 
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
-import { useParams } from "next/navigation";
 import { cn } from "@/lib/utils";
-
-// Define TypeScript interfaces
-interface PriceInfo {
-  amount: string;
-  currencyCode: string;
-}
-
-interface VariantNode {
-  price: PriceInfo;
-  compareAtPrice: PriceInfo | null;
-  availableForSale: boolean;
-  quantityAvailable: number | null;
-}
-
-interface ImageNode {
-  originalSrc: string;
-  altText?: string;
-}
+import { getCurrencySymbol } from "@/lib/countries";
+import { useTheme } from "next-themes";
+import { Sparkles, AlertCircle } from "lucide-react";
+import { CollectionProductNode } from "@/lib/types/collection";
 
 interface ProductCardProps {
-  product: {
-    title: string;
-    handle: string;
-    images: {
-      edges: Array<{
-        node: ImageNode;
-      }>;
-    };
-    variants: {
-      edges: Array<{
-        node: VariantNode;
-      }>;
-    };
-  };
+  product: CollectionProductNode;
 }
 
-// Framer-motion variants
 const cardContainerVariants = {
   hidden: { opacity: 0, y: 10 },
   show: { opacity: 1, y: 0 },
-  hover: {
-    transition: {
-      duration: 0.3,
-    },
-  },
 };
 
-const imageVariants = {
-  hover: {
-    scale: 1.05,
+const stockIndicatorVariants = {
+  initial: { scale: 0.95, opacity: 0 },
+  animate: {
+    scale: 1,
+    opacity: 1,
     transition: {
       duration: 0.4,
-      ease: "easeOut",
+      delay: 0.2,
+      type: "spring",
+      stiffness: 300,
     },
   },
 };
 
-export default function ProductCard({
-  product,
-}: ProductCardProps): JSX.Element | null {
-  const params = useParams();
+export default function ProductCard({ product }: ProductCardProps) {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
 
   const firstImageUrl = product.images.edges[0]?.node.originalSrc;
   const altText = product.images.edges[0]?.node.altText || product.title;
@@ -85,6 +53,9 @@ export default function ProductCard({
     parseFloat(compareAtPrice.amount) > parseFloat(price.amount);
   const isOutOfStock = !variant.availableForSale;
   const quantityAvailable = variant.quantityAvailable || 0;
+  const isCriticalStock = quantityAvailable > 0 && quantityAvailable <= 5;
+  const isLowStock =
+    quantityAvailable > 0 && quantityAvailable <= 10 && !isCriticalStock;
 
   const discountPercentage = isDiscounted
     ? Math.round(
@@ -93,6 +64,45 @@ export default function ProductCard({
           100
       )
     : null;
+
+  // Get currency symbols
+  const priceSymbol = getCurrencySymbol(price.currencyCode);
+  const compareAtSymbol = getCurrencySymbol(compareAtPrice.currencyCode);
+
+  // Generate stock messages and styling based on availability
+  const getStockIndicator = () => {
+    if (isOutOfStock) return null;
+
+    if (isCriticalStock) {
+      return {
+        message: `Last ${quantityAvailable} remaining`,
+        icon: <AlertCircle className="w-4 h-4 mr-1" />,
+        bgClass: isDark
+          ? "bg-gradient-to-r from-rose-900/60 via-rose-800/60 to-rose-900/60"
+          : "bg-gradient-to-r from-rose-50 via-rose-100 to-rose-50",
+        textClass: isDark ? "text-rose-100" : "text-rose-800",
+        borderClass: isDark ? "border-rose-700" : "border-rose-200",
+        pulseClass: isDark ? "bg-rose-700" : "bg-rose-500",
+      };
+    }
+
+    if (isLowStock) {
+      return {
+        message: `Limited stock • ${quantityAvailable} left`,
+        icon: <Sparkles className="w-3.5 h-3.5 mr-1" />,
+        bgClass: isDark
+          ? "bg-gradient-to-r from-amber-900/60 via-amber-800/60 to-amber-900/60"
+          : "bg-gradient-to-r from-amber-50 via-amber-100 to-amber-50",
+        textClass: isDark ? "text-amber-100" : "text-amber-800",
+        borderClass: isDark ? "border-amber-700" : "border-amber-200",
+        pulseClass: isDark ? "bg-amber-600" : "bg-amber-500",
+      };
+    }
+
+    return null;
+  };
+
+  const stockIndicator = getStockIndicator();
 
   return (
     <motion.div
@@ -103,7 +113,7 @@ export default function ProductCard({
       className="w-full overflow-hidden rounded-xl"
     >
       <Link href={`/product/${product.handle || "#"}`} className="group block">
-        <div className="relative h-full border p-3 md:p-4 shadow-sm hover:shadow-md transition-shadow duration-300">
+        <div className="relative h-full border p-2 md:p-3">
           <GlowingEffect
             blur={0}
             borderWidth={3}
@@ -114,66 +124,114 @@ export default function ProductCard({
             inactiveZone={0.01}
           />
           <div className="relative w-full overflow-hidden rounded-xl border">
-            {discountPercentage !== null && (
-              <div className="absolute top-2 right-2 px-3 py-1.5 rounded-lg text-xs md:text-sm font-bold bg-red-500 z-10 shadow-sm">
-                {discountPercentage}% OFF
-              </div>
-            )}
-            <motion.div className="relative w-full overflow-hidden">
+            <motion.div className="relative w-full overflow-hidden rounded-t-xl">
               {firstImageUrl ? (
                 <div className="overflow-hidden">
-                  <motion.div
-                    className="w-full relative"
-                    variants={imageVariants}
-                  >
+                  <motion.div className="w-full">
                     <Image
                       src={firstImageUrl}
-                      width={600}
-                      height={600}
+                      width={500}
+                      height={500}
                       alt={altText}
-                      className={cn(
-                        "w-full h-[250px] md:h-[300px] lg:h-[350px] object-cover",
-                        isOutOfStock && "opacity-50"
-                      )}
+                      className={`w-full h-[250px] md:h-[300px] lg:h-[350px] object-cover transition-transform duration-300 ease-in-out group-hover:scale-105 ${
+                        isOutOfStock &&
+                        "filter grayscale opacity-70 transition-all duration-500"
+                      }`}
                     />
-                    {isOutOfStock && (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="bg-opacity-70  px-4 py-2 rounded-md text-sm md:text-base font-bold uppercase tracking-wider">
-                          Out of Stock
-                        </span>
-                      </div>
-                    )}
                   </motion.div>
                 </div>
               ) : (
-                <Skeleton className="w-full h-[250px] md:h-[300px] lg:h-[350px]" />
+                <Skeleton className="w-full h-[250px] md:h-[300px] lg:h-[350px] rounded-t-xl" />
+              )}
+
+              {isOutOfStock && (
+                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-black/70 to-black/40">
+                  <div
+                    className={cn(
+                      "px-6 py-2 backdrop-blur-sm rounded-full",
+
+                      "dark:bg-gray-900/80 dark:text-gray-100 bg-white/80 text-gray-900"
+                    )}
+                  >
+                    <span className="font-medium tracking-wide uppercase text-sm">
+                      Out of Stock
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {stockIndicator && (
+                <AnimatePresence>
+                  <motion.div
+                    key="stock-indicator"
+                    variants={stockIndicatorVariants}
+                    initial="initial"
+                    animate="animate"
+                    className={cn(
+                      "absolute top-4 left-0 right-0 mx-auto w-fit px-3 py-1.5 rounded-full border backdrop-blur-sm",
+                      stockIndicator.bgClass,
+                      stockIndicator.textClass,
+                      stockIndicator.borderClass
+                    )}
+                  >
+                    <div className="flex items-center text-xs font-medium">
+                      {stockIndicator.icon}
+                      <span>{stockIndicator.message}</span>
+
+                      {isCriticalStock && (
+                        <span className="relative flex h-2 w-2 ml-2">
+                          <span
+                            className={cn(
+                              "animate-ping absolute inline-flex h-full w-full rounded-full opacity-75",
+                              stockIndicator.pulseClass
+                            )}
+                          ></span>
+                          <span
+                            className={cn(
+                              "relative inline-flex rounded-full h-2 w-2",
+                              stockIndicator.pulseClass
+                            )}
+                          ></span>
+                        </span>
+                      )}
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
               )}
             </motion.div>
-            <div className="px-4 py-3 ">
-              <div className="flex justify-between items-center">
-                <div className="flex-1">
-                  <p className="font-semibold text-sm md:text-md lg:text-lg line-clamp-1 text-right">
-                    {product.title || "Unnamed Product"}
+
+            <div className="px-3 pt-2 pb-3">
+              <p className="font-semibold text-sm md:text-md lg:text-lg line-clamp-1 truncate">
+                {product.title || "Unnamed Product"}
+              </p>
+              <div className="flex items-center space-x-2 text-sm md:text-md lg:text-lg">
+                <p>
+                  {priceSymbol}
+                  {parseFloat(price.amount).toFixed(2)}
+                </p>
+
+                {isDiscounted && (
+                  <p className="line-through opacity-60">
+                    {compareAtSymbol}
+                    {parseFloat(compareAtPrice.amount).toFixed(2)}
                   </p>
-                </div>
-              </div>
-              <div className="mt-2 flex items-center space-x-2">
-                <div className="flex items-baseline">
-                  <p className="font-bold text-sm md:text-md lg:text-lg">
-                    {price.currencyCode} {price.amount}
-                  </p>
-                  {isDiscounted && (
-                    <p className="ml-2 line-through opacity-60 text-xs md:text-sm">
-                      {compareAtPrice.currencyCode} {compareAtPrice.amount}
-                    </p>
-                  )}
-                </div>
-                {quantityAvailable > 0 && quantityAvailable <= 10 && (
-                  <div className="ml-auto bg-amber-500 text-white px-2 py-1 rounded-md text-xs font-medium">
-                    Only {quantityAvailable} left
-                  </div>
                 )}
               </div>
+              {isDiscounted && (
+                <motion.div
+                  initial="initial"
+                  animate="animate"
+                  className={cn(
+                    "font-medium text-xs flex items-center justify-center py-0.5",
+                    isDark
+                      ? "bg-gradient-to-r from-emerald-950/50 via-emerald-800/70 to-emerald-950/50 text-emerald-100 border border-emerald-700/40"
+                      : "bg-gradient-to-r from-emerald-50 via-emerald-100 to-emerald-50 text-emerald-700 border border-emerald-200",
+                    "bg-[length:200%_100%]"
+                  )}
+                >
+                  <p className="text-center">GET {discountPercentage}% OFF</p>
+                </motion.div>
+              )}
             </div>
           </div>
         </div>
