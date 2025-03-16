@@ -18,6 +18,13 @@ import {
   ShoppingCart,
   XCircle,
 } from "lucide-react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselThumbnail,
+} from "@/components/ui/carousel";
+import Image from "next/image";
 
 interface ClientProductPageProps {
   product: GetSingleProductResponse;
@@ -27,6 +34,8 @@ export default function ClientProductPage({ product }: ClientProductPageProps) {
   const [selectedOptions, setSelectedOptions] = useState<
     Record<string, string>
   >({});
+
+  console.log("Product:", product);
 
   useEffect(() => {
     if (product?.productByHandle?.variants.edges[0]) {
@@ -122,26 +131,30 @@ export default function ClientProductPage({ product }: ClientProductPageProps) {
     },
   };
 
+  const images = productByHandle.images.edges.map((edge) => edge.node);
+
   return (
     <div className="min-h-screen px-2 py-2 md:px-3 md:py-3 lg:px-20 lg:py-5">
       <div className="flex flex-col md:flex-row gap-9 pb-10 relative">
         {/* LEFT */}
-        <motion.div
-          className="flex-[2] w-full md:w-1/2 md:sticky md:top-20 self-start relative"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <motion.img
-            src={productByHandle.featuredImage?.originalSrc}
-            alt={
-              productByHandle.featuredImage?.altText || productByHandle.title
-            }
-            className="w-full h-auto rounded-lg shadow-md"
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.3 }}
-          />
-        </motion.div>
+        <div className="flex-[2] w-full md:w-1/2 md:sticky md:top-20 self-start relative">
+          <Carousel images={images}>
+            <CarouselContent>
+              {images.map((image, index) => (
+                <CarouselItem key={index}>
+                  <Image
+                    src={image.originalSrc}
+                    alt={image.altText}
+                    width={1024}
+                    height={1024}
+                    className="w-full h-full"
+                  />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselThumbnail />
+          </Carousel>
+        </div>
 
         {/* RIGHT */}
         <motion.div

@@ -1,4 +1,4 @@
-export interface Image {
+export interface ImageNode {
   originalSrc: string;
   altText: string | null;
 }
