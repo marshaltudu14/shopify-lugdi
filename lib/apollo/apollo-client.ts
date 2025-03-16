@@ -14,6 +14,10 @@ function createApolloClient(): ApolloClient<NormalizedCacheObject> {
     ssrMode: typeof window === "undefined",
     link: new HttpLink({
       uri: `${process.env.NEXT_PUBLIC_SITE_URL}/api/graphql`,
+      // Add fetch options if needed for authentication
+      fetchOptions: {
+        credentials: "same-origin",
+      },
     }),
     cache: new InMemoryCache(),
   });

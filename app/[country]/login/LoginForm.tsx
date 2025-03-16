@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { motion, useAnimationControls } from "framer-motion";
+import { signIn } from "next-auth/react";
+import { motion } from "framer-motion";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,56 +38,41 @@ import {
   itemVariants,
 } from "@/app/components/FramerMotion";
 import Image from "next/image";
-import { Checkbox } from "@/components/ui/checkbox";
+import Link from "next/link";
+import LugdiUtils from "@/utils/LugdiUtils";
 
-// Enhanced Zod validation schema
-const emailSchema = z.object({
-  email: z.string().email("Please enter a valid email address."),
-  acceptsMarketing: z.boolean().default(false),
-  agreeToPolicies: z.boolean().refine((val) => val === true, {
-    message: "You must agree to the policies",
-  }),
+const loginSchema = z.object({
+  email: z
+    .string({ required_error: "Email is required." })
+    .email("Please enter a valid email address."),
+  password: z
+    .string({ required_error: "Password is required." })
+    .min(
+      LugdiUtils.password_min_char,
+      `Password must be at least ${LugdiUtils.password_min_char} characters`
+    ),
 });
 
-const otpSchema = z.object({
-  otpCode: z
-    .string()
-    .min(6, "OTP must be 6 digits")
-    .max(6, "OTP must be 6 digits"),
-});
-
-export default function AuthPage() {
-  const [serverError, setServerError] = useState<string | null>(null);
+export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const [stage, setStage] = useState<"email" | "otp" | "registered">("email");
-  const [email, setEmail] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [acceptsMarketing, setAcceptsMarketing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLElement | null>(null);
 
   const router = useRouter();
   const urlParams = useSearchParams();
   const redirectTo = urlParams.get("redirect") || "/account";
 
-  const emailForm = useForm<z.infer<typeof emailSchema>>({
-    resolver: zodResolver(emailSchema),
-    defaultValues: {
-      email: "",
-      acceptsMarketing: false,
-      agreeToPolicies: false,
-    },
-  });
-
-  const otpForm = useForm<z.infer<typeof otpSchema>>({
-    resolver: zodResolver(otpSchema),
-    defaultValues: { otpCode: "" },
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: "", password: "" },
   });
 
   // Handle mouse movement for parallax effect
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       if (containerRef.current) {
         const rect = containerRef.current.getBoundingClientRect();
         const x = (e.clientX - rect.left) / rect.width;
@@ -102,66 +87,40 @@ export default function AuthPage() {
     };
   }, []);
 
-  const handleEmailSubmit = async (values: z.infer<typeof emailSchema>) => {
-    setServerError(null);
-    setIsLoading(true);
-
-    try {
-      const response = await fetch("/api/auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "initiate",
-          email: values.email,
-          acceptsMarketing: values.acceptsMarketing,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to process request");
-      }
-
-      setEmail(values.email);
-      if (data.action === "otp") {
-        setStage("otp");
-      } else if (data.action === "register") {
-        setStage("registered");
-        setSuccessMessage(data.message);
-      }
-    } catch (error: any) {
-      setServerError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
-  const handleOtpSubmit = async (values: z.infer<typeof otpSchema>) => {
-    if (!email) return;
-    setServerError(null);
+  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     setIsLoading(true);
+    setError(null);
 
     try {
-      const response = await fetch("/api/auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "verify",
-          email,
-          otpCode: values.otpCode,
-        }),
+      const result = await signIn("credentials", {
+        email: values.email,
+        password: values.password,
+        redirect: false,
       });
 
-      const data = await response.json();
+      setIsLoading(false);
 
-      if (!response.ok) {
-        throw new Error(data.error || "Invalid OTP");
+      if (result?.error) {
+        // Handle specific error messages from NextAuth
+        if (result.error === "CredentialsSignin") {
+          // This is the default NextAuth error when credentials are invalid
+          // We should never see this if our backend is properly passing error messages
+          setError("Invalid email or password. Please try again.");
+        } else {
+          // Display the specific error message from our backend
+          setError(result.error);
+        }
+      } else {
+        router.push(redirectTo);
       }
-
-      router.push(redirectTo);
-    } catch (error: any) {
-      setServerError(error.message);
+    } catch (err) {
+      setIsLoading(false);
+      setError("An unexpected error occurred. Please try again.");
+      console.error("Login error:", err);
     } finally {
       setIsLoading(false);
     }
@@ -193,7 +152,7 @@ export default function AuthPage() {
           src="/auth/Login Page.webp"
           fill
           alt="Lugdi Login Page Banner"
-          className="object-cover"
+          className="object-cover object-top"
           priority
         />
         {/* Dark overlay to improve card readability */}
@@ -202,9 +161,14 @@ export default function AuthPage() {
 
       {/* Login Card */}
       <div className="relative z-10 px-4">
-        <AnimatedSection delay={0.15}>
-          <Card
-            className="
+        <AnimatedSection delay={0.2}>
+          <motion.div
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ type: "spring", damping: 20, stiffness: 100 }}
+          >
+            <Card
+              className="
             w-[300px] 
             md:w-[400px]
             max-w-full
@@ -218,27 +182,26 @@ export default function AuthPage() {
             backdrop-blur-md
             dark:bg-gray-900/80
           "
-          >
-            <CardHeader className="text-center">
-              <motion.div variants={itemVariants}>
-                <CardTitle className="text-2xl font-bold tracking-wide">
-                  Login / Register
-                </CardTitle>
-                <CardDescription className="mt-1 text-gray-500 dark:text-gray-400">
-                  Enter your email to login or register
-                </CardDescription>
-              </motion.div>
-            </CardHeader>
+            >
+              <CardHeader className="text-center">
+                <motion.div variants={itemVariants}>
+                  <CardTitle className="text-2xl font-bold tracking-wide">
+                    Login
+                  </CardTitle>
+                  <CardDescription className="mt-1 text-gray-500 dark:text-gray-400">
+                    Enter your email & password to login
+                  </CardDescription>
+                </motion.div>
+              </CardHeader>
 
-            <CardContent className="p-6">
-              {stage === "email" && (
-                <Form {...emailForm}>
+              <CardContent className="p-6">
+                <Form {...form}>
                   <form
-                    onSubmit={emailForm.handleSubmit(handleEmailSubmit)}
-                    className="flex flex-col space-y-4"
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-6"
                   >
                     <FormField
-                      control={emailForm.control}
+                      control={form.control}
                       name="email"
                       render={({ field }) => (
                         <FormItem>
@@ -250,161 +213,130 @@ export default function AuthPage() {
                         </FormItem>
                       )}
                     />
+
                     <FormField
-                      control={emailForm.control}
-                      name="acceptsMarketing"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                          <div className="space-y-1 leading-none">
-                            <FormLabel className="text-sm text-gray-600">
-                              I want to receive marketing emails and promotions
-                            </FormLabel>
-                          </div>
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={emailForm.control}
-                      name="agreeToPolicies"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                          <div className="space-y-1 leading-none">
-                            <FormLabel className="text-sm text-gray-600">
-                              I agree to the{" "}
-                              <Link
-                                href="/terms"
-                                className="underline text-blue-600"
-                              >
-                                Terms of Service
-                              </Link>{" "}
-                              and{" "}
-                              <Link
-                                href="/privacy"
-                                className="underline text-blue-600"
-                              >
-                                Privacy Policy
-                              </Link>
-                            </FormLabel>
-                            <FormMessage />
-                          </div>
-                        </FormItem>
-                      )}
-                    />
-                    {serverError && (
-                      <div className="text-red-600 text-sm">{serverError}</div>
-                    )}
-                    <motion.div
-                      variants={buttonHoverVariants}
-                      whileHover="hover"
-                      whileTap="tap"
-                    >
-                      <Button
-                        type="submit"
-                        disabled={isLoading}
-                        className="w-full"
-                      >
-                        {isLoading ? (
-                          <div className="flex items-center justify-center gap-2">
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                            Processing...
-                          </div>
-                        ) : (
-                          "Continue"
-                        )}
-                      </Button>
-                    </motion.div>
-                  </form>
-                </Form>
-              )}
-              {stage === "otp" && (
-                <Form {...otpForm}>
-                  <form
-                    onSubmit={otpForm.handleSubmit(handleOtpSubmit)}
-                    className="flex flex-col space-y-4"
-                  >
-                    <div className="text-sm text-gray-600">
-                      Check your email for the OTP.
-                    </div>
-                    <FormField
-                      control={otpForm.control}
-                      name="otpCode"
+                      control={form.control}
+                      name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Enter OTP</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Enter 6-digit code"
-                              {...field}
-                            />
-                          </FormControl>
+                          <FormLabel>Password</FormLabel>
+                          <div className="relative">
+                            <FormControl>
+                              <Input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="••••••••"
+                                {...field}
+                              />
+                            </FormControl>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              className="absolute right-0 top-0 h-full px-3 py-2"
+                              onClick={togglePasswordVisibility}
+                            >
+                              {showPassword ? (
+                                <EyeOff className="h-4 w-4 text-gray-500" />
+                              ) : (
+                                <Eye className="h-4 w-4 text-gray-500" />
+                              )}
+                              <span className="sr-only">
+                                {showPassword ? "Hide" : "Show"} password
+                              </span>
+                            </Button>
+                          </div>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                    {serverError && (
-                      <div className="text-red-600 text-sm">{serverError}</div>
+                    {error && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="p-3 rounded-md bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 text-sm"
+                      >
+                        {error}
+                      </motion.div>
                     )}
                     <motion.div
                       variants={buttonHoverVariants}
                       whileHover="hover"
                       whileTap="tap"
+                      initial="initial"
                     >
                       <Button
                         type="submit"
-                        disabled={isLoading}
                         className="w-full"
+                        disabled={isLoading}
                       >
                         {isLoading ? (
-                          <div className="flex items-center justify-center gap-2">
+                          <div className="flex items-center gap-2">
                             <Loader2 className="h-4 w-4 animate-spin" />
-                            Verifying...
+                            Logging in...
                           </div>
                         ) : (
-                          "Verify OTP"
+                          "Login"
                         )}
                       </Button>
                     </motion.div>
-                    <Button
-                      variant="link"
-                      onClick={() => setStage("email")}
-                      className="text-sm"
-                    >
-                      Use a different email
-                    </Button>
                   </form>
                 </Form>
-              )}
-              {stage === "registered" && (
-                <div className="flex flex-col space-y-4">
-                  <div className="text-sm text-green-600">{successMessage}</div>
-                  <motion.div
-                    variants={buttonHoverVariants}
-                    whileHover="hover"
-                    whileTap="tap"
-                  >
-                    <Button
-                      onClick={() => setStage("email")}
-                      className="w-full"
-                    >
-                      Continue to Sign In
-                    </Button>
-                  </motion.div>
+
+                {/* Separator with "OR" */}
+                <div className="flex items-center mt-4">
+                  <span className="flex-1 border-t border-gray-300 dark:border-gray-700" />
+                  <span className="px-2 text-sm text-gray-500 dark:text-gray-400">
+                    OR
+                  </span>
+                  <span className="flex-1 border-t border-gray-300 dark:border-gray-700" />
                 </div>
-              )}
-            </CardContent>
-          </Card>
+              </CardContent>
+
+              <CardFooter className="flex flex-col space-y-2 items-center">
+                {/* Register Button */}
+                <motion.div
+                  variants={buttonHoverVariants}
+                  whileHover="hover"
+                  whileTap="tap"
+                  className="w-full"
+                >
+                  <Button variant="outline" className="w-full" asChild>
+                    <Link
+                      href={`/register?redirect=${encodeURIComponent(
+                        redirectTo
+                      )}`}
+                    >
+                      Register
+                    </Link>
+                  </Button>
+                </motion.div>
+
+                {/* Reset Password Button */}
+                <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-5 mb-2">
+                  Don&apos;t Remember your Password?
+                </p>
+                <motion.div
+                  variants={buttonHoverVariants}
+                  whileHover="hover"
+                  whileTap="tap"
+                  className="w-full"
+                >
+                  <Button variant="outline" className="w-full" asChild>
+                    <Link
+                      href={`/forgot-password?redirect=${encodeURIComponent(
+                        redirectTo
+                      )}`}
+                      /* href={`/forgot-password${
+                      email ? `?email=${encodeURIComponent(email)}` : ""
+                    }`} */
+                    >
+                      Reset Password
+                    </Link>
+                  </Button>
+                </motion.div>
+              </CardFooter>
+            </Card>
+          </motion.div>
         </AnimatedSection>
       </div>
     </main>

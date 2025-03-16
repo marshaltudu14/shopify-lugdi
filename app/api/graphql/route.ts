@@ -49,5 +49,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(data, { status: response.status });
   }
 
+  // Log GraphQL errors for debugging
+  if (data.errors) {
+    console.error("API: Shopify GraphQL returned errors:", data.errors);
+  }
+
   return NextResponse.json(data);
 }
