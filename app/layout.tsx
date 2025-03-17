@@ -7,6 +7,7 @@ import localFont from "next/font/local";
 import { cookies } from "next/headers";
 import LugdiUtils from "@/utils/LugdiUtils";
 import Footer from "./components/navbar/Footer";
+import { SessionProvider } from "next-auth/react";
 
 const blippo = localFont({
   src: "/fonts/blippo-blk-bt.ttf",
@@ -80,17 +81,19 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${blippo.variable} ${baumans.variable} antialiased`}>
-        <ApolloWrapper>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem={true}
-          >
-            <Header />
-            <main>{children}</main>
-            <Footer />
-          </ThemeProvider>
-        </ApolloWrapper>
+        <SessionProvider>
+          <ApolloWrapper>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem={true}
+            >
+              <Header />
+              <main>{children}</main>
+              <Footer />
+            </ThemeProvider>
+          </ApolloWrapper>
+        </SessionProvider>
       </body>
     </html>
   );

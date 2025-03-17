@@ -1,121 +1,152 @@
-import { initializeApollo } from "@/lib/apollo/apollo-client";
-import { CUSTOMER_LOGIN } from "@/lib/queries/auth";
 import NextAuth from "next-auth";
-import type { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+import { encode as base64urlEncode } from "crypto-js";
+import SHA256 from "crypto-js/sha256";
 
-type CustomUser = {
-  id: string;
-  email?: string | null;
-  accessToken: string;
-  expiresAt: string;
-};
+async function generateCodeVerifier() {
+  const randomBytes = crypto.getRandomValues(new Uint8Array(32));
+  return base64urlEncode(Buffer.from(randomBytes).toString("base64"))
+    .replace(/=/g, "")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_");
+}
 
-// Define the auth options separately for better reusability
-export const authOptions: NextAuthOptions = {
+async function generateCodeChallenge(verifier) {
+  const hashed = SHA256(verifier);
+  return base64urlEncode(hashed)
+    .replace(/=/g, "")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_");
+}
+
+function decodeJwt(token) {
+  const [, payload] = token.split(".");
+  return { payload: JSON.parse(Buffer.from(payload, "base64").toString()) };
+}
+
+const authOptions = {
   providers: [
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+    {
+      id: "shopify",
+      name: "Shopify",
+      type: "oauth",
+      clientId: process.env.SHOPIFY_CUSTOMER_ACCOUNT_API_CLIENT_ID,
+      authorization: {
+        url: `https://shopify.com/authentication/${process.env.SHOPIFY_SHOP_ID}/oauth/authorize`,
+        params: {
+          scope: "openid email customer-account-api:full",
+          response_type: "code",
+          redirect_uri: `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/callback/shopify`,
+          state: Math.random().toString(36).substring(2),
+          async params(context) {
+            const verifier = await generateCodeVerifier();
+            const challenge = await generateCodeChallenge(verifier);
+            context.verifier = verifier;
+            return { code_challenge: challenge, code_challenge_method: "S256" };
+          },
+        },
       },
-      async authorize(credentials) {
-        try {
-          const client = initializeApollo();
-
-          const { data } = await client.mutate({
-            mutation: CUSTOMER_LOGIN,
-            variables: {
-              input: {
-                email: credentials?.email,
-                password: credentials?.password,
-              },
-            },
+      token: {
+        url: `https://shopify.com/authentication/${process.env.SHOPIFY_SHOP_ID}/oauth/token`,
+        async request(context) {
+          const { code, verifier } = context.params;
+          const response = await fetch(context.provider.token.url, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({
+              grant_type: "authorization_code",
+              client_id: process.env.SHOPIFY_CUSTOMER_ACCOUNT_API_CLIENT_ID,
+              redirect_uri: `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/callback/shopify`,
+              code,
+              code_verifier: verifier,
+            }),
           });
-
-          const { customerAccessToken, customerUserErrors } =
-            data.customerAccessTokenCreate;
-
-          if (customerUserErrors && customerUserErrors.length > 0) {
-            // Map Shopify error codes to user-friendly messages
-            const errorCode = customerUserErrors[0].code;
-            const errorMessage = customerUserErrors[0].message;
-
-            let userFriendlyMessage = errorMessage;
-
-            // Customize error messages based on Shopify error codes
-            switch (errorCode) {
-              case "UNIDENTIFIED_CUSTOMER":
-                userFriendlyMessage =
-                  "Email not found. Please check your email or register for an account.";
-                break;
-              case "INVALID_CREDENTIALS":
-                userFriendlyMessage =
-                  "Invalid email or password. Please try again.";
-                break;
-              case "TOO_MANY_ATTEMPTS":
-                userFriendlyMessage =
-                  "Too many login attempts. Please try again later.";
-                break;
-              // Add more cases as needed
-            }
-
-            throw new Error(userFriendlyMessage);
-          }
-
-          if (customerAccessToken) {
-            return {
-              id: credentials?.email || "",
-              email: credentials?.email,
-              accessToken: customerAccessToken.accessToken,
-              expiresAt: customerAccessToken.expiresAt,
-            };
-          }
-
-          return null;
-        } catch (error: unknown) {
-          console.error("Authentication error:", error);
-
-          let errorMessage = "Authentication failed";
-
-          if (error instanceof Error) {
-            errorMessage = error.message;
-          }
-
-          throw new Error(errorMessage);
-        }
+          const tokens = await response.json();
+          if (!response.ok)
+            throw new Error(tokens.error_description || "Token request failed");
+          return { tokens };
+        },
       },
-    }),
+      userinfo: {
+        async request(context) {
+          const { payload } = decodeJwt(context.tokens.id_token);
+          return { id: payload.sub, email: payload.email };
+        },
+      },
+      async refreshAccessToken(token) {
+        const response = await fetch(
+          `https://shopify.com/authentication/${process.env.SHOPIFY_SHOP_ID}/oauth/token`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({
+              grant_type: "refresh_token",
+              client_id: process.env.SHOPIFY_CUSTOMER_ACCOUNT_API_CLIENT_ID,
+              refresh_token: token.refresh_token,
+            }),
+          }
+        );
+        const refreshed = await response.json();
+        if (!response.ok)
+          throw new Error(refreshed.error_description || "Refresh failed");
+        return {
+          access_token: refreshed.access_token,
+          expires_in: refreshed.expires_in,
+          refresh_token: refreshed.refresh_token || token.refresh_token,
+        };
+      },
+    },
   ],
-  session: {
-    strategy: "jwt",
-    maxAge: 24 * 60 * 60, // 1 days
-  },
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.accessToken = (user as CustomUser).accessToken;
-        token.expiresAt = (user as CustomUser).expiresAt;
+    async jwt({ token, account }) {
+      if (account) {
+        token.accessToken = account.access_token;
+        token.refreshToken = account.refresh_token;
+        token.idToken = account.id_token;
+        token.expiresAt = Date.now() + account.expires_in * 1000;
+        token.state = account.providerAccountId;
+      }
+      if (Date.now() > token.expiresAt) {
+        try {
+          const refreshed = await this.providers[0].refreshAccessToken(token);
+          token.accessToken = refreshed.access_token;
+          token.expiresAt = Date.now() + refreshed.expires_in * 1000;
+          token.refreshToken = refreshed.refresh_token;
+        } catch (error) {
+          console.error("Token refresh failed:", error);
+          return { ...token, error: "RefreshAccessTokenError" };
+        }
       }
       return token;
     },
     async session({ session, token }) {
-      if (token) {
-        session.accessToken = token.accessToken as string;
-        session.expiresAt = token.expiresAt as string;
+      if (token.error) {
+        session.error = token.error;
+      } else {
+        session.accessToken = token.accessToken;
+        session.idToken = token.idToken;
+        session.user.id = token.sub;
       }
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      if (url.includes("state=")) {
+        const urlParams = new URLSearchParams(url.split("?")[1]);
+        const state = urlParams.get("state");
+        if (state !== this.providers[0].authorization.params.state) {
+          return `${baseUrl}/auth/error?error=CSRF`;
+        }
+      }
+      return url.startsWith(baseUrl) ? url : `${baseUrl}/account`;
+    },
+  },
+  session: {
+    strategy: "jwt",
+    maxAge: 24 * 60 * 60, // 1 day
   },
   pages: {
-    signIn: "/login",
-    signOut: "/login",
-    error: "/login",
+    error: "/auth/error",
   },
-  secret: process.env.NEXTAUTH_SECRET,
 };
 
-// Create the handler using the App Router pattern
-const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST };
+export const GET = NextAuth(authOptions);
+export const POST = NextAuth(authOptions);
