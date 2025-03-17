@@ -1,5 +1,4 @@
 "use client";
-
 import {
   AnimatedSection,
   buttonHoverVariants,
@@ -17,6 +16,7 @@ import {
   AlertCircle,
   ShoppingCart,
   XCircle,
+  ArrowRight,
 } from "lucide-react";
 import {
   Carousel,
@@ -25,6 +25,8 @@ import {
   CarouselThumbnail,
 } from "@/components/ui/carousel";
 import Image from "next/image";
+import { useCartStore } from "@/app/ZustandStore/cartStore";
+import { Input } from "@/components/ui/input";
 
 interface ClientProductPageProps {
   product: GetSingleProductResponse;
@@ -34,8 +36,14 @@ export default function ClientProductPage({ product }: ClientProductPageProps) {
   const [selectedOptions, setSelectedOptions] = useState<
     Record<string, string>
   >({});
+  const [quantity, setQuantity] = useState<number>(1);
 
-  console.log("Product:", product);
+  const { addItem } = useCartStore();
+  const { items } = useCartStore((state) => ({
+    items: state.items,
+  }));
+
+  const [isAddToCartDisabled, setIsAddToCartDisabled] = useState(true);
 
   useEffect(() => {
     if (product?.productByHandle?.variants.edges[0]) {
@@ -50,6 +58,14 @@ export default function ClientProductPage({ product }: ClientProductPageProps) {
       setSelectedOptions(initialOptions);
     }
   }, [product]);
+
+  useEffect(() => {
+    // Enable "Add to Cart" only if all options are selected
+    const allOptionsSelected = product?.productByHandle?.options.every(
+      (option) => !!selectedOptions[option.name]
+    );
+    setIsAddToCartDisabled(!allOptionsSelected);
+  }, [selectedOptions, product]);
 
   if (!product?.productByHandle) {
     return (
@@ -86,7 +102,7 @@ export default function ClientProductPage({ product }: ClientProductPageProps) {
   const currencyCode = productByHandle.priceRange.maxVariantPrice.currencyCode;
   const currencySymbol = getCurrencySymbol(currencyCode);
 
-  const selectedVariant = productByHandle.variants.edges.find((edge) => {
+  const selectedVariant = productByHandle?.variants.edges.find((edge) => {
     const variantOptions = edge.node.selectedOptions;
     return productByHandle.options.every((option) =>
       variantOptions.some(
@@ -96,6 +112,10 @@ export default function ClientProductPage({ product }: ClientProductPageProps) {
       )
     );
   })?.node;
+
+  const isVariantInCart = items.some(
+    (item) => item.variantId === selectedVariant?.id
+  );
 
   const handleOptionChange = (optionName: string, value: string) => {
     setSelectedOptions((prev) => ({
@@ -107,10 +127,21 @@ export default function ClientProductPage({ product }: ClientProductPageProps) {
   const handleAddToCart = () => {
     if (
       selectedVariant?.availableForSale &&
-      selectedVariant?.quantityAvailable > 0
+      selectedVariant?.quantityAvailable >= quantity
     ) {
-      // Add your cart logic here
-      console.log("Added to cart:", selectedVariant.id);
+      addItem(
+        {
+          productId: productByHandle.id,
+          variantId: selectedVariant.id,
+          title: productByHandle.title,
+          variantTitle: selectedVariant.title,
+          price: selectedVariant.price.amount,
+        },
+        quantity
+      );
+      alert(`Added ${quantity} ${selectedVariant.title} to cart.`);
+    } else {
+      alert("Not enough stock available.");
     }
   };
 
@@ -144,7 +175,7 @@ export default function ClientProductPage({ product }: ClientProductPageProps) {
                 <CarouselItem key={index}>
                   <Image
                     src={image.originalSrc}
-                    alt={image.altText}
+                    alt={image.altText || productByHandle.title}
                     width={1024}
                     height={1024}
                     className="w-full h-full"
@@ -210,7 +241,6 @@ export default function ClientProductPage({ product }: ClientProductPageProps) {
                 const isColorOption = option.name
                   .toLowerCase()
                   .includes("color");
-
                 return (
                   <motion.div
                     key={option.id}
@@ -242,7 +272,6 @@ export default function ClientProductPage({ product }: ClientProductPageProps) {
                                   (selectedOptions[opt.name] || "")
                             )
                         );
-
                         const isSelected =
                           selectedOptions[option.name] === value;
                         const isLightColor =
@@ -250,7 +279,6 @@ export default function ClientProductPage({ product }: ClientProductPageProps) {
                           value.toLowerCase().includes("light") ||
                           value.toLowerCase() === "cream" ||
                           value.toLowerCase() === "beige";
-
                         return (
                           <motion.div
                             key={value}
@@ -321,6 +349,50 @@ export default function ClientProductPage({ product }: ClientProductPageProps) {
               })}
             </motion.div>
 
+            {/* Add Quantity Selector */}
+            {selectedVariant && (
+              <motion.div
+                className="space-y-2 pt-4"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <div className="flex items-center gap-4">
+                  <label className="font-medium text-lg">Quantity:</label>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() =>
+                        setQuantity((prev) => Math.max(prev - 1, 1))
+                      }
+                    >
+                      -
+                    </Button>
+                    <Input
+                      type="number"
+                      value={quantity}
+                      onChange={(e) =>
+                        setQuantity(Math.min(parseInt(e.target.value), 10) || 1)
+                      }
+                      min={1}
+                      max={10}
+                      className="w-16 text-center"
+                    />
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() =>
+                        setQuantity((prev) => Math.min(prev + 1, 10))
+                      }
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
             {/* Add to Cart Button and Stock Info */}
             {selectedVariant && (
               <motion.div
@@ -334,35 +406,44 @@ export default function ClientProductPage({ product }: ClientProductPageProps) {
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <Button
-                    onClick={handleAddToCart}
-                    disabled={
-                      !selectedVariant.availableForSale ||
-                      selectedVariant.quantityAvailable === 0
-                    }
-                    className="w-full rounded-md py-6 text-lg font-medium shadow-md transition-all hover:shadow-lg"
-                    variant={
-                      selectedVariant.availableForSale &&
-                      selectedVariant.quantityAvailable > 0
-                        ? "default"
-                        : "outline"
-                    }
-                  >
-                    {selectedVariant.availableForSale &&
-                    selectedVariant.quantityAvailable > 0 ? (
-                      <div className="flex items-center gap-2">
-                        <ShoppingCart className="w-5 h-5" />
-                        <span>Add to Cart</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <XCircle className="w-5 h-5" />
-                        <span>Out of Stock</span>
-                      </div>
-                    )}
-                  </Button>
+                  {isVariantInCart ? (
+                    <Link href="/cart">
+                      <Button className="w-full rounded-md py-6 text-lg font-medium transition-all flex items-center justify-center gap-2">
+                        <ArrowRight className="w-5 h-5" />
+                        <span>Go to Cart</span>
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Button
+                      onClick={handleAddToCart}
+                      disabled={
+                        isAddToCartDisabled ||
+                        !selectedVariant.availableForSale ||
+                        selectedVariant.quantityAvailable < quantity
+                      }
+                      className="w-full rounded-md py-6 text-lg font-medium transition-all"
+                      variant={
+                        selectedVariant.availableForSale &&
+                        selectedVariant.quantityAvailable >= quantity
+                          ? "default"
+                          : "outline"
+                      }
+                    >
+                      {selectedVariant.availableForSale &&
+                      selectedVariant.quantityAvailable >= quantity ? (
+                        <div className="flex items-center gap-2">
+                          <ShoppingCart className="w-5 h-5" />
+                          <span>Add to Cart</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <XCircle className="w-5 h-5" />
+                          <span>Out of Stock</span>
+                        </div>
+                      )}
+                    </Button>
+                  )}
                 </motion.div>
-
                 {selectedVariant.availableForSale &&
                   selectedVariant.quantityAvailable > 0 &&
                   selectedVariant.quantityAvailable < 10 && (
