@@ -1,5 +1,4 @@
-// components/ApolloWrapper.tsx
-"use client"; // Mark as client component
+"use client";
 
 import { ApolloProvider } from "@apollo/client";
 import { initializeApollo } from "@/lib/apollo/apollo-client";

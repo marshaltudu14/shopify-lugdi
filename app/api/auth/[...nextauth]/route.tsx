@@ -29,13 +29,13 @@ const authOptions = {
       id: "shopify",
       name: "Shopify",
       type: "oauth",
-      clientId: process.env.SHOPIFY_CUSTOMER_ACCOUNT_API_CLIENT_ID,
+      clientId: process.env.SHOPIFY_CLIENT_ID,
       authorization: {
         url: `https://shopify.com/authentication/${process.env.SHOPIFY_SHOP_ID}/oauth/authorize`,
         params: {
           scope: "openid email customer-account-api:full",
           response_type: "code",
-          redirect_uri: `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/callback/shopify`,
+          redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/callback/shopify`,
           state: Math.random().toString(36).substring(2),
           async params(context) {
             const verifier = await generateCodeVerifier();
@@ -54,8 +54,8 @@ const authOptions = {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({
               grant_type: "authorization_code",
-              client_id: process.env.SHOPIFY_CUSTOMER_ACCOUNT_API_CLIENT_ID,
-              redirect_uri: `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/callback/shopify`,
+              client_id: process.env.SHOPIFY_CLIENT_ID,
+              redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/callback/shopify`,
               code,
               code_verifier: verifier,
             }),
@@ -80,7 +80,7 @@ const authOptions = {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({
               grant_type: "refresh_token",
-              client_id: process.env.SHOPIFY_CUSTOMER_ACCOUNT_API_CLIENT_ID,
+              client_id: process.env.SHOPIFY_CLIENT_ID,
               refresh_token: token.refresh_token,
             }),
           }
