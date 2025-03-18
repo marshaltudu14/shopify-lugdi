@@ -7,7 +7,7 @@ import localFont from "next/font/local";
 import { cookies } from "next/headers";
 import LugdiUtils from "@/utils/LugdiUtils";
 import Footer from "./components/navbar/Footer";
-import NextAuthWrapper from "@/lib/nextAuth-wrapper";
+import NextAuthWrapper from "@/lib/NextAuthWrapper";
 
 const blippo = localFont({
   src: "/fonts/blippo-blk-bt.ttf",
