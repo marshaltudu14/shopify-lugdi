@@ -27,31 +27,6 @@ export const GET_SINGLE_PRODUCT = gql`
         optionValues {
           id
           name
-          firstSelectableVariant {
-            id
-            title
-            availableForSale
-            barcode
-            quantityAvailable
-            taxable
-            selectedOptions {
-              name
-              value
-            }
-            image {
-              altText
-              url
-            }
-            price {
-              amount
-              currencyCode
-            }
-            compareAtPrice {
-              amount
-              currencyCode
-            }
-            currentlyNotInStock
-          }
           swatch {
             color
             image {
@@ -62,6 +37,35 @@ export const GET_SINGLE_PRODUCT = gql`
                 altText
                 url
               }
+            }
+          }
+        }
+      }
+      variants(first: 250) {
+        edges {
+          cursor
+          node {
+            id
+            title
+            availableForSale
+            quantityAvailable
+            taxable
+            currentlyNotInStock
+            selectedOptions {
+              name
+              value
+            }
+            image {
+              url
+              altText
+            }
+            price {
+              amount
+              currencyCode
+            }
+            compareAtPrice {
+              amount
+              currencyCode
             }
           }
         }

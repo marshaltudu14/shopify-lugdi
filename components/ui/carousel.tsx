@@ -295,13 +295,17 @@ function CarouselThumbnail({
           onClick={() => scrollToSlide(index)}
           aria-label={`Go to slide ${index + 1}`}
         >
-          <Image
-            src={image.originalSrc}
-            alt={image.altText || `Thumbnail for slide ${index + 1}`}
-            className="object-cover w-full h-full"
-            width={100}
-            height={100}
-          />
+          {image.url ? (
+            <Image
+              src={image.url}
+              alt={image.altText || `Thumbnail for slide ${index + 1}`}
+              className="object-cover w-full h-full"
+              width={100}
+              height={100}
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-300" />
+          )}
         </button>
       ))}
     </div>

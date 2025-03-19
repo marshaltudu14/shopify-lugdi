@@ -32,12 +32,9 @@ export async function generateMetadata({
       variables: { handle: productSlug, country: isoCountryCode },
     });
 
-    if (!data?.product) return notFound();
-
     const productData = data.product;
 
-    const seoTitle =
-      productData?.seo?.title || `Buy ${productData?.title} Online`;
+    const seoTitle = productData?.seo?.title || "Product Not Available";
     const seoDescription = productData?.seo?.description;
     const seoImage = productData?.images?.edges[0]?.node?.url || "";
 
@@ -81,7 +78,6 @@ export default async function ProductPage({
   try {
     const client = initializeApollo();
 
-    // Fetch Single Product Data
     const { data: productDataRes } =
       await client.query<GetSingleProductResponse>({
         query: GET_SINGLE_PRODUCT,
@@ -90,8 +86,6 @@ export default async function ProductPage({
           country: isoCountryCode,
         },
       });
-
-    if (!productDataRes?.product) return notFound();
 
     const { data: productRecommendationRes } =
       await client.query<GetSingleProductRecommendationResponse>({
@@ -106,22 +100,18 @@ export default async function ProductPage({
     productRecommendation = productRecommendationRes;
 
     console.log("Product", productDataRes);
-    console.log("Reccomend", productRecommendationRes);
+    console.log("Recommend", productRecommendationRes);
   } catch (error) {
     console.error("Error fetching product data:", error);
     return notFound();
   }
 
-  //Prepare JSON-LD for the product
   const product = productData?.product;
 
   const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
     productID: product?.id,
-    sku:
-      product?.options[0]?.optionValues[0]?.firstSelectableVariant?.barcode ||
-      "",
     name: product?.title,
     description: product?.seo?.description || product?.description || "",
     image: product?.images?.edges.map((edge) => edge.node.url) || [],
@@ -137,49 +127,36 @@ export default async function ProductPage({
       "@type": "AggregateOffer",
       url: `${process.env.NEXT_PUBLIC_SITE_URL}/product/${productSlug}`,
       priceCurrency:
-        product?.options[0]?.optionValues[0]?.firstSelectableVariant?.price
-          ?.currencyCode || "INR",
+        product?.variants.edges[0]?.node.price.currencyCode || "INR",
       lowPrice: Math.min(
-        ...(product?.options.flatMap((option) =>
-          option.optionValues.map((ov) =>
-            parseFloat(ov.firstSelectableVariant.price.amount)
-          )
-        ) || [0])
+        ...(product?.variants.edges.map((edge) => edge.node.price.amount) || [
+          0,
+        ])
       ).toFixed(2),
       highPrice: Math.max(
-        ...(product?.options.flatMap((option) =>
-          option.optionValues.map((ov) =>
-            parseFloat(ov.firstSelectableVariant.price.amount)
-          )
-        ) || [0])
+        ...(product?.variants.edges.map((edge) => edge.node.price.amount) || [
+          0,
+        ])
       ).toFixed(2),
       itemCondition: "https://schema.org/NewCondition",
       availability: product?.availableForSale
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",
-      offerCount:
-        product?.options.reduce(
-          (count, option) => count + option.optionValues.length,
-          0
-        ) || 0,
-      offers: product?.options.map((option) => ({
+      offerCount: product?.variants.edges.length || 0,
+      offers: product?.variants.edges.map((edge) => ({
         "@type": "Offer",
         itemOffered: {
           "@type": "Product",
-          name: `${product?.title} - ${option.name}`,
-          sku: option.optionValues[0]?.firstSelectableVariant?.barcode || "",
-          additionalProperty: option.optionValues.map((value) => ({
+          name: `${product?.title} - ${edge.node.title}`,
+          additionalProperty: edge.node.selectedOptions.map((option) => ({
             "@type": "PropertyValue",
             name: option.name,
-            value: value.name,
+            value: option.value,
           })),
         },
-        price: option.optionValues[0]?.firstSelectableVariant?.price?.amount,
-        priceCurrency:
-          option.optionValues[0]?.firstSelectableVariant?.price?.currencyCode ||
-          "INR",
-        availability: option.optionValues[0]?.firstSelectableVariant
-          ?.availableForSale
+        price: edge.node.price.amount,
+        priceCurrency: edge.node.price.currencyCode || "INR",
+        availability: edge.node.availableForSale
           ? "https://schema.org/InStock"
           : "https://schema.org/OutOfStock",
       })),
@@ -208,10 +185,10 @@ export default async function ProductPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
-      {/* <ClientProductPage
+      <ClientProductPage
         productData={productData}
         recommendationsData={productRecommendation}
-      /> */}
+      />
     </>
   );
 }

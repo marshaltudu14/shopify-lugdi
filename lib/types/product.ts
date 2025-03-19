@@ -26,21 +26,19 @@ export interface ProductVariant {
   id: string;
   title: string;
   availableForSale: boolean;
-  barcode: string | null;
   quantityAvailable: number;
   taxable: boolean;
+  currentlyNotInStock: boolean;
   selectedOptions: SelectedOption[];
   image: ImageNode | null;
   price: Price;
   compareAtPrice: Price | null;
-  currentlyNotInStock: boolean;
 }
 
 // Product Option related types
 export interface OptionValue {
   id: string;
   name: string;
-  firstSelectableVariant: ProductVariant;
   swatch: Swatch | null;
 }
 
@@ -72,6 +70,12 @@ export interface ProductByHandle {
     }[];
   };
   options: ProductOption[];
+  variants: {
+    edges: {
+      cursor: string;
+      node: ProductVariant;
+    }[];
+  };
   seo: SEO;
 }
 
@@ -87,7 +91,7 @@ export interface ProductRecommendation {
   handle: string;
   availableForSale: boolean;
   totalInventory: number;
-  featuredImage: ImageNode | null;
+  featuredImage: ImageNode;
   compareAtPriceRange: PriceRange;
   priceRange: PriceRange;
 }

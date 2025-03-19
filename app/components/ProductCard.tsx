@@ -46,9 +46,10 @@ export default function ProductCard({ product }: ProductCardProps) {
   const compareAtPrice = product?.compareAtPriceRange?.minVariantPrice;
   const isDiscounted =
     price && compareAtPrice
-      ? parseFloat(compareAtPrice.amount) > parseFloat(price.amount)
+      ? parseFloat(compareAtPrice.amount.toString()) >
+        parseFloat(price.amount.toString())
       : false;
-  const isOutOfStock = product?.availableForSale === false; // Explicit check for false
+  const isOutOfStock = product?.availableForSale === false;
   const quantityAvailable = product?.totalInventory ?? 0;
   const isCriticalStock = quantityAvailable > 0 && quantityAvailable <= 5;
   const isLowStock =
@@ -56,20 +57,18 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   const discountPercentage = isDiscounted
     ? Math.round(
-        ((parseFloat(compareAtPrice?.amount ?? "0") -
-          parseFloat(price?.amount ?? "0")) /
-          parseFloat(compareAtPrice?.amount ?? "1")) *
+        ((parseFloat(compareAtPrice?.amount.toString() ?? "0") -
+          parseFloat(price?.amount.toString() ?? "0")) /
+          parseFloat(compareAtPrice?.amount.toString() ?? "1")) *
           100
       )
     : null;
 
-  // Get currency symbols with fallback
   const priceSymbol = price ? getCurrencySymbol(price.currencyCode) : "";
   const compareAtSymbol = compareAtPrice
     ? getCurrencySymbol(compareAtPrice.currencyCode)
     : "";
 
-  // Generate stock messages and styling based on availability
   const getStockIndicator = () => {
     if (isOutOfStock) return null;
 
@@ -207,14 +206,14 @@ export default function ProductCard({ product }: ProductCardProps) {
                 {price && (
                   <p>
                     {priceSymbol}
-                    {parseFloat(price.amount).toFixed(2)}
+                    {parseFloat(price.amount.toString()).toString()}
                   </p>
                 )}
 
                 {isDiscounted && compareAtPrice && (
                   <p className="line-through opacity-60">
                     {compareAtSymbol}
-                    {parseFloat(compareAtPrice.amount).toFixed(2)}
+                    {parseFloat(compareAtPrice.amount.toString()).toString()}
                   </p>
                 )}
               </div>

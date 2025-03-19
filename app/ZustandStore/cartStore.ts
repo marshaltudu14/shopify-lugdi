@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface CartItem {
   productId: string;
@@ -14,52 +15,67 @@ interface CartState {
   clearCart: () => void;
 }
 
-export const useCartStore = create<CartState>((set) => ({
-  items: [],
-  addItem: (item, quantity) => {
-    set((state) => {
-      const existingItem = state.items.find(
-        (i) => i.variantId === item.variantId
-      );
-      if (existingItem) {
-        const newQuantity = existingItem.quantity + quantity;
-        console.log(
-          `Updated cart item: Variant ${item.variantId}, Quantity: ${newQuantity}`
-        );
-        return {
-          items: state.items.map((i) =>
-            i.variantId === item.variantId ? { ...i, quantity: newQuantity } : i
-          ),
-        };
-      }
-      console.log(
-        `Added to cart: Variant ${item.variantId}, Quantity: ${quantity}`
-      );
-      return { items: [...state.items, { ...item, quantity }] };
-    });
-  },
-  updateQuantity: (variantId, quantity) => {
-    set((state) => {
-      console.log(`Updated quantity for variant ${variantId} to ${quantity}`);
-      return {
-        items: state.items.map((item) =>
-          item.variantId === variantId ? { ...item, quantity } : item
-        ),
-      };
-    });
-  },
-  removeItem: (variantId) => {
-    set((state) => {
-      console.log(`Removed item with variant ${variantId} from cart`);
-      return {
-        items: state.items.filter((item) => item.variantId !== variantId),
-      };
-    });
-  },
-  clearCart: () => {
-    set(() => {
-      console.log("Cart cleared");
-      return { items: [] };
-    });
-  },
-}));
+export const useCartStore = create<CartState>()(
+  persist(
+    (set) => ({
+      items: [],
+
+      addItem: (item, quantity) => {
+        set((state) => {
+          const existingItem = state.items.find(
+            (i) => i.variantId === item.variantId
+          );
+          if (existingItem) {
+            const newQuantity = existingItem.quantity + quantity;
+            console.log(
+              `Updated cart item: Variant ${item.variantId}, Quantity: ${newQuantity}`
+            );
+            return {
+              items: state.items.map((i) =>
+                i.variantId === item.variantId
+                  ? { ...i, quantity: newQuantity }
+                  : i
+              ),
+            };
+          }
+          console.log(
+            `Added to cart: Variant ${item.variantId}, Quantity: ${quantity}`
+          );
+          return { items: [...state.items, { ...item, quantity }] };
+        });
+      },
+
+      updateQuantity: (variantId, quantity) => {
+        set((state) => {
+          console.log(
+            `Updated quantity for variant ${variantId} to ${quantity}`
+          );
+          return {
+            items: state.items.map((item) =>
+              item.variantId === variantId ? { ...item, quantity } : item
+            ),
+          };
+        });
+      },
+
+      removeItem: (variantId) => {
+        set((state) => {
+          console.log(`Removed item with variant ${variantId} from cart`);
+          return {
+            items: state.items.filter((item) => item.variantId !== variantId),
+          };
+        });
+      },
+
+      clearCart: () => {
+        set(() => {
+          console.log("Cart cleared");
+          return { items: [] };
+        });
+      },
+    }),
+    {
+      name: "lugdi-cart-storage",
+    }
+  )
+);
