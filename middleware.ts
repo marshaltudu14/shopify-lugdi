@@ -2,9 +2,95 @@ import { NextResponse, NextRequest } from "next/server";
 import { countries, Country } from "./lib/countries";
 import LugdiUtils from "./utils/LugdiUtils";
 
+async function refreshToken(refreshToken: string): Promise<{
+  access_token: string;
+  expires_in: number;
+  refresh_token: string;
+} | null> {
+  const shopId = process.env.SHOPIFY_SHOP_ID!;
+  const clientId = process.env.SHOPIFY_CUSTOMER_ACCOUNT_API_CLIENT_ID!;
+
+  const body = new URLSearchParams({
+    grant_type: "refresh_token",
+    client_id: clientId,
+    refresh_token: refreshToken,
+  });
+
+  const response = await fetch(
+    `https://shopify.com/authentication/${shopId}/oauth/token`,
+    {
+      method: "POST",
+      body,
+    }
+  );
+
+  if (!response.ok) return null;
+
+  return await response.json();
+}
+
 export async function middleware(request: NextRequest): Promise<NextResponse> {
   try {
     const cookies = request.cookies;
+    const pathName = request.nextUrl.pathname || "";
+    const protectedRoutes = ["/account"]; // Define protected routes here
+    const isProtectedRoute = protectedRoutes.some((route) =>
+      pathName.startsWith(route)
+    );
+
+    // Auth Logic (only for protected routes)
+    if (isProtectedRoute) {
+      let accessToken = cookies.get("lugdi_shopify_access_token")?.value;
+      const refreshToken = cookies.get("lugdi_shopify_refresh_token")?.value;
+      const expiresAt = cookies.get("lugdi_shopify_expires_at")?.value;
+
+      // No session, redirect to sign-in
+      if (!accessToken || !refreshToken || !expiresAt) {
+        return NextResponse.redirect(new URL("/signin", request.url));
+      }
+
+      // Check if token is expired
+      if (Date.now() > parseInt(expiresAt)) {
+        const refreshedTokens = await refreshToken(refreshToken);
+        if (!refreshedTokens) {
+          // Refresh failed, clear cookies and redirect to sign-in
+          const response = NextResponse.redirect(
+            new URL("/signin", request.url)
+          );
+          response.cookies.delete("lugdi_shopify_access_token");
+          response.cookies.delete("lugdi_shopify_refresh_token");
+          response.cookies.delete("lugdi_shopify_id_token");
+          response.cookies.delete("lugdi_shopify_expires_at");
+          return response;
+        }
+
+        // Update cookies with new tokens
+        const newExpiresAt = Date.now() + refreshedTokens.expires_in * 1000;
+        const response = NextResponse.next();
+        response.cookies.set(
+          "lugdi_shopify_access_token",
+          refreshedTokens.access_token,
+          { httpOnly: true, secure: true, expires: new Date(newExpiresAt) }
+        );
+        response.cookies.set(
+          "lugdi_shopify_refresh_token",
+          refreshedTokens.refresh_token,
+          { httpOnly: true, secure: true }
+        );
+        response.cookies.set(
+          "lugdi_shopify_expires_at",
+          newExpiresAt.toString(),
+          {
+            httpOnly: true,
+            secure: true,
+          }
+        );
+        accessToken = refreshedTokens.access_token; // Update for downstream use
+        return response;
+      }
+    }
+
+    // Country Redirection logic goes here
     const cookieCountryCode =
       cookies.get(LugdiUtils.location_cookieName)?.value || null;
     const detectedCountryCode =
@@ -32,7 +118,6 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const pathName = request.nextUrl.pathname || "";
     const excludedPaths = ["/api"];
     const isExcludedPath = excludedPaths.some((excluded) =>
       pathName.startsWith(excluded)

@@ -1,32 +1,40 @@
+// src/app/api/auth/refresh/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { authOptions } from "../[...nextauth]/route";
-import { getServerSession } from "next-auth/next";
+import { refreshToken } from "@/middleware";
 
-export async function GET(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session || !session.refreshToken) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-  }
+export async function GET(request: NextRequest) {
+  const refreshToken = request.cookies.get(
+    "lugdi_shopify_refresh_token"
+  )?.value;
+  if (!refreshToken)
+    return NextResponse.json({ error: "No refresh token" }, { status: 401 });
 
-  try {
-    const body = new URLSearchParams({
-      grant_type: "refresh_token",
-      client_id: process.env.SHOPIFY_CLIENT_ID!,
-      refresh_token: session.refreshToken,
-    });
+  const refreshedTokens = await refreshToken(refreshToken);
+  if (!refreshedTokens)
+    return NextResponse.json({ error: "Refresh failed" }, { status: 401 });
 
-    const response = await fetch(
-      `https://shopify.com/authentication/${process.env.SHOPIFY_SHOP_ID}/oauth/token`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body,
-      }
-    );
-
-    const tokens = await response.json();
-    return NextResponse.json(tokens);
-  } catch (error) {
-    return NextResponse.json({ error: "Refresh failed" }, { status: 500 });
-  }
+  const newExpiresAt = Date.now() + refreshedTokens.expires_in * 1000;
+  const response = NextResponse.json({ success: true });
+  response.cookies.set(
+    "lugdi_shopify_access_token",
+    refreshedTokens.access_token,
+    {
+      httpOnly: true,
+      secure: true,
+      expires: new Date(newExpiresAt),
+    }
+  );
+  response.cookies.set(
+    "lugdi_shopify_refresh_token",
+    refreshedTokens.refresh_token,
+    {
+      httpOnly: true,
+      secure: true,
+    }
+  );
+  response.cookies.set("lugdi_shopify_expires_at", newExpiresAt.toString(), {
+    httpOnly: true,
+    secure: true,
+  });
+  return response;
 }
