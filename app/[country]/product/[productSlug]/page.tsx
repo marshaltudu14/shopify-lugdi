@@ -34,7 +34,7 @@ export async function generateMetadata({
 
     const productData = data.product;
 
-    const seoTitle = productData?.seo?.title || "Product Not Available";
+    const seoTitle = productData?.seo?.title || productData?.title;
     const seoDescription = productData?.seo?.description;
     const seoImage = productData?.images?.edges[0]?.node?.url || "";
 
@@ -98,9 +98,6 @@ export default async function ProductPage({
 
     productData = productDataRes;
     productRecommendation = productRecommendationRes;
-
-    console.log("Product", productDataRes);
-    console.log("Recommend", productRecommendationRes);
   } catch (error) {
     console.error("Error fetching product data:", error);
     return notFound();

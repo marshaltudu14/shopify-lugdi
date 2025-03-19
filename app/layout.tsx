@@ -7,6 +7,7 @@ import localFont from "next/font/local";
 import { cookies } from "next/headers";
 import LugdiUtils from "@/utils/LugdiUtils";
 import Footer from "./components/navbar/Footer";
+import { Toaster } from "@/components/ui/sonner";
 
 const blippo = localFont({
   src: "/fonts/blippo-blk-bt.ttf",
@@ -88,6 +89,7 @@ export default function RootLayout({
           >
             <Header />
             <main>{children}</main>
+            <Toaster />
             <Footer />
           </ThemeProvider>
         </ApolloWrapper>

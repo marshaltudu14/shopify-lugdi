@@ -33,6 +33,7 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import ProductCard from "@/app/components/ProductCard";
+import { useRouter } from "next/navigation";
 
 export default function ClientProductPage({
   productData,
@@ -48,7 +49,19 @@ export default function ClientProductPage({
   const [selectedOptions, setSelectedOptions] = useState<
     Record<string, string>
   >({});
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const { items, addItem } = useCartStore();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    async function checkAuth() {
+      const response = await fetch("/api/auth/check-auth");
+      const data = await response.json();
+      setIsAuthenticated(data.authenticated);
+    }
+    checkAuth();
+  }, [router]);
 
   useEffect(() => {
     if (product?.options?.length > 0) {
