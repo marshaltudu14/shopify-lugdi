@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { useQuery } from "@apollo/client";
 import Link from "next/link";
 import LugdiUtils from "@/utils/LugdiUtils";
-import SortSelect from "@/app/components/SortSelect"; // Adjust path as needed
+import SortSelect from "@/app/components/SortSelect";
 import { GET_COLLECTION_PRODUCTS } from "@/lib/queries/collection";
 import { getSortConfig, SortOption } from "@/lib/SortConfig";
 import { Frown, Loader2 } from "lucide-react";
@@ -31,20 +31,16 @@ interface ClientCollectionPageProps {
   initialData: CollectionData | null;
   collectionSlug: string;
   isoCountryCode: string;
-  countryName?: string;
 }
 
 export default function ClientCollectionPage({
   initialData,
   collectionSlug,
   isoCountryCode,
-  countryName,
 }: ClientCollectionPageProps) {
   const [sortOption, setSortOption] = useState<SortOption>("relevance");
-
   const sentinelRef = useRef<HTMLDivElement>(null);
 
-  // Query variables
   const variables = useMemo<QueryVariables>(() => {
     const sortConfig = getSortConfig(sortOption);
     return {
@@ -57,7 +53,6 @@ export default function ClientCollectionPage({
     };
   }, [collectionSlug, sortOption, isoCountryCode]);
 
-  // Use initial data if available, otherwise fetch on client
   const { data, fetchMore, loading, error, refetch } = useQuery<
     CollectionData,
     QueryVariables
@@ -68,7 +63,6 @@ export default function ClientCollectionPage({
     notifyOnNetworkStatusChange: true,
   });
 
-  // Handle sort change
   const handleSortChange = (value: SortOption) => {
     setSortOption(value);
     const sortConfig = getSortConfig(value);
@@ -76,40 +70,37 @@ export default function ClientCollectionPage({
       ...variables,
       sortKey: sortConfig.sortKey,
       reverse: sortConfig.reverse,
-      after: null, // Reset pagination on sort
+      after: null,
     });
   };
 
-  // Infinite scroll
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
         if (
           entry.isIntersecting &&
-          data?.collectionByHandle?.products.pageInfo.hasNextPage &&
+          data?.collection?.products?.pageInfo?.hasNextPage &&
           !loading
         ) {
           fetchMore({
             variables: {
               ...variables,
-              after: data.collectionByHandle!.products.pageInfo.endCursor,
+              after: data?.collection?.products?.pageInfo?.endCursor,
             },
             updateQuery: (prev, { fetchMoreResult }) => {
-              if (!fetchMoreResult || !fetchMoreResult.collectionByHandle)
-                return prev;
+              if (!fetchMoreResult?.collection) return prev;
               return {
                 ...prev,
-                collectionByHandle: {
-                  ...prev.collectionByHandle!,
+                collection: {
+                  ...prev.collection!,
                   products: {
-                    ...prev.collectionByHandle!.products,
+                    ...prev.collection!.products,
                     edges: [
-                      ...prev.collectionByHandle!.products.edges,
-                      ...fetchMoreResult.collectionByHandle.products.edges,
+                      ...prev.collection!.products.edges,
+                      ...fetchMoreResult.collection.products.edges,
                     ],
-                    pageInfo:
-                      fetchMoreResult.collectionByHandle.products.pageInfo,
+                    pageInfo: fetchMoreResult.collection.products.pageInfo,
                   },
                 },
               };
@@ -128,7 +119,9 @@ export default function ClientCollectionPage({
     };
   }, [data, loading, fetchMore, variables]);
 
-  if (loading && !data)
+  const resolvedData = data || initialData;
+
+  if (loading && !resolvedData)
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="animate-spin" />
@@ -138,14 +131,13 @@ export default function ClientCollectionPage({
   if (error) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center space-y-3">
-        <h1 className="text-3xl text-center">Error Occured</h1>
-
+        <h1 className="text-3xl text-center">Error Occurred</h1>
         <p className="text-center">{error.message}</p>
       </div>
     );
   }
 
-  if (!data?.collectionByHandle)
+  if (!resolvedData?.collection)
     return (
       <div className="min-h-screen flex items-center justify-center">
         <AnimatedSection delay={0.2}>
@@ -166,7 +158,6 @@ export default function ClientCollectionPage({
               Looks like we don&apos;t have products here yet. Try exploring
               other categories or check back later for updates.
             </motion.p>
-
             <Link href="/">
               <motion.div
                 variants={buttonHoverVariants}
@@ -174,7 +165,9 @@ export default function ClientCollectionPage({
                 whileTap="tap"
                 className="mt-6"
               >
-                <Button className="px-4 py-2">Back to Home</Button>
+                <Button className="px-4 py-2 cursor-pointer">
+                  Back to Home
+                </Button>
               </motion.div>
             </Link>
           </div>
@@ -182,16 +175,15 @@ export default function ClientCollectionPage({
       </div>
     );
 
-  const products = data.collectionByHandle.products.edges.map(
-    (edge) => edge.node
-  );
+  const products =
+    resolvedData.collection?.products?.edges?.map((edge) => edge.node) || [];
 
   return (
     <div className="min-h-screen px-2 py-2 md:px-3 md:py-3 lg:px-5 lg:py-5">
       <div className="space-y-2">
         <div className="text-center my-5 md:my-7 lg:my-10">
           <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">
-            {data?.collectionByHandle?.title || "Collection"}
+            {resolvedData?.collection?.title || "Collection"}
           </h1>
         </div>
 
@@ -203,7 +195,7 @@ export default function ClientCollectionPage({
 
         <div>
           {products.length > 0 ? (
-            <div className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-5 md:gap-4">
+            <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4 md:gap-4">
               {products.map((product) => (
                 <div key={product.id}>
                   <ProductCard product={product} />
@@ -230,7 +222,6 @@ export default function ClientCollectionPage({
                     Looks like we don’t have products here yet. Try exploring
                     other categories or check back later for updates.
                   </motion.p>
-
                   <Link href="/">
                     <motion.div
                       variants={buttonHoverVariants}
@@ -238,7 +229,9 @@ export default function ClientCollectionPage({
                       whileTap="tap"
                       className="mt-6"
                     >
-                      <Button className="px-4 py-2">Back to Home</Button>
+                      <Button className="px-4 py-2 cursor-pointer">
+                        Back to Home
+                      </Button>
                     </motion.div>
                   </Link>
                 </div>
@@ -247,7 +240,7 @@ export default function ClientCollectionPage({
           )}
         </div>
       </div>
-      {data.collectionByHandle.products.pageInfo.hasNextPage && (
+      {resolvedData?.collection?.products?.pageInfo?.hasNextPage && (
         <div ref={sentinelRef} className="flex items-center justify-center">
           <Loader2 className="animate-spin" />
         </div>

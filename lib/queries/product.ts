@@ -3,42 +3,44 @@ import { gql } from "@apollo/client";
 export const GET_SINGLE_PRODUCT = gql`
   query getSingleProduct($handle: String!, $country: CountryCode!)
   @inContext(country: $country) {
-    productByHandle(handle: $handle) {
+    product(handle: $handle) {
       id
-      handle
       title
+      availableForSale
       description
       descriptionHtml
-      availableForSale
-      seo {
-        title
-        description
+      handle
+      totalInventory
+      tags
+      images(first: 20) {
+        edges {
+          cursor
+          node {
+            url
+            altText
+          }
+        }
       }
       options {
         id
         name
-        values
-      }
-      priceRange {
-        maxVariantPrice {
-          amount
-          currencyCode
-        }
-        minVariantPrice {
-          amount
-          currencyCode
-        }
-      }
-      variants(first: 250) {
-        edges {
-          node {
+        optionValues {
+          id
+          name
+          firstSelectableVariant {
             id
             title
             availableForSale
+            barcode
             quantityAvailable
+            taxable
             selectedOptions {
               name
               value
+            }
+            image {
+              altText
+              url
             }
             price {
               amount
@@ -48,23 +50,60 @@ export const GET_SINGLE_PRODUCT = gql`
               amount
               currencyCode
             }
+            currentlyNotInStock
+          }
+          swatch {
+            color
+            image {
+              alt
+              id
+              mediaContentType
+              previewImage {
+                altText
+                url
+              }
+            }
           }
         }
       }
+      seo {
+        title
+        description
+      }
+    }
+  }
+`;
+
+export const GET_SINGLE_PRODUCT_RECOMMENDATION = gql`
+  query getSingleProductRecommendation(
+    $productHandle: String!
+    $country: CountryCode!
+  ) @inContext(country: $country) {
+    productRecommendations(productHandle: $productHandle) {
+      id
+      title
+      handle
+      availableForSale
+      totalInventory
+
       featuredImage {
-        originalSrc
+        url
         altText
       }
-      images(first: 20) {
-        edges {
-          node {
-            originalSrc
-            altText
-          }
+
+      compareAtPriceRange {
+        minVariantPrice {
+          amount
+          currencyCode
         }
       }
-      tags
-      updatedAt
+
+      priceRange {
+        minVariantPrice {
+          amount
+          currencyCode
+        }
+      }
     }
   }
 `;

@@ -1,45 +1,98 @@
-import { Image, Price, ProductVariant, SEO } from "./type";
+import { ImageNode, Price, SEO } from "./type";
+
+// Swatch related types
+export interface SwatchImage {
+  alt: string | null;
+  id: string;
+  mediaContentType: string;
+  previewImage: {
+    altText: string | null;
+    url: string;
+  };
+}
+
+export interface Swatch {
+  color: string | null;
+  image: SwatchImage | null;
+}
+
+// Product Variant related types
+export interface SelectedOption {
+  name: string;
+  value: string;
+}
+
+export interface ProductVariant {
+  id: string;
+  title: string;
+  availableForSale: boolean;
+  barcode: string | null;
+  quantityAvailable: number;
+  taxable: boolean;
+  selectedOptions: SelectedOption[];
+  image: ImageNode | null;
+  price: Price;
+  compareAtPrice: Price | null;
+  currentlyNotInStock: boolean;
+}
+
+// Product Option related types
+export interface OptionValue {
+  id: string;
+  name: string;
+  firstSelectableVariant: ProductVariant;
+  swatch: Swatch | null;
+}
 
 export interface ProductOption {
   id: string;
   name: string;
-  values: string[];
+  optionValues: OptionValue[];
 }
 
+// Price Range for Recommendations
 export interface PriceRange {
-  maxVariantPrice: Price;
   minVariantPrice: Price;
 }
 
-export interface ProductVariantEdge {
-  node: ProductVariant;
-}
-
-export interface ProductImageEdge {
-  node: Image;
-}
-
+// Main Product interface for GET_SINGLE_PRODUCT
 export interface ProductByHandle {
   id: string;
-  handle: string;
   title: string;
+  availableForSale: boolean;
   description: string;
   descriptionHtml: string;
-  availableForSale: boolean;
-  seo: SEO;
-  options: ProductOption[];
-  priceRange: PriceRange;
-  variants: {
-    edges: ProductVariantEdge[];
-  };
-  featuredImage: Image | null;
-  images: {
-    edges: ProductImageEdge[];
-  };
+  handle: string;
+  totalInventory: number;
   tags: string[];
-  updatedAt: string;
+  images: {
+    edges: {
+      cursor: string;
+      node: ImageNode;
+    }[];
+  };
+  options: ProductOption[];
+  seo: SEO;
 }
 
+// Response type for GET_SINGLE_PRODUCT
 export interface GetSingleProductResponse {
-  productByHandle: ProductByHandle;
+  product: ProductByHandle;
+}
+
+// Product Recommendation interface for SINGLE_PRODUCT_RECOMMENDATION
+export interface ProductRecommendation {
+  id: string;
+  title: string;
+  handle: string;
+  availableForSale: boolean;
+  totalInventory: number;
+  featuredImage: ImageNode | null;
+  compareAtPriceRange: PriceRange;
+  priceRange: PriceRange;
+}
+
+// Response type for SINGLE_PRODUCT_RECOMMENDATION
+export interface GetSingleProductRecommendationResponse {
+  productRecommendations: ProductRecommendation[];
 }

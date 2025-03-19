@@ -19,12 +19,12 @@ import MobileBottomNav from "./MobileBottomNav";
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCountrySlug, setSelectedCountrySlug] = useState("");
-  const [selectedCountryName, setSelectedCountryName] = useState("");
+  const [, setSelectedCountryName] = useState("");
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
   const client = initializeApollo();
-  const { data, loading } = useQuery<GetMenuResponse>(GET_MENU, {
+  const { data } = useQuery<GetMenuResponse>(GET_MENU, {
     variables: { handle: "main-menu" },
     client,
   });

@@ -9,17 +9,20 @@ export const GET_COLLECTION_PRODUCTS = gql`
     $after: String
     $country: CountryCode!
   ) @inContext(country: $country) {
-    collectionByHandle(handle: $handle) {
+    collection(handle: $handle) {
       id
       title
+
+      image {
+        url
+        altText
+      }
+
       seo {
         title
         description
       }
-      image {
-        originalSrc
-        altText
-      }
+
       products(
         first: $first
         sortKey: $sortKey
@@ -27,37 +30,30 @@ export const GET_COLLECTION_PRODUCTS = gql`
         after: $after
       ) {
         edges {
+          cursor
           node {
             id
             title
             handle
-            images(first: 1) {
-              edges {
-                node {
-                  originalSrc
-                  altText
-                }
+            availableForSale
+            totalInventory
+            priceRange {
+              minVariantPrice {
+                amount
+                currencyCode
               }
             }
-            variants(first: 1) {
-              edges {
-                node {
-                  id
-                  availableForSale
-                  quantityAvailable
-                  price {
-                    amount
-                    currencyCode
-                  }
-                  compareAtPrice {
-                    amount
-                    currencyCode
-                  }
-                }
+            compareAtPriceRange {
+              minVariantPrice {
+                amount
+                currencyCode
               }
+            }
+            featuredImage {
+              url
+              altText
             }
           }
-          cursor
         }
         pageInfo {
           hasNextPage

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { Search, Menu, ShoppingCart, X } from "lucide-react";
+import { Search, Menu, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
@@ -56,7 +56,7 @@ export default function MobileHeader({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="rounded-full bg-neutral-100 dark:bg-neutral-900"
+                  className="rounded-full bg-neutral-100 dark:bg-neutral-900 cursor-pointer"
                 >
                   <Menu className="h-4 w-4" />
                 </Button>
@@ -133,7 +133,7 @@ export default function MobileHeader({
                       <SheetClose asChild>
                         <Link href={item.url}>
                           <Button
-                            className="w-full justify-start text-left font-light tracking-wide"
+                            className="w-full justify-start text-left font-light tracking-wide cursor-pointer"
                             variant="ghost"
                           >
                             {item.title}
@@ -182,7 +182,7 @@ export default function MobileHeader({
                 variant="ghost"
                 size="icon"
                 onClick={() => setIsSearchExpanded(!isSearchExpanded)}
-                className="rounded-full bg-neutral-100 dark:bg-neutral-900"
+                className="rounded-full bg-neutral-100 dark:bg-neutral-900 cursor-pointer"
               >
                 <Search className="h-4 w-4" />
               </Button>
@@ -232,7 +232,7 @@ export default function MobileHeader({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 cursor-pointer"
                   onClick={() => setIsSearchExpanded(false)}
                 >
                   <X className="h-3 w-3" />

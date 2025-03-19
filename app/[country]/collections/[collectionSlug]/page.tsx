@@ -4,9 +4,10 @@ import { GET_COLLECTION_PRODUCTS } from "@/lib/queries/collection";
 import LugdiUtils from "@/utils/LugdiUtils";
 import { cookies } from "next/headers";
 import React from "react";
-import ClientCollctionPage from "./ClientCollectionPage";
 import { convertSlugToTitle } from "@/utils/SlugToTitle";
 import { CollectionData, CollectionProductEdge } from "@/lib/types/collection";
+import ClientCollectionPage from "./ClientCollectionPage";
+import { notFound } from "next/navigation";
 
 // Collection Page Metadata
 export async function generateMetadata({
@@ -33,7 +34,9 @@ export async function generateMetadata({
       },
     });
 
-    const collection = data.collectionByHandle;
+    if (!data?.collection) return notFound();
+
+    const collection = data.collection;
 
     const seoTitle =
       collection?.seo.title ||
@@ -41,7 +44,7 @@ export async function generateMetadata({
     const seoDescription =
       collection?.seo.description ||
       `Discover a wide selection of ${collection?.title} fashion apparels & accessories. Enjoy new arrivals, exclusive deals, and premium quality.`;
-    const seoImage = collection?.image?.originalSrc || "";
+    const seoImage = collection?.image?.url || "";
 
     return {
       title: seoTitle,
@@ -58,7 +61,7 @@ export async function generateMetadata({
       },
     };
   } catch (error) {
-    console.error("Error fetching SEO metadata:", error);
+    console.error("Error fetching Collection SEO metadata:", error);
     return {
       title: `Buy ${convertSlugToTitle(
         collectionSlug
@@ -79,9 +82,6 @@ export default async function CollectionPage({
 
   const cookieStore = await cookies();
   const countrySlug = cookieStore.get(LugdiUtils.location_cookieName)?.value;
-  const countryName = cookieStore.get(
-    LugdiUtils.location_name_country_cookie
-  )?.value;
   const isoCountryCode = countrySlug ? countrySlug.toUpperCase() : "IN";
 
   let initialData: CollectionData | null;
@@ -98,23 +98,25 @@ export default async function CollectionPage({
       },
     });
     initialData = data;
+
+    console.log("Initial Data:", data);
   } catch (error) {
     console.error("Error fetching collection:", error);
     initialData = null;
   }
 
   // Prepare JSON-LD for the collection
-  const collection = initialData?.collectionByHandle;
+  const collection = initialData?.collection;
   const collectionJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
     name: collection?.title || convertSlugToTitle(collectionSlug),
     description:
-      collection?.seo.description ||
+      collection?.seo?.description ||
       `Discover a wide selection of ${
         collection?.title || convertSlugToTitle(collectionSlug)
       } fashion apparels & accessories.`,
-    image: collection?.image?.originalSrc || "",
+    image: collection?.image?.url || "",
     url: `${process.env.NEXT_PUBLIC_SITE_URL}/collections/${collectionSlug}`,
     itemListElement: (collection?.products.edges || []).map(
       (edge: CollectionProductEdge, index: number) => ({
@@ -124,20 +126,20 @@ export default async function CollectionPage({
           "@type": "Product",
           name: edge.node.title,
           url: `${process.env.NEXT_PUBLIC_SITE_URL}/product/${edge.node.handle}`,
-          image: edge.node.images.edges[0]?.node.originalSrc || "",
+          image: edge.node.featuredImage?.url || "",
           offers: {
             "@type": "Offer",
-            price: edge.node.variants.edges[0]?.node.price.amount,
-            priceCurrency: edge.node.variants.edges[0]?.node.price.currencyCode,
-            availability: edge.node.variants.edges[0]?.node.availableForSale
+            price: edge.node.priceRange.minVariantPrice.amount,
+            priceCurrency: edge.node.priceRange.minVariantPrice.currencyCode,
+            availability: edge.node.availableForSale
               ? "https://schema.org/InStock"
               : "https://schema.org/OutOfStock",
-            ...(edge.node.variants.edges[0]?.node.compareAtPrice && {
+            ...(edge.node.compareAtPriceRange.minVariantPrice.amount && {
               compareAtPrice: {
                 "@type": "Offer",
-                price: edge.node.variants.edges[0].node.compareAtPrice.amount,
+                price: edge.node.compareAtPriceRange.minVariantPrice.amount,
                 priceCurrency:
-                  edge.node.variants.edges[0].node.compareAtPrice.currencyCode,
+                  edge.node.compareAtPriceRange.minVariantPrice.currencyCode,
               },
             }),
           },
@@ -154,11 +156,10 @@ export default async function CollectionPage({
           __html: JSON.stringify(collectionJsonLd),
         }}
       />
-      <ClientCollctionPage
+      <ClientCollectionPage
         initialData={initialData}
         collectionSlug={collectionSlug}
         isoCountryCode={isoCountryCode}
-        countryName={countryName}
       />
     </>
   );

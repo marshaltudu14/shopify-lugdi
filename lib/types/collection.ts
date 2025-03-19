@@ -1,24 +1,23 @@
-import { Image, ProductVariant, SEO } from "./type";
+import { ImageNode, Price, SEO } from "./type";
 
 export interface CollectionProductNode {
   id: string;
   title: string;
   handle: string;
-  images: {
-    edges: {
-      node: Image;
-    }[];
+  availableForSale: boolean;
+  priceRange: {
+    minVariantPrice: Price;
   };
-  variants: {
-    edges: {
-      node: ProductVariant;
-    }[];
+  compareAtPriceRange: {
+    minVariantPrice: Price;
   };
+  featuredImage: ImageNode;
+  totalInventory: number;
 }
 
 export interface CollectionProductEdge {
-  node: CollectionProductNode;
   cursor: string;
+  node: CollectionProductNode;
 }
 
 export interface CollectionPageInfo {
@@ -30,7 +29,7 @@ export interface CollectionNode {
   id: string;
   title: string;
   seo: SEO;
-  image: Image;
+  image: ImageNode;
   products: {
     edges: CollectionProductEdge[];
     pageInfo: CollectionPageInfo;
@@ -38,7 +37,7 @@ export interface CollectionNode {
 }
 
 export interface CollectionData {
-  collectionByHandle: CollectionNode | null;
+  collection: CollectionNode | null;
 }
 
 export interface CollectionVariables {

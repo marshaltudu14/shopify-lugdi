@@ -127,7 +127,7 @@ export default function DesktopHeader({
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
                         onClick={() => setIsSearchExpanded(false)}
                       >
                         <X className="h-5 w-5" />
@@ -143,7 +143,7 @@ export default function DesktopHeader({
                       variant="ghost"
                       size="icon"
                       onClick={() => setIsSearchExpanded(true)}
-                      className="rounded-full bg-neutral-100 dark:bg-neutral-900"
+                      className="rounded-full bg-neutral-100 dark:bg-neutral-900 cursor-pointer"
                     >
                       <Search className="h-4 w-4" />
                     </Button>
@@ -169,7 +169,7 @@ export default function DesktopHeader({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="rounded-full bg-neutral-100 dark:bg-neutral-900"
+                    className="rounded-full bg-neutral-100 dark:bg-neutral-900 cursor-pointer"
                   >
                     <User className="h-4 w-4" />
                   </Button>
@@ -185,7 +185,7 @@ export default function DesktopHeader({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="rounded-full bg-neutral-100 dark:bg-neutral-900 relative"
+                    className="rounded-full bg-neutral-100 dark:bg-neutral-900 relative cursor-pointer"
                   >
                     <ShoppingCart className="h-4 w-4" />
                   </Button>
@@ -201,7 +201,7 @@ export default function DesktopHeader({
                   variant="ghost"
                   size="icon"
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className="rounded-full bg-neutral-100 dark:bg-neutral-900"
+                  className="rounded-full bg-neutral-100 dark:bg-neutral-900 cursor-pointer"
                 >
                   {isMenuOpen ? (
                     <X className="h-4 w-4" />

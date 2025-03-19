@@ -57,7 +57,7 @@ export default function CountriesCombobox({
         <Button
           variant="outline"
           role="combobox"
-          className="w-[150px] justify-center"
+          className="w-[150px] justify-center cursor-pointer"
         >
           {selectedName || "Select Country..."}
         </Button>
@@ -77,6 +77,7 @@ export default function CountriesCombobox({
                   key={country.slug}
                   value={country.name}
                   onSelect={handleSelect}
+                  className="cursor-pointer"
                 >
                   {country.name}
                   <Check

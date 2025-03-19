@@ -38,36 +38,36 @@ export default function ProductCard({ product }: ProductCardProps) {
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
 
-  const firstImageUrl = product.images.edges[0]?.node.originalSrc;
-  const altText = product.images.edges[0]?.node.altText || product.title;
+  const imageUrl = product?.featuredImage?.url;
+  const altText =
+    product?.featuredImage?.altText ?? product?.title ?? "Product Image";
 
-  const variant = product.variants.edges[0]?.node;
-  if (!variant) return null;
-
-  const price = variant.price;
-  const compareAtPrice = variant.compareAtPrice || {
-    amount: "0",
-    currencyCode: price.currencyCode,
-  };
+  const price = product?.priceRange?.minVariantPrice;
+  const compareAtPrice = product?.compareAtPriceRange?.minVariantPrice;
   const isDiscounted =
-    parseFloat(compareAtPrice.amount) > parseFloat(price.amount);
-  const isOutOfStock = !variant.availableForSale;
-  const quantityAvailable = variant.quantityAvailable || 0;
+    price && compareAtPrice
+      ? parseFloat(compareAtPrice.amount) > parseFloat(price.amount)
+      : false;
+  const isOutOfStock = product?.availableForSale === false; // Explicit check for false
+  const quantityAvailable = product?.totalInventory ?? 0;
   const isCriticalStock = quantityAvailable > 0 && quantityAvailable <= 5;
   const isLowStock =
     quantityAvailable > 0 && quantityAvailable <= 10 && !isCriticalStock;
 
   const discountPercentage = isDiscounted
     ? Math.round(
-        ((parseFloat(compareAtPrice.amount) - parseFloat(price.amount)) /
-          parseFloat(compareAtPrice.amount)) *
+        ((parseFloat(compareAtPrice?.amount ?? "0") -
+          parseFloat(price?.amount ?? "0")) /
+          parseFloat(compareAtPrice?.amount ?? "1")) *
           100
       )
     : null;
 
-  // Get currency symbols
-  const priceSymbol = getCurrencySymbol(price.currencyCode);
-  const compareAtSymbol = getCurrencySymbol(compareAtPrice.currencyCode);
+  // Get currency symbols with fallback
+  const priceSymbol = price ? getCurrencySymbol(price.currencyCode) : "";
+  const compareAtSymbol = compareAtPrice
+    ? getCurrencySymbol(compareAtPrice.currencyCode)
+    : "";
 
   // Generate stock messages and styling based on availability
   const getStockIndicator = () => {
@@ -112,7 +112,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       whileHover="hover"
       className="w-full overflow-hidden rounded-xl"
     >
-      <Link href={`/product/${product.handle || "#"}`} className="group block">
+      <Link href={`/product/${product?.handle ?? "#"}`} className="group block">
         <div className="relative h-full border p-2 md:p-3">
           <GlowingEffect
             blur={0}
@@ -125,11 +125,11 @@ export default function ProductCard({ product }: ProductCardProps) {
           />
           <div className="relative w-full overflow-hidden rounded-xl border">
             <motion.div className="relative w-full overflow-hidden rounded-t-xl">
-              {firstImageUrl ? (
+              {imageUrl ? (
                 <div className="overflow-hidden">
                   <motion.div className="w-full">
                     <Image
-                      src={firstImageUrl}
+                      src={imageUrl}
                       width={500}
                       height={500}
                       alt={altText}
@@ -149,7 +149,6 @@ export default function ProductCard({ product }: ProductCardProps) {
                   <div
                     className={cn(
                       "px-6 py-2 backdrop-blur-sm rounded-full",
-
                       "dark:bg-gray-900/80 dark:text-gray-100 bg-white/80 text-gray-900"
                     )}
                   >
@@ -202,22 +201,24 @@ export default function ProductCard({ product }: ProductCardProps) {
 
             <div className="px-3 pt-2 pb-3">
               <p className="font-semibold text-sm md:text-md lg:text-lg line-clamp-1 truncate">
-                {product.title || "Unnamed Product"}
+                {product?.title ?? "Unnamed Product"}
               </p>
               <div className="flex items-center space-x-2 text-sm md:text-md lg:text-lg">
-                <p>
-                  {priceSymbol}
-                  {parseFloat(price.amount).toFixed(2)}
-                </p>
+                {price && (
+                  <p>
+                    {priceSymbol}
+                    {parseFloat(price.amount).toFixed(2)}
+                  </p>
+                )}
 
-                {isDiscounted && (
+                {isDiscounted && compareAtPrice && (
                   <p className="line-through opacity-60">
                     {compareAtSymbol}
                     {parseFloat(compareAtPrice.amount).toFixed(2)}
                   </p>
                 )}
               </div>
-              {isDiscounted && (
+              {isDiscounted && discountPercentage && (
                 <motion.div
                   initial="initial"
                   animate="animate"

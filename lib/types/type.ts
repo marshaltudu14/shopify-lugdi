@@ -1,5 +1,5 @@
 export interface ImageNode {
-  originalSrc: string;
+  url: string;
   altText: string | null;
 }
 
