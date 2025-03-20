@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import { getCurrencySymbol } from "@/lib/countries";
-import { useCartStore } from "@/app/ZustandStore/cartStore";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import {
   AlertCircle,
@@ -34,6 +33,9 @@ import {
 import { Input } from "@/components/ui/input";
 import ProductCard from "@/app/components/ProductCard";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { useCart } from "../../cart/CartContext";
 
 export default function ClientProductPage({
   productData,
@@ -50,8 +52,8 @@ export default function ClientProductPage({
     Record<string, string>
   >({});
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const { items, addItem } = useCartStore();
-
+  const [isAdding, setIsAdding] = useState(false);
+  const { cart, addToCart } = useCart();
   const router = useRouter();
 
   useEffect(() => {
@@ -84,7 +86,7 @@ export default function ClientProductPage({
 
   const isVariantInCart =
     selectedVariant &&
-    items.some((item) => item.variantId === selectedVariant.id);
+    cart.items.some((item) => item.variantId === selectedVariant.id);
 
   const handleOptionChange = (optionName: string, value: string) => {
     setSelectedOptions((prev) => ({
@@ -93,20 +95,13 @@ export default function ClientProductPage({
     }));
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!selectedVariant) return;
-
-    if (
-      selectedVariant.availableForSale &&
-      (selectedVariant.quantityAvailable ?? 0) >= quantity
-    ) {
-      addItem(
-        {
-          productId: product.id,
-          variantId: selectedVariant.id,
-        },
-        quantity
-      );
+    setIsAdding(true);
+    try {
+      await addToCart(selectedVariant.id, quantity);
+    } finally {
+      setIsAdding(false);
     }
   };
 
@@ -148,7 +143,6 @@ export default function ClientProductPage({
   return (
     <div className="min-h-screen px-2 py-2 md:px-3 md:py-3 lg:px-20 lg:py-5">
       <div className="flex flex-col md:flex-row gap-9 pb-10 relative">
-        {/* LEFT */}
         <div className="flex-[2] w-full md:w-1/2 md:sticky md:top-20 self-start relative">
           <Carousel images={product.images.edges.map((e) => e.node)}>
             <CarouselContent>
@@ -170,12 +164,10 @@ export default function ClientProductPage({
           </Carousel>
         </div>
 
-        {/* RIGHT */}
         <div className="flex-[1] w-full md:w-1/2 md:sticky md:top-20 self-start space-y-1 md:space-y-2 lg:space-y-3">
           <div className="space-y-4 lg:space-y-6">
             <p className="text-2xl lg:text-4xl font-bold">{product.title}</p>
 
-            {/* Pricing */}
             {selectedVariant && (
               <div className="space-y-1 md:space-y-2">
                 <div className="flex items-center gap-2 md:gap-4">
@@ -227,7 +219,6 @@ export default function ClientProductPage({
               </div>
             )}
 
-            {/* Variant Selectors */}
             {product.options?.length > 0 && product.variants?.edges?.length > 1
               ? product.options.map((option) => (
                   <div key={option.id} className="space-y-2">
@@ -288,7 +279,6 @@ export default function ClientProductPage({
                 ))
               : null}
 
-            {/* Quantity */}
             {selectedVariant && (
               <div>
                 <div className="space-y-2">
@@ -308,7 +298,7 @@ export default function ClientProductPage({
                       type="number"
                       value={quantity}
                       onChange={(e) =>
-                        setQuantity(Math.min(parseInt(e.target.value), 10) || 1)
+                        setQuantity(Math.min(parseInt(e.target.value) || 1, 10))
                       }
                       min={1}
                       max={10}
@@ -329,7 +319,6 @@ export default function ClientProductPage({
               </div>
             )}
 
-            {/* Cart Button */}
             {selectedVariant && (
               <div className="space-y-2 pt-4">
                 {isVariantInCart ? (
@@ -344,12 +333,15 @@ export default function ClientProductPage({
                     onClick={handleAddToCart}
                     disabled={
                       !selectedVariant.availableForSale ||
-                      selectedVariant.quantityAvailable < quantity
+                      selectedVariant.quantityAvailable < quantity ||
+                      isAdding
                     }
                     className="w-full py-6 flex items-center gap-2 cursor-pointer"
                   >
-                    {selectedVariant.availableForSale &&
-                    selectedVariant.quantityAvailable >= quantity ? (
+                    {isAdding ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : selectedVariant.availableForSale &&
+                      selectedVariant.quantityAvailable >= quantity ? (
                       <div className="flex items-center gap-2">
                         <ShoppingCart className="w-5 h-5" />
                         Add to Cart
@@ -385,7 +377,6 @@ export default function ClientProductPage({
                     </div>
                   )}
 
-                {/* Description */}
                 {product.descriptionHtml && (
                   <div className="mt-5">
                     <h2 className="text-lg font-semibold mb-2">Description</h2>
@@ -401,14 +392,14 @@ export default function ClientProductPage({
           </div>
         </div>
       </div>
-      {/* Recommendations */}
+
       {recommendations?.length > 0 && (
         <div className="mt-10">
           <h2 className="text-2xl text-center font-bold mb-4">
             You Might Also Like
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {recommendations?.map((rec) => (
+            {recommendations.map((rec) => (
               <div key={rec.id}>
                 <ProductCard product={rec} />
               </div>

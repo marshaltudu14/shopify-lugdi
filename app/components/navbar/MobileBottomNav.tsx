@@ -3,9 +3,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { Home, ShoppingBag, User } from "lucide-react";
+import { useCart } from "@/app/[country]/cart/CartContext";
 
 export default function MobileBottomNav() {
   const pathname = usePathname();
+  const { cart } = useCart();
 
   const navItems = [
     {
@@ -17,7 +19,7 @@ export default function MobileBottomNav() {
       name: "Bag",
       href: "/cart",
       icon: ShoppingBag,
-      badge: 2,
+      badge: `${cart.itemCount}`,
     },
     {
       name: "Account",

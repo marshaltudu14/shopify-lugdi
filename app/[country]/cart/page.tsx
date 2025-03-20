@@ -1,20 +1,51 @@
-import { initializeApollo } from "@/lib/apollo/apollo-client";
-import { GET_CART_VARIANTS } from "@/lib/queries/cart";
-import LugdiUtils from "@/utils/LugdiUtils";
-import { cookies } from "next/headers";
-import ClientCartPage from "./ClientCartPage";
-import { notFound } from "next/navigation";
+"use client";
 
-export default async function CartPage() {
-  const cookieStore = await cookies();
-  const countrySlug = cookieStore.get(LugdiUtils.location_cookieName)?.value;
-  const isoCountryCode = countrySlug ? countrySlug.toUpperCase() : "IN";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useEffect } from "react";
+import { useCart } from "./CartContext";
 
-  const client = initializeApollo();
+export default function CartPage() {
+  const { cart, removeFromCart, updateCartItem, getCart } = useCart();
 
-  // Here you would typically get cart items from a server-side store or cookies
-  // For this example, we'll assume they're passed somehow or fetched client-side
-  // In a real app, you might store cart items in cookies or a database
+  useEffect(() => {
+    getCart();
+  }, [getCart]);
 
-  return <ClientCartPage countryCode={isoCountryCode} />;
+  if (!cart.cartId) return <p>Your cart is empty.</p>;
+
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Your Cart</h1>
+      {cart.items.map((item) => (
+        <div key={item.lineId} className="flex justify-between mb-2">
+          <span>{item.variantId}</span>{" "}
+          {/* Replace with actual product details from GET_CART */}
+          <div className="flex items-center gap-2">
+            <Input
+              type="number"
+              value={item.quantity}
+              onChange={(e) =>
+                updateCartItem(item.lineId!, parseInt(e.target.value) || 1)
+              }
+              min={1}
+              className="w-16"
+            />
+            <Button
+              variant="destructive"
+              onClick={() => removeFromCart(item.lineId!)}
+            >
+              Remove
+            </Button>
+          </div>
+        </div>
+      ))}
+      <p>Total Items: {cart.itemCount}</p>
+      {cart.checkoutUrl && (
+        <Button asChild>
+          <a href={cart.checkoutUrl}>Proceed to Checkout</a>
+        </Button>
+      )}
+    </div>
+  );
 }

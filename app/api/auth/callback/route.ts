@@ -77,5 +77,7 @@ export async function GET(request: NextRequest) {
   cookieStore.delete("lugdi_shopify_code_verifier");
   cookieStore.delete("lugdi_shopify_state");
 
-  return NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL}/account`);
+  return NextResponse.redirect(
+    `${process.env.NEXT_PUBLIC_SITE_URL}/account?syncCart=true`
+  );
 }

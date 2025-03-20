@@ -17,6 +17,7 @@ import {
 import { getCookie } from "@/utils/CookieUtils";
 import LugdiUtils from "@/utils/LugdiUtils";
 import { useRouter } from "next/navigation";
+import { useCart } from "@/app/[country]/cart/CartContext";
 
 interface DesktopHeaderProps {
   menuItems: MenuItem[];
@@ -37,6 +38,8 @@ export default function DesktopHeader({
 }: DesktopHeaderProps) {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const { cart } = useCart();
 
   const router = useRouter();
 
@@ -188,6 +191,7 @@ export default function DesktopHeader({
                     className="rounded-full bg-neutral-100 dark:bg-neutral-900 relative cursor-pointer"
                   >
                     <ShoppingCart className="h-4 w-4" />
+                    {cart.itemCount}
                   </Button>
                 </Link>
               </motion.div>
