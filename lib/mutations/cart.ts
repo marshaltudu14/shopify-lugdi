@@ -55,6 +55,10 @@ export const CART_FRAGMENT = gql`
                 name
                 value
               }
+              product {
+                handle
+                title
+              }
             }
           }
         }

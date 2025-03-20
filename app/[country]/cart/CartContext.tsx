@@ -23,12 +23,24 @@ interface CartLine {
   quantity: number;
   merchandise: {
     id: string;
+    title: string;
+    image?: { url: string; altText?: string };
+    price: { amount: string; currencyCode: string };
+    compareAtPrice?: { amount: string; currencyCode: string } | null;
+    availableForSale: boolean;
+    quantityAvailable: number; // Added
+    selectedOptions: { name: string; value: string }[];
+    product: { handle: string; title: string };
   };
 }
 
 interface Cart {
   id: string;
   checkoutUrl: string;
+  cost: {
+    subtotalAmount: { amount: string; currencyCode: string };
+    totalAmount: { amount: string; currencyCode: string };
+  };
   lines: { edges: { node: CartLine }[] };
   totalQuantity: number;
 }
@@ -43,7 +55,9 @@ interface CartItem {
     price: { amount: string; currencyCode: string };
     compareAtPrice?: { amount: string; currencyCode: string } | null;
     availableForSale: boolean;
+    quantityAvailable?: number; // Added, optional since not all mutations fetch it
     selectedOptions: { name: string; value: string }[];
+    product?: { handle: string; title: string };
   };
 }
 
@@ -52,6 +66,8 @@ interface CartState {
   items: CartItem[];
   checkoutUrl: string | null;
   itemCount: number;
+  subtotalAmount: { amount: string; currencyCode: string } | null;
+  totalAmount: { amount: string; currencyCode: string } | null;
 }
 
 interface CartContextType {
@@ -64,12 +80,11 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-const STORAGE_KEY = "lugdi_shopify_cart_v42"; // More robust storage key
+const STORAGE_KEY = "lugdi_shopify_cart_v42";
 const ENCRYPTION_KEY =
-  process.env.NEXT_PUBLIC_CART_ENCRYPTION_KEY || "defaultKey"; // Retrieve encryption key from env
+  process.env.NEXT_PUBLIC_CART_ENCRYPTION_KEY || "defaultKey";
 
 function encryptData(data: CartState): string {
-  // Explicit type for data
   try {
     const ciphertext = CryptoJS.AES.encrypt(
       JSON.stringify(data),
@@ -78,16 +93,15 @@ function encryptData(data: CartState): string {
     return ciphertext;
   } catch (error) {
     console.error("Encryption error:", error);
-    return ""; // Or throw the error if you want to handle it higher up
+    return "";
   }
 }
 
 function decryptData(ciphertext: string): CartState | null {
-  // Explicit return type
   try {
     const bytes = CryptoJS.AES.decrypt(ciphertext, ENCRYPTION_KEY);
     const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-    return decryptedData as CartState; // Type assertion for return
+    return decryptedData as CartState;
   } catch (error) {
     console.error("Decryption error:", error);
     return null;
@@ -100,7 +114,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   const client = useApolloClient();
   const [cart, setCart] = useState<CartState>(() => {
     if (typeof window === "undefined") {
-      return { cartId: null, items: [], checkoutUrl: null, itemCount: 0 };
+      return {
+        cartId: null,
+        items: [],
+        checkoutUrl: null,
+        itemCount: 0,
+        subtotalAmount: null,
+        totalAmount: null,
+      };
     }
     const storedCartEncrypted = localStorage.getItem(STORAGE_KEY);
     if (storedCartEncrypted) {
@@ -111,10 +132,19 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
           items: [],
           checkoutUrl: null,
           itemCount: 0,
+          subtotalAmount: null,
+          totalAmount: null,
         }
       );
     }
-    return { cartId: null, items: [], checkoutUrl: null, itemCount: 0 };
+    return {
+      cartId: null,
+      items: [],
+      checkoutUrl: null,
+      itemCount: 0,
+      subtotalAmount: null,
+      totalAmount: null,
+    };
   });
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
@@ -144,15 +174,29 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
               price: edge.node.merchandise.price,
               compareAtPrice: edge.node.merchandise.compareAtPrice,
               availableForSale: edge.node.merchandise.availableForSale,
+              quantityAvailable: edge.node.merchandise.quantityAvailable, // Added
               selectedOptions: edge.node.merchandise.selectedOptions,
+              product: {
+                handle: edge.node.merchandise.product.handle,
+                title: edge.node.merchandise.product.title,
+              },
             },
           })),
           checkoutUrl: fetchedCart.checkoutUrl,
           itemCount: fetchedCart.totalQuantity,
+          subtotalAmount: fetchedCart.cost.subtotalAmount,
+          totalAmount: fetchedCart.cost.totalAmount,
         };
         setCart(updatedCartState);
       } else {
-        setCart({ cartId: null, items: [], checkoutUrl: null, itemCount: 0 });
+        setCart({
+          cartId: null,
+          items: [],
+          checkoutUrl: null,
+          itemCount: 0,
+          subtotalAmount: null,
+          totalAmount: null,
+        });
         if (typeof window !== "undefined") {
           localStorage.removeItem(STORAGE_KEY);
         }
@@ -182,7 +226,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     };
     initializeCart();
-  }, [getCart]); // Added getCart to the dependency array
+  }, [getCart]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -219,6 +263,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       })),
       checkoutUrl: newCart.checkoutUrl,
       itemCount: newCart.totalQuantity,
+      subtotalAmount: null,
+      totalAmount: null,
     };
     setCart(updatedCartState);
   };
@@ -250,6 +296,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
           })),
           checkoutUrl: updatedCart.checkoutUrl,
           itemCount: updatedCart.totalQuantity,
+          subtotalAmount: null,
+          totalAmount: null,
         };
         setCart(updatedCartState);
       }
@@ -287,6 +335,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
         })),
         checkoutUrl: updatedCart.checkoutUrl,
         itemCount: updatedCart.totalQuantity,
+        subtotalAmount: null,
+        totalAmount: null,
       };
       setCart(updatedCartState);
       toast.success("Item removed from cart!");
@@ -331,13 +381,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
         })),
         checkoutUrl: updatedCart.checkoutUrl,
         itemCount: updatedCart.totalQuantity,
+        subtotalAmount: null,
+        totalAmount: null,
       };
       setCart(updatedCartState);
       toast.success("Cart updated!");
     } catch (error) {
       console.error("Error updating cart:", error);
       toast.error("Failed to update cart.");
-      // Optionally, refetch the cart to ensure consistency
       await getCart();
     }
   };
