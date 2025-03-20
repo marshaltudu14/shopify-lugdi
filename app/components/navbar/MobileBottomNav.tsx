@@ -19,7 +19,7 @@ export default function MobileBottomNav() {
       name: "Bag",
       href: "/cart",
       icon: ShoppingBag,
-      badge: `${cart.itemCount}`,
+      badge: cart.itemCount,
     },
     {
       name: "Account",
@@ -82,8 +82,8 @@ const NavItem = ({
           }`}
         />
 
-        {/* Badge */}
-        {badge && (
+        {/* Badge - Only show if badge is defined and greater than 0 */}
+        {badge !== undefined && badge > 0 && (
           <span className="absolute -top-1 -right-1 bg-primary text-white dark:text-black text-xs w-4 h-4 flex items-center justify-center rounded-full text-[10px]">
             {badge}
           </span>

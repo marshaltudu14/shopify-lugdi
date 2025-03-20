@@ -98,8 +98,6 @@ export default async function CollectionPage({
       },
     });
     initialData = data;
-
-    console.log("Initial Data:", data);
   } catch (error) {
     console.error("Error fetching collection:", error);
     initialData = null;

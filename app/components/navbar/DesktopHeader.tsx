@@ -191,7 +191,11 @@ export default function DesktopHeader({
                     className="rounded-full bg-neutral-100 dark:bg-neutral-900 relative cursor-pointer"
                   >
                     <ShoppingCart className="h-4 w-4" />
-                    {cart.itemCount}
+                    {cart.itemCount > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-primary text-white dark:text-black text-xs w-4 h-4 flex items-center justify-center rounded-full text-[10px]">
+                        {cart.itemCount}
+                      </span>
+                    )}
                   </Button>
                 </Link>
               </motion.div>

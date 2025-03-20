@@ -32,10 +32,9 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import ProductCard from "@/app/components/ProductCard";
-import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
 import { useCart } from "../../cart/CartContext";
+import { Separator } from "@/components/ui/separator";
 
 export default function ClientProductPage({
   productData,
@@ -51,19 +50,8 @@ export default function ClientProductPage({
   const [selectedOptions, setSelectedOptions] = useState<
     Record<string, string>
   >({});
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const { cart, addToCart } = useCart();
-  const router = useRouter();
-
-  useEffect(() => {
-    async function checkAuth() {
-      const response = await fetch("/api/auth/check-auth");
-      const data = await response.json();
-      setIsAuthenticated(data.authenticated);
-    }
-    checkAuth();
-  }, [router]);
 
   useEffect(() => {
     if (product?.options?.length > 0) {
@@ -219,6 +207,8 @@ export default function ClientProductPage({
               </div>
             )}
 
+            <Separator />
+
             {product.options?.length > 0 && product.variants?.edges?.length > 1
               ? product.options.map((option) => (
                   <div key={option.id} className="space-y-2">
@@ -336,7 +326,7 @@ export default function ClientProductPage({
                       selectedVariant.quantityAvailable < quantity ||
                       isAdding
                     }
-                    className="w-full py-6 flex items-center gap-2 cursor-pointer"
+                    className="w-full py-6 flex items-center gap-2 text-lg font-medium cursor-pointer"
                   >
                     {isAdding ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
