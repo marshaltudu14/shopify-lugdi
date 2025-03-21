@@ -5,6 +5,7 @@ import {
   generateState,
   generateNonce,
 } from "@/lib/auth-utils";
+import LugdiUtils from "@/utils/LugdiUtils";
 
 export async function GET() {
   const shopId = process.env.SHOPIFY_SHOP_ID!;
@@ -32,11 +33,11 @@ export async function GET() {
   authorizationUrl.searchParams.append("code_challenge_method", "S256");
 
   const response = NextResponse.redirect(authorizationUrl.toString());
-  response.cookies.set("lugdi_shopify_code_verifier", verifier, {
+  response.cookies.set(LugdiUtils.auth.codeVerifierCookie, verifier, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
   });
-  response.cookies.set("lugdi_shopify_state", state, {
+  response.cookies.set(LugdiUtils.auth.stateCookie, state, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
   });

@@ -1,22 +1,24 @@
-// src/app/api/auth/refresh/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { refreshToken } from "@/middleware";
+import LugdiUtils from "@/utils/LugdiUtils";
 
 export async function GET(request: NextRequest) {
-  const refreshToken = request.cookies.get(
-    "lugdi_shopify_refresh_token"
+  const refreshTokenValue = request.cookies.get(
+    LugdiUtils.auth.refreshTokenCookie
   )?.value;
-  if (!refreshToken)
+  if (!refreshTokenValue) {
     return NextResponse.json({ error: "No refresh token" }, { status: 401 });
+  }
 
-  const refreshedTokens = await refreshToken(refreshToken);
-  if (!refreshedTokens)
+  const refreshedTokens = await refreshToken(refreshTokenValue);
+  if (!refreshedTokens) {
     return NextResponse.json({ error: "Refresh failed" }, { status: 401 });
+  }
 
   const newExpiresAt = Date.now() + refreshedTokens.expires_in * 1000;
   const response = NextResponse.json({ success: true });
   response.cookies.set(
-    "lugdi_shopify_access_token",
+    LugdiUtils.auth.accessTokenCookie,
     refreshedTokens.access_token,
     {
       httpOnly: true,
@@ -25,16 +27,20 @@ export async function GET(request: NextRequest) {
     }
   );
   response.cookies.set(
-    "lugdi_shopify_refresh_token",
+    LugdiUtils.auth.refreshTokenCookie,
     refreshedTokens.refresh_token,
     {
       httpOnly: true,
       secure: true,
     }
   );
-  response.cookies.set("lugdi_shopify_expires_at", newExpiresAt.toString(), {
-    httpOnly: true,
-    secure: true,
-  });
+  response.cookies.set(
+    LugdiUtils.auth.expiresAtCookie,
+    newExpiresAt.toString(),
+    {
+      httpOnly: true,
+      secure: true,
+    }
+  );
   return response;
 }

@@ -1,52 +1,72 @@
 "use client";
 
-import { useSession, signIn, signOut } from "next-auth/react";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { silentAuthCheck } from "@/lib/auth-check";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function Account() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      if (status === "unauthenticated") {
-        // First, try silent check
-        const result = await silentAuthCheck();
-        if (!result) {
-          // If silent check fails (e.g., login_required), trigger full login
-          signIn("shopify", { callbackUrl: "/account" });
+    async function fetchUser() {
+      try {
+        const response = await fetch(`/api/auth/check-auth`);
+        const data = await response.json();
+        setIsAuthenticated(data.authenticated);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    }
+    fetchUser();
+  }, []);
+
+  const handleLogout = () => {
+    try {
+      setIsLoggingOut(true);
+      window.location.href = "/api/auth/logout";
+    } catch (error) {
+      console.error("Error logging out:", error);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!isLoggingOut) {
+      async function checkAuthAfterLogout() {
+        try {
+          const response = await fetch(`/api/auth/check-auth`);
+          const data = await response.json();
+          setIsAuthenticated(data.authenticated);
+        } catch (error) {
+          console.error("Error checking auth after logout:", error);
         }
       }
-    };
-    checkAuth();
-  }, [status]);
+      checkAuthAfterLogout();
+    }
+  }, [isLoggingOut]);
 
-  if (status === "loading") return <p>Loading...</p>;
-
-  if (session) {
-    return (
-      <div>
-        <h1>Account</h1>
-        <p>Welcome, {session.user?.email}</p>
-        <a
-          href={`https://<shop-domain>/checkouts/<checkout_id>?logged_in=true`}
-        >
-          Go to Checkout
-        </a>
-        <button
-          onClick={() =>
-            signOut({
-              callbackUrl: `https://shopify.com/authentication/${process.env.NEXT_PUBLIC_SHOPIFY_SHOP_ID}/logout?id_token_hint=${session.idToken}&post_logout_redirect_uri=${process.env.NEXT_PUBLIC_SHOPIFY_POST_LOGOUT_REDIRECT_URI}`,
-            })
-          }
-        >
-          Logout
-        </button>
-      </div>
-    );
-  }
-
-  return null;
+  return (
+    <>
+      {isAuthenticated ? (
+        <div className="min-h-screen flex items-center justify-center">
+          <Button onClick={handleLogout} disabled={isLoggingOut}>
+            {isLoggingOut ? (
+              <div className="flex items-center justify-center gap-1">
+                <Loader2 className="animate-spin" />
+                <p>Logging out...</p>
+              </div>
+            ) : (
+              "Logout"
+            )}
+          </Button>
+        </div>
+      ) : (
+        <div className="min-h-screen flex items-center justify-center">
+          <Loader2 className="animate-spin" />
+        </div>
+      )}
+    </>
+  );
 }

@@ -1,3 +1,4 @@
+// CartContext.tsx
 "use client";
 
 import React, {
@@ -17,6 +18,8 @@ import {
 } from "@/lib/mutations/cart";
 import { toast } from "sonner";
 import * as CryptoJS from "crypto-js";
+import { getCookie } from "@/utils/CookieUtils";
+import LugdiUtils from "@/utils/LugdiUtils";
 
 interface CartLine {
   id: string;
@@ -28,7 +31,7 @@ interface CartLine {
     price: { amount: string; currencyCode: string };
     compareAtPrice?: { amount: string; currencyCode: string } | null;
     availableForSale: boolean;
-    quantityAvailable: number; // Added
+    quantityAvailable: number;
     selectedOptions: { name: string; value: string }[];
     product: { handle: string; title: string };
   };
@@ -55,7 +58,7 @@ interface CartItem {
     price: { amount: string; currencyCode: string };
     compareAtPrice?: { amount: string; currencyCode: string } | null;
     availableForSale: boolean;
-    quantityAvailable?: number; // Added, optional since not all mutations fetch it
+    quantityAvailable?: number;
     selectedOptions: { name: string; value: string }[];
     product?: { handle: string; title: string };
   };
@@ -80,7 +83,9 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-const STORAGE_KEY = "lugdi_shopify_cart_v42";
+const STORAGE_KEY = `lugdi_shopify_cart_v42_${getCookie(
+  LugdiUtils.location_name_country_cookie
+)}`;
 const ENCRYPTION_KEY =
   process.env.NEXT_PUBLIC_CART_ENCRYPTION_KEY || "defaultKey";
 
@@ -146,7 +151,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       totalAmount: null,
     };
   });
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   const getCart = useCallback(async () => {
     if (!cart.cartId) return;
@@ -154,11 +158,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       const { data } = await client.query<{ cart: Cart | null }>({
         query: GET_CART,
         variables: { cartId: cart.cartId },
-        context: {
-          headers: isAuthenticated
-            ? { Authorization: `Bearer ${getAccessToken()}` }
-            : {},
-        },
+        fetchPolicy: "no-cache",
       });
       const fetchedCart = data.cart;
       if (fetchedCart) {
@@ -174,7 +174,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
               price: edge.node.merchandise.price,
               compareAtPrice: edge.node.merchandise.compareAtPrice,
               availableForSale: edge.node.merchandise.availableForSale,
-              quantityAvailable: edge.node.merchandise.quantityAvailable, // Added
+              quantityAvailable: edge.node.merchandise.quantityAvailable,
               selectedOptions: edge.node.merchandise.selectedOptions,
               product: {
                 handle: edge.node.merchandise.product.handle,
@@ -205,14 +205,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       console.error("Error fetching cart:", error);
       toast.error("Failed to fetch cart.");
     }
-  }, [cart.cartId, client, isAuthenticated]);
+  }, [cart.cartId, client]);
 
   useEffect(() => {
     const initializeCart = async () => {
-      const response = await fetch("/api/auth/check-auth");
-      const data = await response.json();
-      setIsAuthenticated(data.authenticated);
-
       if (typeof window !== "undefined") {
         const storedCartEncrypted = localStorage.getItem(STORAGE_KEY);
         if (storedCartEncrypted) {
@@ -244,13 +240,19 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   const createCart = async (
     lines: { merchandiseId: string; quantity: number }[]
   ) => {
+    // Get the country code from the cookie and convert to uppercase
+    const countryName = getCookie(LugdiUtils.location_cookieName) || "IN"; // Default to "IN" if cookie not found
+    const countryCode = countryName.toUpperCase();
+
     const { data } = await client.mutate<{ cartCreate: { cart: Cart } }>({
       mutation: CREATE_CART,
-      variables: { input: { lines } },
-      context: {
-        headers: isAuthenticated
-          ? { Authorization: `Bearer ${getAccessToken()}` }
-          : {},
+      variables: {
+        input: {
+          lines,
+          buyerIdentity: {
+            countryCode, // Pass the uppercase country code
+          },
+        },
       },
     });
     const newCart = data!.cartCreate.cart;
@@ -280,11 +282,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
             cartId: cart.cartId,
             lines: [{ merchandiseId: variantId, quantity }],
           },
-          context: {
-            headers: isAuthenticated
-              ? { Authorization: `Bearer ${getAccessToken()}` }
-              : {},
-          },
         });
         const updatedCart = data!.cartLinesAdd.cart;
         const updatedCartState: CartState = {
@@ -311,94 +308,58 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   const removeFromCart = async (lineId: string) => {
     try {
       if (!cart.cartId) return;
-      const { data } = await client.mutate<{ cartLinesRemove: { cart: Cart } }>(
-        {
-          mutation: REMOVE_FROM_CART,
-          variables: {
-            cartId: cart.cartId,
-            lineIds: [lineId],
-          },
-          context: {
-            headers: isAuthenticated
-              ? { Authorization: `Bearer ${getAccessToken()}` }
-              : {},
-          },
-        }
-      );
-      const updatedCart = data!.cartLinesRemove.cart;
-      const updatedCartState: CartState = {
-        cartId: updatedCart.id,
-        items: updatedCart.lines.edges.map((edge) => ({
-          variantId: edge.node.merchandise.id,
-          quantity: edge.node.quantity,
-          lineId: edge.node.id,
-        })),
-        checkoutUrl: updatedCart.checkoutUrl,
-        itemCount: updatedCart.totalQuantity,
-        subtotalAmount: null,
-        totalAmount: null,
-      };
-      setCart(updatedCartState);
-      toast.success("Item removed from cart!");
+      await client.mutate<{ cartLinesRemove: { cart: Cart } }>({
+        mutation: REMOVE_FROM_CART,
+        variables: {
+          cartId: cart.cartId,
+          lineIds: [lineId],
+        },
+      });
+
+      toast.success("Product removed from cart!");
+      await getCart();
     } catch (error) {
       console.error("Error removing from cart:", error);
-      toast.error("Failed to remove item from cart.");
+      toast.error("Failed to remove product from cart.");
+      await getCart();
     }
   };
 
   const updateCartItem = async (lineId: string, quantity: number) => {
     try {
       if (!cart.cartId) return;
-      const { data } = await client.mutate<{ cartLinesUpdate: { cart: Cart } }>(
-        {
-          mutation: UPDATE_CART_ITEMS,
-          variables: {
-            cartId: cart.cartId,
-            lines: [{ id: lineId, quantity }],
-          },
-          context: {
-            headers: isAuthenticated
-              ? { Authorization: `Bearer ${getAccessToken()}` }
-              : {},
-          },
-        }
-      );
-      const updatedCart = data!.cartLinesUpdate.cart;
-      const updatedCartState: CartState = {
-        cartId: updatedCart.id,
-        items: updatedCart.lines.edges.map((edge) => ({
-          variantId: edge.node.merchandise.id,
-          quantity: edge.node.quantity,
-          lineId: edge.node.id,
-          merchandise: {
-            title: edge.node.merchandise.title,
-            image: edge.node.merchandise.image,
-            price: edge.node.merchandise.price,
-            compareAtPrice: edge.node.merchandise.compareAtPrice,
-            availableForSale: edge.node.merchandise.availableForSale,
-            selectedOptions: edge.node.merchandise.selectedOptions,
-          },
-        })),
-        checkoutUrl: updatedCart.checkoutUrl,
-        itemCount: updatedCart.totalQuantity,
-        subtotalAmount: null,
-        totalAmount: null,
-      };
-      setCart(updatedCartState);
-      toast.success("Cart updated!");
+
+      const cartItem = cart.items.find((item) => item.lineId === lineId);
+      if (!cartItem || !cartItem.merchandise) {
+        throw new Error("Item not found in cart.");
+      }
+
+      const availableQuantity = cartItem.merchandise.quantityAvailable ?? 0;
+      const MAX_PRODUCT_QUANTITY = 10;
+
+      if (quantity > availableQuantity) {
+        throw new Error(`Only ${availableQuantity} items available in stock.`);
+      }
+
+      if (quantity > MAX_PRODUCT_QUANTITY) {
+        throw new Error(`Maximum allowed quantity is ${MAX_PRODUCT_QUANTITY}.`);
+      }
+
+      await client.mutate<{ cartLinesUpdate: { cart: Cart } }>({
+        mutation: UPDATE_CART_ITEMS,
+        variables: {
+          cartId: cart.cartId,
+          lines: [{ id: lineId, quantity }],
+        },
+      });
+
+      toast.success("Cart updated successfully!");
+      await getCart();
     } catch (error) {
       console.error("Error updating cart:", error);
       toast.error("Failed to update cart.");
       await getCart();
     }
-  };
-
-  const getAccessToken = () => {
-    if (typeof window === "undefined") return null;
-    return document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("lugdi_shopify_access_token="))
-      ?.split("=")[1];
   };
 
   return (

@@ -2,7 +2,8 @@ import { NextResponse, NextRequest } from "next/server";
 import { countries, Country } from "./lib/countries";
 import LugdiUtils from "./utils/LugdiUtils";
 
-async function refreshToken(refreshToken: string): Promise<{
+// Rename parameter to avoid conflict with function name
+export async function refreshToken(refreshTokenValue: string): Promise<{
   access_token: string;
   expires_in: number;
   refresh_token: string;
@@ -13,7 +14,7 @@ async function refreshToken(refreshToken: string): Promise<{
   const body = new URLSearchParams({
     grant_type: "refresh_token",
     client_id: clientId,
-    refresh_token: refreshToken,
+    refresh_token: refreshTokenValue, // Use the renamed parameter
   });
 
   const response = await fetch(
@@ -33,27 +34,26 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   try {
     const cookies = request.cookies;
     const pathName = request.nextUrl.pathname || "";
-    const protectedRoutes = ["/account"]; // Define protected routes here
+    const protectedRoutes = ["/account"];
     const isProtectedRoute = protectedRoutes.some((route) =>
       pathName.startsWith(route)
     );
 
-    // Auth Logic (only for protected routes)
     if (isProtectedRoute) {
       let accessToken = cookies.get("lugdi_shopify_access_token")?.value;
-      const refreshToken = cookies.get("lugdi_shopify_refresh_token")?.value;
+      const refreshTokenValue = cookies.get(
+        "lugdi_shopify_refresh_token"
+      )?.value; // Renamed for clarity
       const expiresAt = cookies.get("lugdi_shopify_expires_at")?.value;
 
-      // No session, redirect to sign-in
-      if (!accessToken || !refreshToken || !expiresAt) {
+      if (!accessToken || !refreshTokenValue || !expiresAt) {
         return NextResponse.redirect(new URL("/signin", request.url));
       }
 
-      // Check if token is expired
       if (Date.now() > parseInt(expiresAt)) {
-        const refreshedTokens = await refreshToken(refreshToken);
+        // Call the function with the refresh token value
+        const refreshedTokens = await refreshToken(refreshTokenValue);
         if (!refreshedTokens) {
-          // Refresh failed, clear cookies and redirect to sign-in
           const response = NextResponse.redirect(
             new URL("/signin", request.url)
           );
@@ -64,7 +64,6 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
           return response;
         }
 
-        // Update cookies with new tokens
         const newExpiresAt = Date.now() + refreshedTokens.expires_in * 1000;
         const response = NextResponse.next();
         response.cookies.set(
@@ -80,17 +79,13 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
         response.cookies.set(
           "lugdi_shopify_expires_at",
           newExpiresAt.toString(),
-          {
-            httpOnly: true,
-            secure: true,
-          }
+          { httpOnly: true, secure: true }
         );
-        accessToken = refreshedTokens.access_token; // Update for downstream use
+        accessToken = refreshedTokens.access_token;
         return response;
       }
     }
 
-    // Country Redirection logic goes here
     const cookieCountryCode =
       cookies.get(LugdiUtils.location_cookieName)?.value || null;
     const detectedCountryCode =
@@ -125,7 +120,6 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
 
     const isComingSoonPage = pathName.includes("/coming-soon");
 
-    // Redirect to /coming-soon if country is not active
     if (!isCountryActive && !isComingSoonPage) {
       const redirectUrl = new URL(
         `/${activeCountryCode}/coming-soon`,
@@ -143,7 +137,6 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
       return response;
     }
 
-    // Redirect to home if country is active and trying to access /coming-soon
     if (isCountryActive && isComingSoonPage) {
       response = NextResponse.redirect(new URL("/", request.url));
       response.cookies.set(LugdiUtils.location_cookieName, activeCountryCode, {
@@ -157,12 +150,10 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
       return response;
     }
 
-    // Skip further processing for excluded paths
     if (isExcludedPath) {
       return response;
     }
 
-    // Handle URL country slug logic
     const validCountrySlugs = countries.map((c) => c.slug.toLowerCase());
     const urlSegments = pathName.split("/").filter(Boolean);
     const detectedSlugs = urlSegments.filter((segment) =>

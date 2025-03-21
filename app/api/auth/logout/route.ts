@@ -1,15 +1,9 @@
-// src/app/api/auth/logout/route.ts
 import { NextRequest, NextResponse } from "next/server";
+import LugdiUtils from "@/utils/LugdiUtils";
 
 export async function GET(request: NextRequest) {
   const shopId = process.env.SHOPIFY_SHOP_ID!;
-  const idToken = request.cookies.get("lugdi_shopify_id_token")?.value;
-  const cookieStore = request.cookies;
-
-  cookieStore.delete("lugdi_shopify_access_token");
-  cookieStore.delete("lugdi_shopify_refresh_token");
-  cookieStore.delete("lugdi_shopify_id_token");
-  cookieStore.delete("lugdi_shopify_expires_at");
+  const idToken = request.cookies.get(LugdiUtils.auth.idTokenCookie)?.value;
 
   const logoutUrl = new URL(
     `https://shopify.com/authentication/${shopId}/logout`
@@ -20,5 +14,11 @@ export async function GET(request: NextRequest) {
     `${process.env.NEXT_PUBLIC_SITE_URL}`
   );
 
-  return NextResponse.redirect(logoutUrl.toString());
+  const response = NextResponse.redirect(logoutUrl.toString());
+  response.cookies.delete(LugdiUtils.auth.accessTokenCookie);
+  response.cookies.delete(LugdiUtils.auth.refreshTokenCookie);
+  response.cookies.delete(LugdiUtils.auth.idTokenCookie);
+  response.cookies.delete(LugdiUtils.auth.expiresAtCookie);
+
+  return response;
 }

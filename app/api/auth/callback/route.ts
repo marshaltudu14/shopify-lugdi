@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import LugdiUtils from "@/utils/LugdiUtils";
 
 export async function GET(request: NextRequest) {
   const shopId = process.env.SHOPIFY_SHOP_ID!;
@@ -17,8 +18,8 @@ export async function GET(request: NextRequest) {
   }
 
   const cookieStore = await cookies();
-  const storedState = cookieStore.get("lugdi_shopify_state")?.value;
-  const verifier = cookieStore.get("lugdi_shopify_code_verifier")?.value;
+  const storedState = cookieStore.get(LugdiUtils.auth.stateCookie)?.value;
+  const verifier = cookieStore.get(LugdiUtils.auth.codeVerifierCookie)?.value;
 
   if (!storedState || storedState !== state || !verifier) {
     return NextResponse.redirect(
@@ -55,29 +56,27 @@ export async function GET(request: NextRequest) {
     await response.json();
   const expiresAt = Date.now() + expires_in * 1000;
 
-  cookieStore.set("lugdi_shopify_access_token", access_token, {
+  cookieStore.set(LugdiUtils.auth.accessTokenCookie, access_token, {
     httpOnly: true,
     secure: true,
     expires: new Date(expiresAt),
   });
-  cookieStore.set("lugdi_shopify_refresh_token", refresh_token, {
+  cookieStore.set(LugdiUtils.auth.refreshTokenCookie, refresh_token, {
     httpOnly: true,
     secure: true,
   });
-  cookieStore.set("lugdi_shopify_id_token", id_token, {
+  cookieStore.set(LugdiUtils.auth.idTokenCookie, id_token, {
     httpOnly: true,
     secure: true,
   });
-  cookieStore.set("lugdi_shopify_expires_at", expiresAt.toString(), {
+  cookieStore.set(LugdiUtils.auth.expiresAtCookie, expiresAt.toString(), {
     httpOnly: true,
     secure: true,
   });
 
   // Clear temporary cookies
-  cookieStore.delete("lugdi_shopify_code_verifier");
-  cookieStore.delete("lugdi_shopify_state");
+  cookieStore.delete(LugdiUtils.auth.codeVerifierCookie);
+  cookieStore.delete(LugdiUtils.auth.stateCookie);
 
-  return NextResponse.redirect(
-    `${process.env.NEXT_PUBLIC_SITE_URL}/account?syncCart=true`
-  );
+  return NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL}/account`);
 }
