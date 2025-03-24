@@ -3,9 +3,11 @@ import LugdiUtils from "@/utils/LugdiUtils";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function POST(request: Request) {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get(LugdiUtils.auth.accessTokenCookie)?.value;
+  const { first, after, before, sortKey, reverse, query } =
+    await request.json();
 
   if (!accessToken) {
     console.log("No access token found in cookies");
@@ -25,7 +27,14 @@ export async function GET() {
       },
       body: JSON.stringify({
         query: FETCH_CUSTOMER_DATA.loc?.source.body,
-        variables: {},
+        variables: {
+          first: first || 5,
+          after: after || null,
+          before: before || null,
+          sortKey: sortKey || "CREATED_AT",
+          reverse: reverse || false,
+          query: query || null,
+        },
       }),
     });
 
@@ -40,8 +49,6 @@ export async function GET() {
 
     const data = await response.json();
 
-    console.log("Response Data:", data);
-
     if (!data.data?.customer) {
       console.log("No customer data returned");
       return NextResponse.json(
@@ -49,8 +56,6 @@ export async function GET() {
         { status: 404 }
       );
     }
-
-    console.log("CustomerData:", data);
 
     return NextResponse.json({ customer: data.data.customer });
   } catch (error: unknown) {
@@ -61,4 +66,14 @@ export async function GET() {
       { status: 500 }
     );
   }
+}
+
+// Keep GET method for backward compatibility if needed
+export async function GET() {
+  return POST(
+    new Request("http://localhost", {
+      method: "POST",
+      body: JSON.stringify({ first: 5 }),
+    })
+  );
 }

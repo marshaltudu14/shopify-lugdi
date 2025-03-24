@@ -106,7 +106,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="w-full bg-white dark:bg-gray-950 pt-16 pb-8 border-t border-gray-100 dark:border-gray-800">
+    <footer className="w-full bg-gradient-to-b bg-white dark:from-black dark:to-gray-950 pt-16 pb-8 border-t border-gray-100 dark:border-gray-800">
       <div className="container mx-auto px-4 md:px-6">
         {/* Top section with brand name and description */}
         <div className="flex flex-col mb-12 gap-8">
