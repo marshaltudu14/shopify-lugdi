@@ -29,6 +29,7 @@ export default function AccountPageClient() {
           const response = await fetch("/api/customer/info");
           const data = await response.json();
           setCustomer(data.customer);
+          consol.log("Customer:", data);
         } catch (error) {
           console.error("Error fetching customer data:", error);
         }

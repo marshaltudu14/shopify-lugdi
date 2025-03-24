@@ -40,6 +40,8 @@ export async function GET() {
 
     const data = await response.json();
 
+    console.log("Response Data:", data);
+
     if (!data.data?.customer) {
       console.log("No customer data returned");
       return NextResponse.json(

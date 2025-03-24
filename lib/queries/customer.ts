@@ -2,26 +2,42 @@ import { gql } from "@apollo/client";
 
 export const FETCH_CUSTOMER_DATA = gql`
   query getCustomerData(
-    $first: Int!
-    $after: String!
-    $sortKey: OrderSortKeys!
+    $first: Int
+    $after: String
+    $sortKey: OrderSortKeys
     $reverse: Boolean
-    $query: String!
+    $query: String
   ) {
     customer {
       id
-      displaName
-      emailAddress
-      imageUrl
-      orders(first: $first, after: $after) {
+      displayName
+      emailAddress {
+        emailAddress
+        marketingState
+      }
+      orders(
+        first: $first
+        after: $after
+        sortKey: $sortKey
+        reverse: $reverse
+        query: $query
+      ) {
         edges {
           cursor
           node {
+            id
+            name
+            createdAt
             cancelledAt
             cancelReason
-            createdAt
             currencyCode
+            customerLocale
             financialStatus
+            processedAt
+            totalPrice {
+              amount
+              currencyCode
+            }
           }
         }
         pageInfo {
