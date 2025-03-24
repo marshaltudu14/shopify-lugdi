@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export default function Account() {
+export default function AccountPageClient() {
+  const [customer, setCustomer] = useState<CustomerData | null>(null);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
@@ -20,6 +21,21 @@ export default function Account() {
     }
     fetchUser();
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      async function fetchCustomerData() {
+        try {
+          const response = await fetch("/api/customer/info");
+          const data = await response.json();
+          setCustomer(data.customer);
+        } catch (error) {
+          console.error("Error fetching customer data:", error);
+        }
+      }
+      fetchCustomerData();
+    }
+  }, [isAuthenticated]);
 
   const handleLogout = () => {
     try {
@@ -38,6 +54,11 @@ export default function Account() {
         try {
           const response = await fetch(`/api/auth/check-auth`);
           const data = await response.json();
+
+          if (data.error) {
+            return;
+          }
+
           setIsAuthenticated(data.authenticated);
         } catch (error) {
           console.error("Error checking auth after logout:", error);
@@ -51,6 +72,7 @@ export default function Account() {
     <>
       {isAuthenticated ? (
         <div className="min-h-screen flex items-center justify-center">
+          {/* Logout Button */}
           <Button onClick={handleLogout} disabled={isLoggingOut}>
             {isLoggingOut ? (
               <div className="flex items-center justify-center gap-1">
