@@ -7,6 +7,8 @@ export const FETCH_CUSTOMER_ORDER_DATA = gql`
     $sortKey: OrderSortKeys
     $reverse: Boolean
     $query: String
+    $lineItemsFirst: Int
+    $fulfillmentsFirst: Int
   ) {
     customer {
       id
@@ -37,7 +39,7 @@ export const FETCH_CUSTOMER_ORDER_DATA = gql`
               amount
               currencyCode
             }
-            lineItems(first: 5, after: null) {
+            lineItems(first: $lineItemsFirst) {
               edges {
                 cursor
                 node {
@@ -73,7 +75,7 @@ export const FETCH_CUSTOMER_ORDER_DATA = gql`
                 endCursor
               }
             }
-            fulfillments(first: 5, after: null) {
+            fulfillments(first: $fulfillmentsFirst) {
               edges {
                 cursor
                 node {
@@ -81,21 +83,39 @@ export const FETCH_CUSTOMER_ORDER_DATA = gql`
                   estimatedDeliveryAt
                   latestShipmentStatus
                   status
-                  fulfillmentLineItems(first: 5) {
+                  fulfillmentLineItems(first: 10) {
                     edges {
                       cursor
                       node {
                         id
                         lineItem {
                           id
+                          image {
+                            url
+                            altText
+                          }
                           name
+                          price {
+                            amount
+                            currencyCode
+                          }
                           quantity
+                          totalPrice {
+                            amount
+                            currencyCode
+                          }
+                          variantOptions {
+                            name
+                            value
+                          }
                         }
                         quantity
                       }
                     }
                     pageInfo {
                       hasNextPage
+                      hasPreviousPage
+                      startCursor
                       endCursor
                     }
                   }
@@ -109,6 +129,8 @@ export const FETCH_CUSTOMER_ORDER_DATA = gql`
               }
               pageInfo {
                 hasNextPage
+                hasPreviousPage
+                startCursor
                 endCursor
               }
             }

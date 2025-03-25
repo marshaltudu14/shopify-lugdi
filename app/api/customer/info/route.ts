@@ -6,8 +6,16 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get(LugdiUtils.auth.accessTokenCookie)?.value;
-  const { first, after, before, sortKey, reverse, query } =
-    await request.json();
+  const {
+    first,
+    after,
+    before,
+    sortKey,
+    reverse,
+    query,
+    lineItemsFirst,
+    fulfillmentsFirst,
+  } = await request.json();
 
   if (!accessToken) {
     console.log("No access token found in cookies");
@@ -34,6 +42,8 @@ export async function POST(request: Request) {
           sortKey: sortKey || "CREATED_AT",
           reverse: reverse || false,
           query: query || null,
+          lineItemsFirst: lineItemsFirst || 3,
+          fulfillmentsFirst: fulfillmentsFirst || 1,
         },
       }),
     });
