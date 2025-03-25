@@ -22,7 +22,7 @@ interface BannerCarouselProps {
 }
 
 export default function BannerCarousel({ banners }: BannerCarouselProps) {
-  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [activeIndex] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
 
