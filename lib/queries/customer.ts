@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const FETCH_CUSTOMER_DATA = gql`
+export const FETCH_CUSTOMER_ORDER_DATA = gql`
   query getCustomerData(
     $first: Int
     $after: String
@@ -31,12 +31,86 @@ export const FETCH_CUSTOMER_DATA = gql`
             cancelledAt
             cancelReason
             currencyCode
-            customerLocale
             financialStatus
             processedAt
             totalPrice {
               amount
               currencyCode
+            }
+            lineItems(first: 5, after: null) {
+              edges {
+                cursor
+                node {
+                  id
+                  name
+                  quantity
+                  image {
+                    url
+                    altText
+                  }
+                  price {
+                    amount
+                    currencyCode
+                  }
+                  totalDiscount {
+                    amount
+                    currencyCode
+                  }
+                  totalPrice {
+                    amount
+                    currencyCode
+                  }
+                  variantOptions {
+                    name
+                    value
+                  }
+                }
+              }
+              pageInfo {
+                hasNextPage
+                hasPreviousPage
+                startCursor
+                endCursor
+              }
+            }
+            fulfillments(first: 5, after: null) {
+              edges {
+                cursor
+                node {
+                  id
+                  estimatedDeliveryAt
+                  latestShipmentStatus
+                  status
+                  fulfillmentLineItems(first: 5) {
+                    edges {
+                      cursor
+                      node {
+                        id
+                        lineItem {
+                          id
+                          name
+                          quantity
+                        }
+                        quantity
+                      }
+                    }
+                    pageInfo {
+                      hasNextPage
+                      endCursor
+                    }
+                  }
+                  trackingInformation {
+                    company
+                    number
+                    url
+                  }
+                  updatedAt
+                }
+              }
+              pageInfo {
+                hasNextPage
+                endCursor
+              }
             }
           }
         }

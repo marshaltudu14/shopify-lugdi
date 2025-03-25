@@ -1,4 +1,4 @@
-import { FETCH_CUSTOMER_DATA } from "@/lib/queries/customer";
+import { FETCH_CUSTOMER_ORDER_DATA } from "@/lib/queries/customer";
 import LugdiUtils from "@/utils/LugdiUtils";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
         Accept: "application/json",
       },
       body: JSON.stringify({
-        query: FETCH_CUSTOMER_DATA.loc?.source.body,
+        query: FETCH_CUSTOMER_ORDER_DATA.loc?.source.body,
         variables: {
           first: first || 5,
           after: after || null,
@@ -68,7 +68,6 @@ export async function POST(request: Request) {
   }
 }
 
-// Keep GET method for backward compatibility if needed
 export async function GET() {
   return POST(
     new Request("http://localhost", {
