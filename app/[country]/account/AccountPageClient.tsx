@@ -199,7 +199,7 @@ export default function AccountPageClient() {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [ordersPerPage] = useState(1);
+  const [ordersPerPage] = useState(10);
   const [sortKey, setSortKey] = useState("CREATED_AT");
   const [reverse, setReverse] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -279,6 +279,7 @@ export default function AccountPageClient() {
   };
 
   const fetchMoreLineItems = async (orderId: string, afterCursor: string) => {
+    setIsLoading(true);
     try {
       const response = await fetch("/api/customer/info", {
         method: "POST",
@@ -291,36 +292,60 @@ export default function AccountPageClient() {
         }),
       });
       const data = await response.json();
-      // Update the specific order's line items
-      if (customer) {
-        setCustomer({
-          ...customer,
+
+      // Step-by-step response validation
+      const orders = data?.customer?.orders?.edges;
+      if (!orders || !Array.isArray(orders)) {
+        throw new Error("Invalid orders data in response");
+      }
+
+      // Find the order that contains the new line items
+      const orderWithNewItems = orders.find(
+        (edge) => edge?.node?.id === orderId
+      );
+
+      if (!orderWithNewItems) {
+        throw new Error("Order not found in response");
+      }
+
+      const newLineItems = orderWithNewItems.node.lineItems;
+      if (!newLineItems?.edges || !newLineItems?.pageInfo) {
+        throw new Error("Invalid line items data in response");
+      }
+
+      // Update state with the new items
+      setCustomer((prevCustomer) => {
+        if (!prevCustomer) return prevCustomer;
+
+        return {
+          ...prevCustomer,
           orders: {
-            ...customer.orders,
-            edges: customer.orders.edges.map((edge) => {
-              if (edge.node.id === orderId) {
+            ...prevCustomer.orders,
+            edges: prevCustomer.orders.edges.map((orderEdge) => {
+              if (orderEdge.node.id === orderId) {
                 return {
-                  ...edge,
+                  ...orderEdge,
                   node: {
-                    ...edge.node,
+                    ...orderEdge.node,
                     lineItems: {
                       edges: [
-                        ...edge.node.lineItems.edges,
-                        ...data.customer.orders.edges[0].node.lineItems.edges,
+                        ...orderEdge.node.lineItems.edges,
+                        ...newLineItems.edges,
                       ],
-                      pageInfo:
-                        data.customer.orders.edges[0].node.lineItems.pageInfo,
+                      pageInfo: newLineItems.pageInfo,
                     },
                   },
                 };
               }
-              return edge;
+              return orderEdge;
             }),
           },
-        });
-      }
+        };
+      });
     } catch (error) {
       console.error("Error fetching more line items:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -328,6 +353,7 @@ export default function AccountPageClient() {
     orderId: string,
     afterCursor: string
   ) => {
+    setIsLoading(true);
     try {
       const response = await fetch("/api/customer/info", {
         method: "POST",
@@ -340,38 +366,162 @@ export default function AccountPageClient() {
         }),
       });
       const data = await response.json();
-      // Update the specific order's fulfillments
-      if (customer) {
-        setCustomer({
-          ...customer,
+
+      // Validate response structure
+      const orders = data?.customer?.orders?.edges;
+      if (!orders || !Array.isArray(orders)) {
+        throw new Error("Invalid orders data in response");
+      }
+
+      // Find the specific order in response
+      const order = orders.find((edge) => edge?.node?.id === orderId);
+      if (!order) {
+        throw new Error("Order not found in response");
+      }
+
+      const newFulfillments = order.node.fulfillments;
+      if (!newFulfillments || !Array.isArray(newFulfillments.edges)) {
+        throw new Error("Invalid fulfillments data in response");
+      }
+
+      setCustomer((prevCustomer) => {
+        if (!prevCustomer) return prevCustomer;
+
+        return {
+          ...prevCustomer,
           orders: {
-            ...customer.orders,
-            edges: customer.orders.edges.map((edge) => {
-              if (edge.node.id === orderId) {
+            ...prevCustomer.orders,
+            edges: prevCustomer.orders.edges.map((orderEdge) => {
+              if (orderEdge.node.id === orderId) {
                 return {
-                  ...edge,
+                  ...orderEdge,
                   node: {
-                    ...edge.node,
+                    ...orderEdge.node,
                     fulfillments: {
                       edges: [
-                        ...edge.node.fulfillments.edges,
-                        ...data.customer.orders.edges[0].node.fulfillments
-                          .edges,
+                        ...orderEdge.node.fulfillments.edges,
+                        ...newFulfillments.edges,
                       ],
-                      pageInfo:
-                        data.customer.orders.edges[0].node.fulfillments
-                          .pageInfo,
+                      pageInfo: newFulfillments.pageInfo,
                     },
                   },
                 };
               }
-              return edge;
+              return orderEdge;
             }),
           },
-        });
-      }
+        };
+      });
     } catch (error) {
       console.error("Error fetching more fulfillments:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchMoreFulfillmentLineItems = async (
+    orderId: string,
+    fulfillmentId: string,
+    afterCursor: string
+  ) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/customer/info", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fulfillmentLineItemsFirst: 5,
+          fulfillmentLineItemsAfter: afterCursor,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // More robust response checking
+      const orders = data?.customer?.orders?.edges;
+      if (!orders || !Array.isArray(orders)) {
+        throw new Error("Invalid orders data");
+      }
+
+      // Find the specific order
+      const order = orders.find((edge) => edge?.node?.id === orderId);
+      if (!order) {
+        throw new Error("Order not found in response");
+      }
+
+      const fulfillments = order.node.fulfillments?.edges;
+      if (!fulfillments || !Array.isArray(fulfillments)) {
+        throw new Error("Invalid fulfillments data");
+      }
+
+      // Find the specific fulfillment
+      const fulfillment = fulfillments.find(
+        (edge) => edge?.node?.id === fulfillmentId
+      );
+      if (!fulfillment) {
+        throw new Error("Fulfillment not found in response");
+      }
+
+      const newItems = fulfillment.node.fulfillmentLineItems;
+      if (!newItems) {
+        throw new Error("Fulfillment line items not found");
+      }
+
+      setCustomer((prevCustomer) => {
+        if (!prevCustomer) return prevCustomer;
+
+        return {
+          ...prevCustomer,
+          orders: {
+            ...prevCustomer.orders,
+            edges: prevCustomer.orders.edges.map((orderEdge) => {
+              if (orderEdge.node.id === orderId) {
+                return {
+                  ...orderEdge,
+                  node: {
+                    ...orderEdge.node,
+                    fulfillments: {
+                      ...orderEdge.node.fulfillments,
+                      edges: orderEdge.node.fulfillments.edges.map(
+                        (fulfillmentEdge) => {
+                          if (fulfillmentEdge.node.id === fulfillmentId) {
+                            return {
+                              ...fulfillmentEdge,
+                              node: {
+                                ...fulfillmentEdge.node,
+                                fulfillmentLineItems: {
+                                  edges: [
+                                    ...fulfillmentEdge.node.fulfillmentLineItems
+                                      .edges,
+                                    ...newItems.edges,
+                                  ],
+                                  pageInfo: newItems.pageInfo,
+                                },
+                              },
+                            };
+                          }
+                          return fulfillmentEdge;
+                        }
+                      ),
+                    },
+                  },
+                };
+              }
+              return orderEdge;
+            }),
+          },
+        };
+      });
+    } catch (error) {
+      console.error("Error fetching more fulfillment line items:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -899,15 +1049,21 @@ export default function AccountPageClient() {
                                                 variant="outline"
                                                 size="sm"
                                                 onClick={() =>
-                                                  fetchMoreFulfillments(
+                                                  fetchMoreFulfillmentLineItems(
                                                     order.id,
+                                                    fulfillment.id,
                                                     fulfillment
                                                       .fulfillmentLineItems
                                                       .pageInfo.endCursor
                                                   )
                                                 }
+                                                disabled={isLoading}
                                               >
-                                                Load More Items
+                                                {isLoading ? (
+                                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                                ) : (
+                                                  "Load More Items"
+                                                )}
                                               </Button>
                                             </div>
                                           )}

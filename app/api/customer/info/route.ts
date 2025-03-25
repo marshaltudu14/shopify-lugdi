@@ -17,6 +17,8 @@ export async function POST(request: Request) {
     lineItemsAfter,
     fulfillmentsFirst,
     fulfillmentsAfter,
+    fulfillmentLineItemsFirst,
+    fulfillmentLineItemsAfter,
   } = await request.json();
 
   if (!accessToken) {
@@ -38,7 +40,7 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         query: FETCH_CUSTOMER_ORDER_DATA.loc?.source.body,
         variables: {
-          first: first || 5,
+          first: first || 10,
           after: after || null,
           before: before || null,
           sortKey: sortKey || "CREATED_AT",
@@ -46,8 +48,10 @@ export async function POST(request: Request) {
           query: query || null,
           lineItemsFirst: lineItemsFirst || 5,
           lineItemsAfter: lineItemsAfter || null,
-          fulfillmentsFirst: fulfillmentsFirst || 3,
+          fulfillmentsFirst: fulfillmentsFirst || 5,
           fulfillmentsAfter: fulfillmentsAfter || null,
+          fulfillmentLineItemsFirst: fulfillmentLineItemsFirst || 5,
+          fulfillmentLineItemsAfter: fulfillmentLineItemsAfter || null,
         },
       }),
     });

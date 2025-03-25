@@ -11,6 +11,8 @@ export const FETCH_CUSTOMER_ORDER_DATA = gql`
     $lineItemsAfter: String
     $fulfillmentsFirst: Int
     $fulfillmentsAfter: String
+    $fulfillmentLineItemsFirst: Int
+    $fulfillmentLineItemsAfter: String
   ) {
     customer {
       id
@@ -85,7 +87,10 @@ export const FETCH_CUSTOMER_ORDER_DATA = gql`
                   estimatedDeliveryAt
                   latestShipmentStatus
                   status
-                  fulfillmentLineItems(first: 5) {
+                  fulfillmentLineItems(
+                    first: $fulfillmentLineItemsFirst
+                    after: $fulfillmentLineItemsAfter
+                  ) {
                     edges {
                       cursor
                       node {
