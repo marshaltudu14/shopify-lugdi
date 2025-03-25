@@ -43,6 +43,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { ChevronDown, ChevronUp, Loader2, Search } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import Image from "next/image";
 
 interface LineItem {
   id: string;
@@ -640,9 +641,11 @@ export default function AccountPageClient() {
                                       <TableCell>
                                         <div className="flex items-center gap-3">
                                           {item.image && (
-                                            <img
+                                            <Image
                                               src={item.image.url}
                                               alt={item.image.altText || ""}
+                                              width={250}
+                                              height={250}
                                               className="w-10 h-10 rounded object-cover"
                                             />
                                           )}
@@ -829,7 +832,7 @@ export default function AccountPageClient() {
                                                       <div className="flex items-center gap-3">
                                                         {item.lineItem
                                                           .image && (
-                                                          <img
+                                                          <Image
                                                             src={
                                                               item.lineItem
                                                                 .image.url
@@ -839,6 +842,8 @@ export default function AccountPageClient() {
                                                                 .image
                                                                 .altText || ""
                                                             }
+                                                            width={250}
+                                                            height={250}
                                                             className="w-10 h-10 rounded object-cover"
                                                           />
                                                         )}
