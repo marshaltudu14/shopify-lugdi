@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
   Card,
@@ -213,6 +213,8 @@ export default function AccountPageClient() {
     Record<string, boolean>
   >({});
 
+  const directionRef = useRef<"next" | "prev" | null>(null);
+
   // Check authentication status
   useEffect(() => {
     async function fetchUser() {
@@ -242,6 +244,16 @@ export default function AccountPageClient() {
   const fetchCustomerData = async () => {
     setIsLoading(true);
     try {
+      // Determine cursors based on direction
+      const after =
+        directionRef.current === "next"
+          ? customer?.orders.pageInfo.endCursor
+          : null;
+      const before =
+        directionRef.current === "prev"
+          ? customer?.orders.pageInfo.startCursor
+          : null;
+
       const response = await fetch("/api/customer/info", {
         method: "POST",
         headers: {
@@ -249,6 +261,8 @@ export default function AccountPageClient() {
         },
         body: JSON.stringify({
           first: ordersPerPage,
+          after: directionRef.current === "next" ? after : null,
+          before: directionRef.current === "prev" ? before : null,
           sortKey,
           reverse,
           query: searchQuery || undefined,
@@ -256,6 +270,7 @@ export default function AccountPageClient() {
       });
       const data = await response.json();
       setCustomer(data.customer);
+      directionRef.current = null;
     } catch (error) {
       console.error("Error fetching customer data:", error);
     } finally {
@@ -384,12 +399,16 @@ export default function AccountPageClient() {
   };
 
   const handlePageChange = (direction: "next" | "prev") => {
-    if (direction === "next" && customer?.orders.pageInfo.hasNextPage) {
+    if (!customer) return;
+
+    if (direction === "next" && customer.orders.pageInfo.hasNextPage) {
+      directionRef.current = "next";
       setCurrentPage((prev) => prev + 1);
     } else if (
       direction === "prev" &&
-      customer?.orders.pageInfo.hasPreviousPage
+      customer.orders.pageInfo.hasPreviousPage
     ) {
+      directionRef.current = "prev";
       setCurrentPage((prev) => prev - 1);
     }
   };
@@ -438,7 +457,7 @@ export default function AccountPageClient() {
   if (isLoading || isAuthenticated === null) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
+        <Loader2 className="animate-spin" />
       </div>
     );
   }
@@ -931,16 +950,33 @@ export default function AccountPageClient() {
           <Pagination className="m-0">
             <PaginationContent>
               <PaginationItem>
-                <PaginationPrevious
+                <Button
+                  variant="ghost"
+                  size="icon"
                   onClick={() => handlePageChange("prev")}
-                  disabled={!customer?.orders.pageInfo.hasPreviousPage}
-                />
+                  disabled={
+                    !customer?.orders.pageInfo.hasPreviousPage || isLoading
+                  }
+                >
+                  <PaginationPrevious />
+                </Button>
               </PaginationItem>
               <PaginationItem>
-                <PaginationNext
+                <span className="text-sm px-4">Page {currentPage}</span>
+              </PaginationItem>
+              <PaginationItem>
+                <Button
+                  variant="ghost"
+                  size="icon"
                   onClick={() => handlePageChange("next")}
-                  disabled={!customer?.orders.pageInfo.hasNextPage}
-                />
+                  disabled={!customer?.orders.pageInfo.hasNextPage || isLoading}
+                >
+                  {isLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <PaginationNext />
+                  )}
+                </Button>
               </PaginationItem>
             </PaginationContent>
           </Pagination>
