@@ -14,7 +14,9 @@ export async function POST(request: Request) {
     reverse,
     query,
     lineItemsFirst,
+    lineItemsAfter,
     fulfillmentsFirst,
+    fulfillmentsAfter,
   } = await request.json();
 
   if (!accessToken) {
@@ -42,8 +44,10 @@ export async function POST(request: Request) {
           sortKey: sortKey || "CREATED_AT",
           reverse: reverse || false,
           query: query || null,
-          lineItemsFirst: lineItemsFirst || 3,
-          fulfillmentsFirst: fulfillmentsFirst || 1,
+          lineItemsFirst: lineItemsFirst || 5,
+          lineItemsAfter: lineItemsAfter || null,
+          fulfillmentsFirst: fulfillmentsFirst || 3,
+          fulfillmentsAfter: fulfillmentsAfter || null,
         },
       }),
     });
@@ -76,13 +80,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-}
-
-export async function GET() {
-  return POST(
-    new Request("http://localhost", {
-      method: "POST",
-      body: JSON.stringify({ first: 5 }),
-    })
-  );
 }

@@ -1,5 +1,15 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   Pagination,
@@ -17,17 +27,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+} from "@/components/ui/collapsible";
+import { Badge } from "@/components/ui/badge";
+import { ChevronDown, ChevronUp, Loader2, Search } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 interface LineItem {
   id: string;
   name: string;
   quantity: number;
-  image: {
+  image?: {
     url: string;
-    altText: string | null;
+    altText?: string;
   };
   price: {
     amount: string;
@@ -41,24 +64,27 @@ interface LineItem {
     amount: string;
     currencyCode: string;
   };
-  variantOptions: Array<{
+  variantOptions?: Array<{
     name: string;
     value: string;
   }>;
 }
 
+interface FulfillmentLineItem {
+  id: string;
+  lineItem: LineItem;
+  quantity: number;
+}
+
 interface Fulfillment {
   id: string;
-  estimatedDeliveryAt: string | null;
-  latestShipmentStatus: string | null;
+  estimatedDeliveryAt?: string;
+  latestShipmentStatus?: string;
   status: string;
   fulfillmentLineItems: {
     edges: Array<{
-      node: {
-        id: string;
-        lineItem: LineItem;
-        quantity: number;
-      };
+      cursor: string;
+      node: FulfillmentLineItem;
     }>;
     pageInfo: {
       hasNextPage: boolean;
@@ -67,10 +93,10 @@ interface Fulfillment {
       endCursor: string;
     };
   };
-  trackingInformation: Array<{
-    company: string | null;
-    number: string | null;
-    url: string | null;
+  trackingInformation?: Array<{
+    company: string;
+    number: string;
+    url?: string;
   }>;
   updatedAt: string;
 }
@@ -90,6 +116,7 @@ interface Order {
   };
   lineItems: {
     edges: Array<{
+      cursor: string;
       node: LineItem;
     }>;
     pageInfo: {
@@ -101,6 +128,7 @@ interface Order {
   };
   fulfillments: {
     edges: Array<{
+      cursor: string;
       node: Fulfillment;
     }>;
     pageInfo: {
@@ -121,6 +149,7 @@ interface CustomerData {
   };
   orders: {
     edges: Array<{
+      cursor: string;
       node: Order;
     }>;
     pageInfo: {
@@ -164,23 +193,22 @@ const fulfillmentStatusMap: Record<string, string> = {
 };
 
 export default function AccountPageClient() {
+  const router = useRouter();
   const [customer, setCustomer] = useState<CustomerData | null>(null);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [ordersPerPage] = useState(5);
+  const [ordersPerPage] = useState(1);
   const [sortKey, setSortKey] = useState("CREATED_AT");
-  const [reverse, setReverse] = useState(true);
+  const [reverse, setReverse] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [afterCursor, setAfterCursor] = useState<string | null>(null);
-  const [beforeCursor, setBeforeCursor] = useState<string | null>(null);
   const [expandedOrders, setExpandedOrders] = useState<Record<string, boolean>>(
     {}
   );
-  const [loadingMoreItems, setLoadingMoreItems] = useState<
+  const [expandedLineItems, setExpandedLineItems] = useState<
     Record<string, boolean>
   >({});
-  const [loadingMoreFulfillments, setLoadingMoreFulfillments] = useState<
+  const [expandedFulfillments, setExpandedFulfillments] = useState<
     Record<string, boolean>
   >({});
 
@@ -191,12 +219,17 @@ export default function AccountPageClient() {
         const response = await fetch(`/api/auth/check-auth`);
         const data = await response.json();
         setIsAuthenticated(data.authenticated);
+        if (!data.authenticated) {
+          router.push("/login");
+        }
       } catch (error) {
         console.error("Error fetching user:", error);
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchUser();
-  }, []);
+  }, [router]);
 
   // Fetch customer data with pagination, sort, and search
   useEffect(() => {
@@ -206,6 +239,7 @@ export default function AccountPageClient() {
   }, [isAuthenticated, currentPage, sortKey, reverse, searchQuery]);
 
   const fetchCustomerData = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch("/api/customer/info", {
         method: "POST",
@@ -214,66 +248,148 @@ export default function AccountPageClient() {
         },
         body: JSON.stringify({
           first: ordersPerPage,
-          after: afterCursor,
-          before: beforeCursor,
           sortKey,
           reverse,
           query: searchQuery || undefined,
-          lineItemsFirst: 3,
-          fulfillmentsFirst: 1,
         }),
       });
       const data = await response.json();
       setCustomer(data.customer);
-      setAfterCursor(data.customer.orders.pageInfo.endCursor);
-      setBeforeCursor(data.customer.orders.pageInfo.startCursor);
     } catch (error) {
       console.error("Error fetching customer data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchMoreLineItems = async (orderId: string, afterCursor: string) => {
+    try {
+      const response = await fetch("/api/customer/info", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          lineItemsFirst: 5,
+          lineItemsAfter: afterCursor,
+        }),
+      });
+      const data = await response.json();
+      // Update the specific order's line items
+      if (customer) {
+        setCustomer({
+          ...customer,
+          orders: {
+            ...customer.orders,
+            edges: customer.orders.edges.map((edge) => {
+              if (edge.node.id === orderId) {
+                return {
+                  ...edge,
+                  node: {
+                    ...edge.node,
+                    lineItems: {
+                      edges: [
+                        ...edge.node.lineItems.edges,
+                        ...data.customer.orders.edges[0].node.lineItems.edges,
+                      ],
+                      pageInfo:
+                        data.customer.orders.edges[0].node.lineItems.pageInfo,
+                    },
+                  },
+                };
+              }
+              return edge;
+            }),
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching more line items:", error);
+    }
+  };
+
+  const fetchMoreFulfillments = async (
+    orderId: string,
+    afterCursor: string
+  ) => {
+    try {
+      const response = await fetch("/api/customer/info", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fulfillmentsFirst: 3,
+          fulfillmentsAfter: afterCursor,
+        }),
+      });
+      const data = await response.json();
+      // Update the specific order's fulfillments
+      if (customer) {
+        setCustomer({
+          ...customer,
+          orders: {
+            ...customer.orders,
+            edges: customer.orders.edges.map((edge) => {
+              if (edge.node.id === orderId) {
+                return {
+                  ...edge,
+                  node: {
+                    ...edge.node,
+                    fulfillments: {
+                      edges: [
+                        ...edge.node.fulfillments.edges,
+                        ...data.customer.orders.edges[0].node.fulfillments
+                          .edges,
+                      ],
+                      pageInfo:
+                        data.customer.orders.edges[0].node.fulfillments
+                          .pageInfo,
+                    },
+                  },
+                };
+              }
+              return edge;
+            }),
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching more fulfillments:", error);
     }
   };
 
   const handleLogout = async () => {
     try {
-      setIsLoggingOut(true);
       window.location.href = "/api/auth/logout";
     } catch (error) {
       console.error("Error logging out:", error);
-    } finally {
-      setIsLoggingOut(false);
     }
   };
 
   const handleSortChange = (value: string) => {
     setSortKey(value);
     setCurrentPage(1);
-    setAfterCursor(null);
-    setBeforeCursor(null);
   };
 
   const handleReverseToggle = () => {
     setReverse(!reverse);
     setCurrentPage(1);
-    setAfterCursor(null);
-    setBeforeCursor(null);
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
-    setAfterCursor(null);
-    setBeforeCursor(null);
   };
 
   const handlePageChange = (direction: "next" | "prev") => {
-    if (direction === "next" && customer?.orders?.pageInfo?.hasNextPage) {
+    if (direction === "next" && customer?.orders.pageInfo.hasNextPage) {
       setCurrentPage((prev) => prev + 1);
-      setBeforeCursor(null);
     } else if (
       direction === "prev" &&
-      customer?.orders?.pageInfo?.hasPreviousPage
+      customer?.orders.pageInfo.hasPreviousPage
     ) {
       setCurrentPage((prev) => prev - 1);
-      setAfterCursor(null);
     }
   };
 
@@ -284,544 +400,547 @@ export default function AccountPageClient() {
     }));
   };
 
-  const loadMoreLineItems = async (orderId: string, cursor: string) => {
-    try {
-      setLoadingMoreItems((prev) => ({ ...prev, [orderId]: true }));
-
-      const response = await fetch("/api/customer/info", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          first: ordersPerPage,
-          sortKey,
-          reverse,
-          query: searchQuery || undefined,
-          lineItemsFirst: 10, // Load more items
-          fulfillmentsFirst: 1,
-        }),
-      });
-
-      const data = await response.json();
-
-      // Update the specific order's line items
-      setCustomer((prev) => {
-        if (!prev) return null;
-
-        const updatedOrders = prev.orders.edges.map((edge) => {
-          if (edge.node.id === orderId) {
-            return {
-              ...edge,
-              node: {
-                ...edge.node,
-                lineItems:
-                  data.customer.orders.edges.find(
-                    (e: any) => e.node.id === orderId
-                  )?.node.lineItems || edge.node.lineItems,
-              },
-            };
-          }
-          return edge;
-        });
-
-        return {
-          ...prev,
-          orders: {
-            ...prev.orders,
-            edges: updatedOrders,
-          },
-        };
-      });
-    } catch (error) {
-      console.error("Error loading more line items:", error);
-    } finally {
-      setLoadingMoreItems((prev) => ({ ...prev, [orderId]: false }));
-    }
+  const toggleLineItemsExpansion = (orderId: string) => {
+    setExpandedLineItems((prev) => ({
+      ...prev,
+      [orderId]: !prev[orderId],
+    }));
   };
 
-  const loadMoreFulfillments = async (orderId: string, cursor: string) => {
-    try {
-      setLoadingMoreFulfillments((prev) => ({ ...prev, [orderId]: true }));
-
-      const response = await fetch("/api/customer/info", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          first: ordersPerPage,
-          sortKey,
-          reverse,
-          query: searchQuery || undefined,
-          lineItemsFirst: 3,
-          fulfillmentsFirst: 5, // Load more fulfillments
-        }),
-      });
-
-      const data = await response.json();
-
-      // Update the specific order's fulfillments
-      setCustomer((prev) => {
-        if (!prev) return null;
-
-        const updatedOrders = prev.orders.edges.map((edge) => {
-          if (edge.node.id === orderId) {
-            return {
-              ...edge,
-              node: {
-                ...edge.node,
-                fulfillments:
-                  data.customer.orders.edges.find(
-                    (e: any) => e.node.id === orderId
-                  )?.node.fulfillments || edge.node.fulfillments,
-              },
-            };
-          }
-          return edge;
-        });
-
-        return {
-          ...prev,
-          orders: {
-            ...prev.orders,
-            edges: updatedOrders,
-          },
-        };
-      });
-    } catch (error) {
-      console.error("Error loading more fulfillments:", error);
-    } finally {
-      setLoadingMoreFulfillments((prev) => ({ ...prev, [orderId]: false }));
-    }
+  const toggleFulfillmentsExpansion = (orderId: string) => {
+    setExpandedFulfillments((prev) => ({
+      ...prev,
+      [orderId]: !prev[orderId],
+    }));
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    const options: Intl.DateTimeFormatOptions = {
+      month: "short", // e.g., "Mar"
+      day: "numeric", // e.g., "25"
+      year: "numeric", // e.g., "2025"
+      hour: "numeric", // e.g., "2"
+      minute: "2-digit", // e.g., "00"
+      hour12: true, // e.g., "PM"
+    };
+    return date.toLocaleString("en-US", options).replace(/,/, " at"); // e.g., "Mar 25 2025 at 2:00 PM"
   };
 
   const formatCurrency = (amount: string, currencyCode: string) => {
-    return new Intl.NumberFormat("en-US", {
+    return new Intl.NumberFormat(undefined, {
       style: "currency",
       currency: currencyCode,
     }).format(parseFloat(amount));
   };
 
+  if (isLoading || isAuthenticated === null) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return null; // Redirect handled in useEffect
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {isAuthenticated && customer !== null ? (
-        <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-          {/* User Information */}
-          <div className="bg-white shadow rounded-lg p-6 mb-8">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">
-                  Welcome, {customer?.displayName || "User"}
-                </h1>
-                <p className="text-gray-600 mt-1">
-                  {customer.emailAddress?.emailAddress}
-                </p>
-              </div>
-              <Button
-                onClick={handleLogout}
-                disabled={isLoggingOut}
-                className="mt-4 md:mt-0"
-                variant="outline"
-              >
-                {isLoggingOut ? (
-                  <div className="flex items-center justify-center gap-1">
-                    <Loader2 className="animate-spin h-4 w-4" />
-                    <p>Logging out...</p>
-                  </div>
-                ) : (
-                  "Logout"
-                )}
-              </Button>
+    <div className="container mx-auto py-8 px-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div>
+          <h1 className="text-2xl font-bold">My Account</h1>
+          <p className="text-muted-foreground">
+            Welcome back, {customer?.displayName || "Customer"}
+          </p>
+        </div>
+        <Button variant="outline" onClick={handleLogout}>
+          Logout
+        </Button>
+      </div>
+
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>Account Information</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p className="font-medium">Name</p>
+              <p>{customer?.displayName || "Not available"}</p>
+            </div>
+            <div>
+              <p className="font-medium">Email</p>
+              <p>{customer?.emailAddress.emailAddress || "Not available"}</p>
             </div>
           </div>
+        </CardContent>
+      </Card>
 
-          {/* Search and Sort Controls */}
-          <div className="bg-white shadow rounded-lg p-6 mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
-              Order History
-            </h2>
-            <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:space-x-4">
-              <Input
-                placeholder="Search orders by name or item..."
-                value={searchQuery}
-                onChange={handleSearch}
-                className="flex-1"
-              />
-              <div className="flex space-x-2">
-                <Select onValueChange={handleSortChange} defaultValue={sortKey}>
+      <Card>
+        <CardHeader>
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <CardTitle>Order History</CardTitle>
+              <CardDescription>
+                View and manage your recent orders
+              </CardDescription>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+              <div className="relative w-full">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search orders..."
+                  className="pl-9 w-full"
+                  value={searchQuery}
+                  onChange={handleSearch}
+                />
+              </div>
+              <div className="flex gap-2">
+                <Select onValueChange={handleSortChange} value={sortKey}>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="CREATED_AT">Order Date</SelectItem>
-                    <SelectItem value="PROCESSED_AT">Processed Date</SelectItem>
+                    <SelectItem value="CREATED_AT">Date</SelectItem>
+                    <SelectItem value="ORDER_NUMBER">Order Number</SelectItem>
+                    <SelectItem value="PROCESSED_AT">Processed At</SelectItem>
                     <SelectItem value="TOTAL_PRICE">Total Price</SelectItem>
-                    <SelectItem value="UPDATED_AT">Updated Date</SelectItem>
+                    <SelectItem value="UPDATED_AT">Updated At</SelectItem>
                   </SelectContent>
                 </Select>
-                <Button onClick={handleReverseToggle} variant="outline">
-                  {reverse ? "Newest First" : "Oldest First"}
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={handleReverseToggle}
+                >
+                  {reverse ? (
+                    <ChevronUp className="h-4 w-4" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
             </div>
           </div>
-
-          {/* Order List */}
-          <div className="space-y-4">
-            {customer.orders.edges.length > 0 ? (
-              customer.orders.edges.map(({ node: order }) => (
-                <div
-                  key={order.id}
-                  className="bg-white shadow rounded-lg overflow-hidden"
-                >
-                  {/* Order Summary */}
-                  <div
-                    className="p-6 cursor-pointer hover:bg-gray-50 transition-colors"
-                    onClick={() => toggleOrderExpansion(order.id)}
-                  >
-                    <div className="flex justify-between items-start">
+        </CardHeader>
+        <CardContent>
+          {customer?.orders.edges.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-muted-foreground">No orders found</p>
+              <Button className="mt-4" onClick={() => setSearchQuery("")}>
+                Clear search
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {customer?.orders.edges.map(({ node: order }) => (
+                <Card key={order.id}>
+                  <CardHeader className="pb-0">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-900">
+                        <CardTitle className="text-lg">
                           Order #{order.name}
-                        </h3>
-                        <p className="text-sm text-gray-500 mt-1">
+                        </CardTitle>
+                        <CardDescription>
                           Placed on {formatDate(order.createdAt)}
-                        </p>
+                        </CardDescription>
                       </div>
-                      <div className="text-right">
-                        <p className="text-lg font-semibold">
+                      <div className="flex items-center gap-2">
+                        <Badge
+                          variant={
+                            order.financialStatus === "PAID" ||
+                            order.financialStatus === "REFUNDED"
+                              ? "default"
+                              : order.financialStatus ===
+                                  "PARTIALLY_REFUNDED" ||
+                                order.financialStatus === "PARTIALLY_PAID"
+                              ? "secondary"
+                              : "destructive"
+                          }
+                        >
+                          {financialStatusMap[order.financialStatus] ||
+                            order.financialStatus}
+                        </Badge>
+                        {order.cancelledAt && (
+                          <Badge variant="destructive">
+                            {cancelReasonMap[order.cancelReason || "OTHER"] ||
+                              "Cancelled"}
+                          </Badge>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => toggleOrderExpansion(order.id)}
+                        >
+                          {expandedOrders[order.id] ? (
+                            <ChevronUp className="h-4 w-4" />
+                          ) : (
+                            <ChevronDown className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div>
+                        <p className="font-medium">Order Total</p>
+                        <p>
                           {formatCurrency(
                             order.totalPrice.amount,
                             order.totalPrice.currencyCode
                           )}
                         </p>
-                        <div className="flex items-center justify-end mt-1">
-                          <span
-                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                              order.cancelledAt
-                                ? "bg-red-100 text-red-800"
-                                : order.financialStatus === "PAID"
-                                ? "bg-green-100 text-green-800"
-                                : "bg-yellow-100 text-yellow-800"
-                            }`}
-                          >
-                            {order.cancelledAt
-                              ? "Cancelled"
-                              : financialStatusMap[order.financialStatus] ||
-                                order.financialStatus}
-                          </span>
-                        </div>
                       </div>
-                    </div>
-                    <div className="flex justify-between items-center mt-4">
                       <div>
-                        {order.cancelledAt && (
-                          <p className="text-sm text-red-600">
-                            Cancelled on {formatDate(order.cancelledAt)} •
-                            Reason:{" "}
-                            {cancelReasonMap[order.cancelReason || "OTHER"] ||
-                              "Not specified"}
-                          </p>
-                        )}
+                        <p className="font-medium">Processed At</p>
+                        <p>{formatDate(order.processedAt)}</p>
                       </div>
-                      <ChevronDown
-                        className={`h-5 w-5 text-gray-500 transition-transform ${
-                          expandedOrders[order.id] ? "transform rotate-180" : ""
-                        }`}
-                      />
                     </div>
-                  </div>
 
-                  {/* Expanded Order Details */}
-                  {expandedOrders[order.id] && (
-                    <div className="border-t border-gray-200 p-6">
-                      {/* Order Line Items */}
-                      <div className="mb-8">
-                        <h4 className="text-md font-medium text-gray-900 mb-4">
-                          Items ({order.lineItems.edges.length})
-                        </h4>
-                        <div className="space-y-4">
-                          {order.lineItems.edges.map(({ node: item }) => (
-                            <div
-                              key={item.id}
-                              className="flex border-b border-gray-100 pb-4"
-                            >
-                              <div className="flex-shrink-0 h-20 w-20 rounded-md overflow-hidden">
-                                <img
-                                  src={
-                                    item.image?.url ||
-                                    "/placeholder-product.jpg"
-                                  }
-                                  alt={item.image?.altText || item.name}
-                                  className="h-full w-full object-cover object-center"
-                                />
-                              </div>
-                              <div className="ml-4 flex-1 flex flex-col">
-                                <div>
-                                  <h5 className="text-sm font-medium text-gray-900">
-                                    {item.name}
-                                  </h5>
-                                  {item.variantOptions &&
-                                    item.variantOptions.length > 0 && (
-                                      <p className="text-xs text-gray-500 mt-1">
-                                        {item.variantOptions
-                                          .map(
-                                            (opt) => `${opt.name}: ${opt.value}`
-                                          )
-                                          .join(", ")}
-                                      </p>
-                                    )}
-                                </div>
-                                <div className="flex-1 flex items-end justify-between">
-                                  <p className="text-sm text-gray-500">
-                                    Qty: {item.quantity}
-                                  </p>
-                                  <div className="text-right">
-                                    {parseFloat(item.totalDiscount.amount) >
-                                      0 && (
-                                      <p className="text-xs text-gray-500 line-through">
+                    {expandedOrders[order.id] && (
+                      <div className="mt-4 space-y-6">
+                        <Collapsible
+                          open={expandedLineItems[order.id]}
+                          onOpenChange={() =>
+                            toggleLineItemsExpansion(order.id)
+                          }
+                        >
+                          <div className="flex justify-between items-center">
+                            <h3 className="font-medium">Items</h3>
+                            <CollapsibleTrigger asChild>
+                              <Button variant="ghost" size="sm">
+                                {expandedLineItems[order.id] ? (
+                                  <ChevronUp className="h-4 w-4" />
+                                ) : (
+                                  <ChevronDown className="h-4 w-4" />
+                                )}
+                              </Button>
+                            </CollapsibleTrigger>
+                          </div>
+                          <Separator className="my-2" />
+                          <CollapsibleContent>
+                            <Table>
+                              <TableHeader>
+                                <TableRow>
+                                  <TableHead>Product</TableHead>
+                                  <TableHead>Price</TableHead>
+                                  <TableHead>Qty</TableHead>
+                                  <TableHead className="text-right">
+                                    Total
+                                  </TableHead>
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                {order.lineItems.edges.map(
+                                  ({ node: item }, index) => (
+                                    <TableRow key={`${item.id}-${index}`}>
+                                      <TableCell>
+                                        <div className="flex items-center gap-3">
+                                          {item.image && (
+                                            <img
+                                              src={item.image.url}
+                                              alt={item.image.altText || ""}
+                                              className="w-10 h-10 rounded object-cover"
+                                            />
+                                          )}
+                                          <div>
+                                            <p className="font-medium">
+                                              {item.name}
+                                            </p>
+                                            {item.variantOptions && (
+                                              <p className="text-sm text-muted-foreground">
+                                                {item.variantOptions
+                                                  .map(
+                                                    (opt) =>
+                                                      `${opt.name}: ${opt.value}`
+                                                  )
+                                                  .join(", ")}
+                                              </p>
+                                            )}
+                                          </div>
+                                        </div>
+                                      </TableCell>
+                                      <TableCell>
                                         {formatCurrency(
                                           item.price.amount,
                                           item.price.currencyCode
                                         )}
-                                      </p>
-                                    )}
-                                    <p className="text-sm font-medium text-gray-900">
-                                      {formatCurrency(
-                                        item.totalPrice.amount,
-                                        item.totalPrice.currencyCode
-                                      )}
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                        {order.lineItems.pageInfo.hasNextPage && (
-                          <div className="mt-4 text-center">
-                            <Button
-                              variant="outline"
-                              onClick={() =>
-                                loadMoreLineItems(
-                                  order.id,
-                                  order.lineItems.pageInfo.endCursor
-                                )
-                              }
-                              disabled={loadingMoreItems[order.id]}
-                            >
-                              {loadingMoreItems[order.id] ? (
-                                <Loader2 className="animate-spin h-4 w-4 mr-2" />
-                              ) : (
-                                <ChevronDown className="h-4 w-4 mr-2" />
-                              )}
-                              View More Items
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Order Summary */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                        <div>
-                          <h4 className="text-md font-medium text-gray-900 mb-4">
-                            Order Summary
-                          </h4>
-                          <div className="space-y-2">
-                            <div className="flex justify-between">
-                              <p className="text-sm text-gray-600">Subtotal</p>
-                              <p className="text-sm text-gray-900">
-                                {formatCurrency(
-                                  order.totalPrice.amount,
-                                  order.totalPrice.currencyCode
+                                      </TableCell>
+                                      <TableCell>{item.quantity}</TableCell>
+                                      <TableCell className="text-right">
+                                        {formatCurrency(
+                                          item.totalPrice.amount,
+                                          item.totalPrice.currencyCode
+                                        )}
+                                      </TableCell>
+                                    </TableRow>
+                                  )
                                 )}
-                              </p>
+                              </TableBody>
+                            </Table>
+                            {order.lineItems.pageInfo.hasNextPage && (
+                              <div className="mt-2 flex justify-center">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() =>
+                                    fetchMoreLineItems(
+                                      order.id,
+                                      order.lineItems.pageInfo.endCursor
+                                    )
+                                  }
+                                >
+                                  Load More Items
+                                </Button>
+                              </div>
+                            )}
+                          </CollapsibleContent>
+                        </Collapsible>
+
+                        {order.fulfillments.edges.length > 0 && (
+                          <Collapsible
+                            open={expandedFulfillments[order.id]}
+                            onOpenChange={() =>
+                              toggleFulfillmentsExpansion(order.id)
+                            }
+                          >
+                            <div className="flex justify-between items-center">
+                              <h3 className="font-medium">Fulfillments</h3>
+                              <CollapsibleTrigger asChild>
+                                <Button variant="ghost" size="sm">
+                                  {expandedFulfillments[order.id] ? (
+                                    <ChevronUp className="h-4 w-4" />
+                                  ) : (
+                                    <ChevronDown className="h-4 w-4" />
+                                  )}
+                                </Button>
+                              </CollapsibleTrigger>
                             </div>
-                            <div className="flex justify-between">
-                              <p className="text-sm text-gray-600">Status</p>
-                              <p className="text-sm text-gray-900">
-                                {financialStatusMap[order.financialStatus] ||
-                                  order.financialStatus}
-                              </p>
-                            </div>
-                            <div className="flex justify-between">
-                              <p className="text-sm text-gray-600">
-                                Order Date
-                              </p>
-                              <p className="text-sm text-gray-900">
-                                {formatDate(order.createdAt)}
-                              </p>
-                            </div>
-                            <div className="flex justify-between">
-                              <p className="text-sm text-gray-600">Processed</p>
-                              <p className="text-sm text-gray-900">
-                                {formatDate(order.processedAt)}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div>
-                          <h4 className="text-md font-medium text-gray-900 mb-4">
-                            Shipping Information
-                          </h4>
-                          {order.fulfillments.edges.length > 0 ? (
-                            <div className="space-y-4">
-                              {order.fulfillments.edges.map(
-                                ({ node: fulfillment }) => (
-                                  <div
-                                    key={fulfillment.id}
-                                    className="border rounded-lg p-4"
-                                  >
-                                    <div className="flex justify-between items-start">
-                                      <div>
-                                        <p className="text-sm font-medium">
-                                          {fulfillmentStatusMap[
-                                            fulfillment.status
-                                          ] || fulfillment.status}
-                                        </p>
-                                        {fulfillment.estimatedDeliveryAt && (
-                                          <p className="text-xs text-gray-500 mt-1">
-                                            Estimated delivery:{" "}
-                                            {formatDate(
-                                              fulfillment.estimatedDeliveryAt
-                                            )}
-                                          </p>
-                                        )}
-                                      </div>
-                                      {fulfillment.trackingInformation &&
-                                        fulfillment.trackingInformation.length >
-                                          0 && (
-                                          <div className="text-right">
-                                            {fulfillment.trackingInformation.map(
-                                              (tracking, idx) => (
-                                                <div key={idx}>
-                                                  {tracking.url ? (
-                                                    <Link
-                                                      href={tracking.url}
-                                                      target="_blank"
-                                                      rel="noopener noreferrer"
-                                                    >
-                                                      <Button
-                                                        variant="link"
-                                                        className="text-sm p-0 h-auto"
-                                                      >
-                                                        Track Package{" "}
-                                                        <ExternalLink className="h-3 w-3 ml-1" />
-                                                      </Button>
-                                                    </Link>
-                                                  ) : (
-                                                    <p className="text-xs text-gray-500">
-                                                      Tracking #:{" "}
-                                                      {tracking.number}
-                                                    </p>
-                                                  )}
-                                                </div>
-                                              )
-                                            )}
+                            <Separator className="my-2" />
+                            <CollapsibleContent>
+                              <div className="space-y-4">
+                                {order.fulfillments.edges.map(
+                                  ({ node: fulfillment }) => (
+                                    <Card key={fulfillment.id}>
+                                      <CardHeader className="pb-2">
+                                        <div className="flex justify-between items-center">
+                                          <CardTitle className="text-sm">
+                                            Fulfillment
+                                          </CardTitle>
+                                          <Badge
+                                            variant={
+                                              fulfillment.status === "FULFILLED"
+                                                ? "default"
+                                                : fulfillment.status ===
+                                                  "IN_PROGRESS"
+                                                ? "secondary"
+                                                : "destructive"
+                                            }
+                                          >
+                                            {fulfillmentStatusMap[
+                                              fulfillment.status
+                                            ] || fulfillment.status}
+                                          </Badge>
+                                        </div>
+                                      </CardHeader>
+                                      <CardContent className="pt-2">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                          <div>
+                                            <p className="font-medium">
+                                              Last Updated
+                                            </p>
+                                            <p>
+                                              {formatDate(
+                                                fulfillment.updatedAt
+                                              )}
+                                            </p>
                                           </div>
-                                        )}
-                                    </div>
-                                  </div>
-                                )
-                              )}
+                                          {fulfillment.estimatedDeliveryAt && (
+                                            <div>
+                                              <p className="font-medium">
+                                                Estimated Delivery
+                                              </p>
+                                              <p>
+                                                {formatDate(
+                                                  fulfillment.estimatedDeliveryAt
+                                                )}
+                                              </p>
+                                            </div>
+                                          )}
+                                        </div>
+
+                                        {fulfillment.trackingInformation &&
+                                          fulfillment.trackingInformation
+                                            .length > 0 && (
+                                            <div className="mt-4">
+                                              <p className="font-medium mb-2">
+                                                Tracking Information
+                                              </p>
+                                              <div className="space-y-2">
+                                                {fulfillment.trackingInformation.map(
+                                                  (tracking, idx) => (
+                                                    <div
+                                                      key={idx}
+                                                      className="flex items-center gap-2"
+                                                    >
+                                                      <span className="font-medium">
+                                                        {tracking.company}:
+                                                      </span>
+                                                      {tracking.url ? (
+                                                        <a
+                                                          href={tracking.url}
+                                                          target="_blank"
+                                                          rel="noopener noreferrer"
+                                                          className="text-primary underline"
+                                                        >
+                                                          {tracking.number}
+                                                        </a>
+                                                      ) : (
+                                                        <span>
+                                                          {tracking.number}
+                                                        </span>
+                                                      )}
+                                                    </div>
+                                                  )
+                                                )}
+                                              </div>
+                                            </div>
+                                          )}
+
+                                        <div className="mt-4">
+                                          <p className="font-medium mb-2">
+                                            Fulfilled Items
+                                          </p>
+                                          <Table>
+                                            <TableHeader>
+                                              <TableRow>
+                                                <TableHead>Product</TableHead>
+                                                <TableHead>Qty</TableHead>
+                                              </TableRow>
+                                            </TableHeader>
+                                            <TableBody>
+                                              {fulfillment.fulfillmentLineItems.edges.map(
+                                                ({ node: item }) => (
+                                                  <TableRow key={item.id}>
+                                                    <TableCell>
+                                                      <div className="flex items-center gap-3">
+                                                        {item.lineItem
+                                                          .image && (
+                                                          <img
+                                                            src={
+                                                              item.lineItem
+                                                                .image.url
+                                                            }
+                                                            alt={
+                                                              item.lineItem
+                                                                .image
+                                                                .altText || ""
+                                                            }
+                                                            className="w-10 h-10 rounded object-cover"
+                                                          />
+                                                        )}
+                                                        <div>
+                                                          <p className="font-medium">
+                                                            {item.lineItem.name}
+                                                          </p>
+                                                          {item.lineItem
+                                                            .variantOptions && (
+                                                            <p className="text-sm text-muted-foreground">
+                                                              {item.lineItem.variantOptions
+                                                                .map(
+                                                                  (opt) =>
+                                                                    `${opt.name}: ${opt.value}`
+                                                                )
+                                                                .join(", ")}
+                                                            </p>
+                                                          )}
+                                                        </div>
+                                                      </div>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                      {item.quantity}
+                                                    </TableCell>
+                                                  </TableRow>
+                                                )
+                                              )}
+                                            </TableBody>
+                                          </Table>
+                                          {fulfillment.fulfillmentLineItems
+                                            .pageInfo.hasNextPage && (
+                                            <div className="mt-2 flex justify-center">
+                                              <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() =>
+                                                  fetchMoreFulfillments(
+                                                    order.id,
+                                                    fulfillment
+                                                      .fulfillmentLineItems
+                                                      .pageInfo.endCursor
+                                                  )
+                                                }
+                                              >
+                                                Load More Items
+                                              </Button>
+                                            </div>
+                                          )}
+                                        </div>
+                                      </CardContent>
+                                    </Card>
+                                  )
+                                )}
+                              </div>
                               {order.fulfillments.pageInfo.hasNextPage && (
-                                <div className="text-center">
+                                <div className="mt-4 flex justify-center">
                                   <Button
                                     variant="outline"
                                     onClick={() =>
-                                      loadMoreFulfillments(
+                                      fetchMoreFulfillments(
                                         order.id,
                                         order.fulfillments.pageInfo.endCursor
                                       )
                                     }
-                                    disabled={loadingMoreFulfillments[order.id]}
                                   >
-                                    {loadingMoreFulfillments[order.id] ? (
-                                      <Loader2 className="animate-spin h-4 w-4 mr-2" />
-                                    ) : (
-                                      <ChevronDown className="h-4 w-4 mr-2" />
-                                    )}
-                                    View More Shipments
+                                    Load More Fulfillments
                                   </Button>
                                 </div>
                               )}
-                            </div>
-                          ) : (
-                            <p className="text-sm text-gray-500">
-                              No shipping information available
-                            </p>
-                          )}
-                        </div>
+                            </CollapsibleContent>
+                          </Collapsible>
+                        )}
                       </div>
-                    </div>
-                  )}
-                </div>
-              ))
-            ) : (
-              <div className="bg-white shadow rounded-lg p-8 text-center">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  No orders found
-                </h3>
-                <p className="text-gray-500">
-                  {searchQuery
-                    ? "Try a different search term"
-                    : "You haven't placed any orders yet"}
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* Pagination */}
-          {(customer.orders.pageInfo?.hasNextPage ||
-            customer.orders.pageInfo?.hasPreviousPage) && (
-            <div className="mt-8">
-              <Pagination>
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious
-                      onClick={() => handlePageChange("prev")}
-                      className={
-                        !customer.orders.pageInfo?.hasPreviousPage
-                          ? "pointer-events-none opacity-50"
-                          : "cursor-pointer"
-                      }
-                    />
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationLink isActive>{currentPage}</PaginationLink>
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationNext
-                      onClick={() => handlePageChange("next")}
-                      className={
-                        !customer.orders.pageInfo?.hasNextPage
-                          ? "pointer-events-none opacity-50"
-                          : "cursor-pointer"
-                      }
-                    />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           )}
-        </div>
-      ) : (
-        <div className="min-h-screen flex items-center justify-center">
-          <Loader2 className="animate-spin h-8 w-8 text-gray-500" />
-        </div>
-      )}
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <div className="text-sm text-muted-foreground">
+            Showing page {currentPage}
+          </div>
+          <Pagination className="m-0">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() => handlePageChange("prev")}
+                  disabled={!customer?.orders.pageInfo.hasPreviousPage}
+                />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() => handlePageChange("next")}
+                  disabled={!customer?.orders.pageInfo.hasNextPage}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </CardFooter>
+      </Card>
     </div>
   );
 }

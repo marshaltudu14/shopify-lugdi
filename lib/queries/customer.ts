@@ -8,7 +8,9 @@ export const FETCH_CUSTOMER_ORDER_DATA = gql`
     $reverse: Boolean
     $query: String
     $lineItemsFirst: Int
+    $lineItemsAfter: String
     $fulfillmentsFirst: Int
+    $fulfillmentsAfter: String
   ) {
     customer {
       id
@@ -39,7 +41,7 @@ export const FETCH_CUSTOMER_ORDER_DATA = gql`
               amount
               currencyCode
             }
-            lineItems(first: $lineItemsFirst) {
+            lineItems(first: $lineItemsFirst, after: $lineItemsAfter) {
               edges {
                 cursor
                 node {
@@ -75,7 +77,7 @@ export const FETCH_CUSTOMER_ORDER_DATA = gql`
                 endCursor
               }
             }
-            fulfillments(first: $fulfillmentsFirst) {
+            fulfillments(first: $fulfillmentsFirst, after: $fulfillmentsAfter) {
               edges {
                 cursor
                 node {
@@ -83,7 +85,7 @@ export const FETCH_CUSTOMER_ORDER_DATA = gql`
                   estimatedDeliveryAt
                   latestShipmentStatus
                   status
-                  fulfillmentLineItems(first: 10) {
+                  fulfillmentLineItems(first: 5) {
                     edges {
                       cursor
                       node {
