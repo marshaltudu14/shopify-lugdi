@@ -16,7 +16,6 @@ import {
   PaginationContent,
   PaginationItem,
   PaginationPrevious,
-  PaginationLink,
   PaginationNext,
 } from "@/components/ui/pagination";
 import { Input } from "@/components/ui/input";
@@ -45,6 +44,7 @@ import { ChevronDown, ChevronUp, Loader2, Search } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { getCurrencySymbol } from "@/lib/countries";
+import Link from "next/link";
 
 interface LineItem {
   id: string;
@@ -169,13 +169,13 @@ const financialStatusMap: Record<string, string> = {
   PAID: "Paid",
   PARTIALLY_PAID: "Partially Paid",
   PARTIALLY_REFUNDED: "Partially Refunded",
-  PENDING: "Pending",
-  REFUNDED: "Refunded",
+  PENDING: "Payment Pending",
+  REFUNDED: "Money Refunded",
   VOIDED: "Voided",
 };
 
 const cancelReasonMap: Record<string, string> = {
-  CUSTOMER: "Cancelled by You",
+  CUSTOMER: "Cancelled by Customer",
   DECLINED: "Payment Declined",
   FRAUD: "Fraudulent Order",
   INVENTORY: "Out of Stock",
@@ -184,14 +184,12 @@ const cancelReasonMap: Record<string, string> = {
 };
 
 const fulfillmentStatusMap: Record<string, string> = {
-  FULFILLED: "Fulfilled",
-  IN_PROGRESS: "In Progress",
-  ON_HOLD: "On Hold",
+  CANCELLED: "Cancelled",
+  ERROR: "Error",
+  FAILURE: "Failure",
+  SUCCESS: "Success",
   OPEN: "Open",
-  PARTIALLY_FULFILLED: "Partially Fulfilled",
-  PENDING_FULFILLMENT: "Pending",
-  RESTOCKED: "Restocked",
-  SCHEDULED: "Scheduled",
+  PENDING: "Pending",
 };
 
 export default function AccountPageClient() {
@@ -205,9 +203,6 @@ export default function AccountPageClient() {
   const [sortKey, setSortKey] = useState("CREATED_AT");
   const [reverse, setReverse] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [expandedOrders, setExpandedOrders] = useState<Record<string, boolean>>(
-    {}
-  );
   const [expandedLineItems, setExpandedLineItems] = useState<
     Record<string, boolean>
   >({});
@@ -292,6 +287,7 @@ export default function AccountPageClient() {
     if (isAuthenticated) {
       fetchCustomerData();
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isAuthenticated,
@@ -589,13 +585,6 @@ export default function AccountPageClient() {
     }
   };
 
-  const toggleOrderExpansion = (orderId: string) => {
-    setExpandedOrders((prev) => ({
-      ...prev,
-      [orderId]: !prev[orderId],
-    }));
-  };
-
   const toggleLineItemsExpansion = (orderId: string) => {
     setExpandedLineItems((prev) => ({
       ...prev,
@@ -730,7 +719,7 @@ export default function AccountPageClient() {
                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                           <div>
                             <CardTitle className="text-lg">
-                              Order #{order.name}
+                              Order {order.name}
                             </CardTitle>
                             <CardDescription>
                               Placed on {formatDate(order.createdAt)}
@@ -759,17 +748,6 @@ export default function AccountPageClient() {
                                 ] || "Cancelled"}
                               </Badge>
                             )}
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => toggleOrderExpansion(order.id)}
-                            >
-                              {expandedOrders[order.id] ? (
-                                <ChevronUp className="h-4 w-4" />
-                              ) : (
-                                <ChevronDown className="h-4 w-4" />
-                              )}
-                            </Button>
                           </div>
                         </div>
                       </CardHeader>
@@ -782,65 +760,65 @@ export default function AccountPageClient() {
                               {order.totalPrice.amount}
                             </p>
                           </div>
-                          <div>
-                            <p className="font-medium">Processed At</p>
-                            <p>{formatDate(order.processedAt)}</p>
-                          </div>
                         </div>
 
-                        {expandedOrders[order.id] && (
-                          <div className="mt-4 space-y-6">
-                            <Collapsible
-                              open={expandedLineItems[order.id]}
-                              onOpenChange={() =>
-                                toggleLineItemsExpansion(order.id)
-                              }
-                            >
-                              <div className="flex justify-between items-center">
-                                <h3 className="font-medium">Items</h3>
-                                <CollapsibleTrigger asChild>
-                                  <Button variant="ghost" size="sm">
-                                    {expandedLineItems[order.id] ? (
-                                      <ChevronUp className="h-4 w-4" />
-                                    ) : (
-                                      <ChevronDown className="h-4 w-4" />
-                                    )}
-                                  </Button>
-                                </CollapsibleTrigger>
-                              </div>
-                              <Separator className="my-2" />
-                              <CollapsibleContent>
-                                <Table>
-                                  <TableHeader>
-                                    <TableRow>
-                                      <TableHead>Product</TableHead>
-                                      <TableHead>Price</TableHead>
-                                      <TableHead>Qty</TableHead>
-                                      <TableHead className="text-right">
-                                        Total
-                                      </TableHead>
-                                    </TableRow>
-                                  </TableHeader>
-                                  <TableBody>
-                                    {order.lineItems.edges.map(
-                                      ({ node: item }, index) => (
-                                        <TableRow key={`${item.id}-${index}`}>
-                                          <TableCell>
-                                            <div className="flex items-center gap-3">
-                                              {item.image && (
-                                                <Image
-                                                  src={item.image.url}
-                                                  alt={item.image.altText || ""}
-                                                  width={250}
-                                                  height={250}
-                                                  className="w-10 h-10 rounded object-cover"
-                                                />
-                                              )}
-                                              <div>
-                                                <p className="font-medium">
-                                                  {item.name}
-                                                </p>
-                                                {item.variantOptions && (
+                        <div className="mt-4 space-y-6">
+                          <Collapsible
+                            open={expandedLineItems[order.id]}
+                            onOpenChange={() =>
+                              toggleLineItemsExpansion(order.id)
+                            }
+                          >
+                            <div className="flex justify-between items-center">
+                              <CollapsibleTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  className="w-full flex justify-between items-center"
+                                >
+                                  <p className="font-bold">Order Items</p>
+                                  {expandedLineItems[order.id] ? (
+                                    <ChevronUp className="h-4 w-4" />
+                                  ) : (
+                                    <ChevronDown className="h-4 w-4" />
+                                  )}
+                                </Button>
+                              </CollapsibleTrigger>
+                            </div>
+                            <Separator className="my-2" />
+                            <CollapsibleContent>
+                              <Table>
+                                <TableHeader>
+                                  <TableRow>
+                                    <TableHead>Product</TableHead>
+                                    <TableHead>Price</TableHead>
+                                    <TableHead>Qty</TableHead>
+                                    <TableHead className="text-right">
+                                      Total
+                                    </TableHead>
+                                  </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                  {order.lineItems.edges.map(
+                                    ({ node: item }, index) => (
+                                      <TableRow key={`${item.id}-${index}`}>
+                                        <TableCell>
+                                          <div className="flex items-center gap-3">
+                                            {item.image && (
+                                              <Image
+                                                src={item.image.url}
+                                                alt={item.image.altText || ""}
+                                                width={250}
+                                                height={250}
+                                                className="w-10 h-10 rounded object-cover"
+                                              />
+                                            )}
+                                            <div>
+                                              <p className="font-medium truncate">
+                                                {item.name}
+                                              </p>
+                                              {item.variantOptions &&
+                                                item.variantOptions.length >
+                                                  1 && (
                                                   <p className="text-sm text-muted-foreground">
                                                     {item.variantOptions
                                                       .map(
@@ -850,205 +828,210 @@ export default function AccountPageClient() {
                                                       .join(", ")}
                                                   </p>
                                                 )}
-                                              </div>
                                             </div>
-                                          </TableCell>
-                                          <TableCell>
-                                            {getCurrencySymbol(
-                                              item.price.currencyCode
-                                            )}
-                                            {item.price.amount}
-                                          </TableCell>
-                                          <TableCell>{item.quantity}</TableCell>
-                                          <TableCell className="text-right">
-                                            {getCurrencySymbol(
-                                              item.totalPrice.currencyCode
-                                            )}
-                                            {item.totalPrice.amount}
-                                          </TableCell>
-                                        </TableRow>
+                                          </div>
+                                        </TableCell>
+                                        <TableCell>
+                                          {getCurrencySymbol(
+                                            item.price.currencyCode
+                                          )}
+                                          {Number(item.price.amount).toFixed(2)}
+                                        </TableCell>
+                                        <TableCell>{item.quantity}</TableCell>
+                                        <TableCell className="text-right">
+                                          {getCurrencySymbol(
+                                            item.totalPrice.currencyCode
+                                          )}
+                                          {Number(
+                                            item.totalPrice.amount
+                                          ).toFixed(2)}
+                                        </TableCell>
+                                      </TableRow>
+                                    )
+                                  )}
+                                </TableBody>
+                              </Table>
+                              {order.lineItems.pageInfo.hasNextPage && (
+                                <div className="mt-2 flex justify-center">
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() =>
+                                      fetchMoreLineItems(
+                                        order.id,
+                                        order.lineItems.pageInfo.endCursor
                                       )
+                                    }
+                                    disabled={isFetchLoading}
+                                  >
+                                    {isFetchLoading ? (
+                                      <Loader2 className="animate-spin" />
+                                    ) : (
+                                      "Load More Items"
                                     )}
-                                  </TableBody>
-                                </Table>
-                                {order.lineItems.pageInfo.hasNextPage && (
-                                  <div className="mt-2 flex justify-center">
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      onClick={() =>
-                                        fetchMoreLineItems(
-                                          order.id,
-                                          order.lineItems.pageInfo.endCursor
-                                        )
-                                      }
-                                    >
-                                      Load More Items
-                                    </Button>
-                                  </div>
-                                )}
-                              </CollapsibleContent>
-                            </Collapsible>
-
-                            {order.fulfillments.edges.length > 0 && (
-                              <Collapsible
-                                open={expandedFulfillments[order.id]}
-                                onOpenChange={() =>
-                                  toggleFulfillmentsExpansion(order.id)
-                                }
-                              >
-                                <div className="flex justify-between items-center">
-                                  <h3 className="font-medium">Fulfillments</h3>
-                                  <CollapsibleTrigger asChild>
-                                    <Button variant="ghost" size="sm">
-                                      {expandedFulfillments[order.id] ? (
-                                        <ChevronUp className="h-4 w-4" />
-                                      ) : (
-                                        <ChevronDown className="h-4 w-4" />
-                                      )}
-                                    </Button>
-                                  </CollapsibleTrigger>
+                                  </Button>
                                 </div>
-                                <Separator className="my-2" />
-                                <CollapsibleContent>
-                                  <div className="space-y-4">
-                                    {order.fulfillments.edges.map(
-                                      ({ node: fulfillment }) => (
-                                        <Card key={fulfillment.id}>
-                                          <CardHeader className="pb-2">
-                                            <div className="flex justify-between items-center">
-                                              <CardTitle className="text-sm">
-                                                Fulfillment
-                                              </CardTitle>
-                                              <Badge
-                                                variant={
-                                                  fulfillment.status ===
-                                                  "FULFILLED"
-                                                    ? "default"
-                                                    : fulfillment.status ===
-                                                      "IN_PROGRESS"
-                                                    ? "secondary"
-                                                    : "destructive"
-                                                }
-                                              >
-                                                {fulfillmentStatusMap[
-                                                  fulfillment.status
-                                                ] || fulfillment.status}
-                                              </Badge>
+                              )}
+                            </CollapsibleContent>
+                          </Collapsible>
+
+                          {/* Fulfillment Collapsible */}
+                          {order.fulfillments.edges.length > 0 && (
+                            <Collapsible
+                              open={expandedFulfillments[order.id]}
+                              onOpenChange={() =>
+                                toggleFulfillmentsExpansion(order.id)
+                              }
+                            >
+                              <div className="flex justify-between items-center">
+                                <CollapsibleTrigger asChild>
+                                  <Button
+                                    variant="ghost"
+                                    className="w-full flex justify-between items-center"
+                                  >
+                                    <p className="font-bold">Fulfillments</p>
+                                    {expandedFulfillments[order.id] ? (
+                                      <ChevronUp className="h-4 w-4" />
+                                    ) : (
+                                      <ChevronDown className="h-4 w-4" />
+                                    )}
+                                  </Button>
+                                </CollapsibleTrigger>
+                              </div>
+                              <Separator className="my-2" />
+                              <CollapsibleContent>
+                                <div className="space-y-4">
+                                  {order.fulfillments.edges.map(
+                                    ({ node: fulfillment }) => (
+                                      <Card key={fulfillment.id}>
+                                        <CardHeader className="pb-2">
+                                          <div className="flex justify-between items-center">
+                                            <CardTitle className="text-sm">
+                                              Fulfillment
+                                            </CardTitle>
+                                            <Badge
+                                              variant={
+                                                fulfillment.status === "SUCCESS"
+                                                  ? "default"
+                                                  : fulfillment.status ===
+                                                      "Pending" || "OPEN"
+                                                  ? "secondary"
+                                                  : "destructive"
+                                              }
+                                            >
+                                              {fulfillmentStatusMap[
+                                                fulfillment.status
+                                              ] || fulfillment.status}
+                                            </Badge>
+                                          </div>
+                                        </CardHeader>
+                                        <CardContent className="pt-2">
+                                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                              <p className="font-medium">
+                                                Last Updated
+                                              </p>
+                                              <p>
+                                                {formatDate(
+                                                  fulfillment.updatedAt
+                                                )}
+                                              </p>
                                             </div>
-                                          </CardHeader>
-                                          <CardContent className="pt-2">
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            {fulfillment.estimatedDeliveryAt && (
                                               <div>
                                                 <p className="font-medium">
-                                                  Last Updated
+                                                  Estimated Delivery
                                                 </p>
                                                 <p>
                                                   {formatDate(
-                                                    fulfillment.updatedAt
+                                                    fulfillment.estimatedDeliveryAt
                                                   )}
                                                 </p>
                                               </div>
-                                              {fulfillment.estimatedDeliveryAt && (
-                                                <div>
-                                                  <p className="font-medium">
-                                                    Estimated Delivery
-                                                  </p>
-                                                  <p>
-                                                    {formatDate(
-                                                      fulfillment.estimatedDeliveryAt
-                                                    )}
-                                                  </p>
-                                                </div>
-                                              )}
-                                            </div>
+                                            )}
+                                          </div>
 
-                                            {fulfillment.trackingInformation &&
-                                              fulfillment.trackingInformation
-                                                .length > 0 && (
-                                                <div className="mt-4">
-                                                  <p className="font-medium mb-2">
-                                                    Tracking Information
-                                                  </p>
-                                                  <div className="space-y-2">
-                                                    {fulfillment.trackingInformation.map(
-                                                      (tracking, idx) => (
-                                                        <div
-                                                          key={idx}
-                                                          className="flex items-center gap-2"
-                                                        >
-                                                          <span className="font-medium">
-                                                            {tracking.company}:
+                                          {fulfillment.trackingInformation &&
+                                            fulfillment.trackingInformation
+                                              .length > 0 && (
+                                              <div className="mt-4">
+                                                <p className="font-medium mb-2">
+                                                  Tracking Information
+                                                </p>
+                                                <div className="space-y-2">
+                                                  {fulfillment.trackingInformation.map(
+                                                    (tracking, idx) => (
+                                                      <div
+                                                        key={idx}
+                                                        className="flex items-center gap-2"
+                                                      >
+                                                        <span className="font-medium">
+                                                          {tracking.company}:
+                                                        </span>
+                                                        {tracking.url ? (
+                                                          <Link
+                                                            href={tracking.url}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-primary underline"
+                                                          >
+                                                            {tracking.number}
+                                                          </Link>
+                                                        ) : (
+                                                          <span>
+                                                            {tracking.number}
                                                           </span>
-                                                          {tracking.url ? (
-                                                            <a
-                                                              href={
-                                                                tracking.url
-                                                              }
-                                                              target="_blank"
-                                                              rel="noopener noreferrer"
-                                                              className="text-primary underline"
-                                                            >
-                                                              {tracking.number}
-                                                            </a>
-                                                          ) : (
-                                                            <span>
-                                                              {tracking.number}
-                                                            </span>
-                                                          )}
-                                                        </div>
-                                                      )
-                                                    )}
-                                                  </div>
+                                                        )}
+                                                      </div>
+                                                    )
+                                                  )}
                                                 </div>
-                                              )}
+                                              </div>
+                                            )}
 
-                                            <div className="mt-4">
-                                              <p className="font-medium mb-2">
-                                                Fulfilled Items
-                                              </p>
-                                              <Table>
-                                                <TableHeader>
-                                                  <TableRow>
-                                                    <TableHead>
-                                                      Product
-                                                    </TableHead>
-                                                    <TableHead>Qty</TableHead>
-                                                  </TableRow>
-                                                </TableHeader>
-                                                <TableBody>
-                                                  {fulfillment.fulfillmentLineItems.edges.map(
-                                                    ({ node: item }) => (
-                                                      <TableRow key={item.id}>
-                                                        <TableCell>
-                                                          <div className="flex items-center gap-3">
+                                          <div className="mt-4">
+                                            <Table>
+                                              <TableHeader>
+                                                <TableRow>
+                                                  <TableHead>Product</TableHead>
+                                                  <TableHead>Qty</TableHead>
+                                                </TableRow>
+                                              </TableHeader>
+                                              <TableBody>
+                                                {fulfillment.fulfillmentLineItems.edges.map(
+                                                  ({ node: item }) => (
+                                                    <TableRow key={item.id}>
+                                                      <TableCell>
+                                                        <div className="flex items-center gap-3">
+                                                          {item.lineItem
+                                                            .image && (
+                                                            <Image
+                                                              src={
+                                                                item.lineItem
+                                                                  .image.url
+                                                              }
+                                                              alt={
+                                                                item.lineItem
+                                                                  .image
+                                                                  .altText || ""
+                                                              }
+                                                              width={250}
+                                                              height={250}
+                                                              className="w-10 h-10 rounded object-cover"
+                                                            />
+                                                          )}
+                                                          <div>
+                                                            <p className="font-medium">
+                                                              {
+                                                                item.lineItem
+                                                                  .name
+                                                              }
+                                                            </p>
                                                             {item.lineItem
-                                                              .image && (
-                                                              <Image
-                                                                src={
-                                                                  item.lineItem
-                                                                    .image.url
-                                                                }
-                                                                alt={
-                                                                  item.lineItem
-                                                                    .image
-                                                                    .altText ||
-                                                                  ""
-                                                                }
-                                                                width={250}
-                                                                height={250}
-                                                                className="w-10 h-10 rounded object-cover"
-                                                              />
-                                                            )}
-                                                            <div>
-                                                              <p className="font-medium">
-                                                                {
-                                                                  item.lineItem
-                                                                    .name
-                                                                }
-                                                              </p>
-                                                              {item.lineItem
-                                                                .variantOptions && (
+                                                              .variantOptions &&
+                                                              item.lineItem
+                                                                .variantOptions
+                                                                .length > 1 && (
                                                                 <p className="text-sm text-muted-foreground">
                                                                   {item.lineItem.variantOptions
                                                                     .map(
@@ -1058,85 +1041,81 @@ export default function AccountPageClient() {
                                                                     .join(", ")}
                                                                 </p>
                                                               )}
-                                                            </div>
                                                           </div>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                          {item.quantity}
-                                                        </TableCell>
-                                                      </TableRow>
+                                                        </div>
+                                                      </TableCell>
+                                                      <TableCell>
+                                                        {item.quantity}
+                                                      </TableCell>
+                                                    </TableRow>
+                                                  )
+                                                )}
+                                              </TableBody>
+                                            </Table>
+                                            {fulfillment.fulfillmentLineItems
+                                              .pageInfo.hasNextPage && (
+                                              <div className="mt-2 flex justify-center">
+                                                <Button
+                                                  variant="outline"
+                                                  size="sm"
+                                                  onClick={() =>
+                                                    fetchMoreFulfillmentLineItems(
+                                                      order.id,
+                                                      fulfillment.id,
+                                                      fulfillment
+                                                        .fulfillmentLineItems
+                                                        .pageInfo.endCursor
                                                     )
+                                                  }
+                                                  disabled={isFetchLoading}
+                                                >
+                                                  {isFetchLoading ? (
+                                                    <Loader2 className="animate-spin" />
+                                                  ) : (
+                                                    "Load More Items"
                                                   )}
-                                                </TableBody>
-                                              </Table>
-                                              {fulfillment.fulfillmentLineItems
-                                                .pageInfo.hasNextPage && (
-                                                <div className="mt-2 flex justify-center">
-                                                  <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                    onClick={() =>
-                                                      fetchMoreFulfillmentLineItems(
-                                                        order.id,
-                                                        fulfillment.id,
-                                                        fulfillment
-                                                          .fulfillmentLineItems
-                                                          .pageInfo.endCursor
-                                                      )
-                                                    }
-                                                    disabled={isFetchLoading}
-                                                  >
-                                                    {isFetchLoading ? (
-                                                      <Loader2 className="h-4 w-4 animate-spin" />
-                                                    ) : (
-                                                      "Load More Items"
-                                                    )}
-                                                  </Button>
-                                                </div>
-                                              )}
-                                            </div>
-                                          </CardContent>
-                                        </Card>
-                                      )
-                                    )}
-                                  </div>
-                                  {order.fulfillments.pageInfo.hasNextPage && (
-                                    <div className="mt-4 flex justify-center">
-                                      <Button
-                                        variant="outline"
-                                        onClick={() =>
-                                          fetchMoreFulfillments(
-                                            order.id,
-                                            order.fulfillments.pageInfo
-                                              .endCursor
-                                          )
-                                        }
-                                      >
-                                        Load More Fulfillments
-                                      </Button>
-                                    </div>
+                                                </Button>
+                                              </div>
+                                            )}
+                                          </div>
+                                        </CardContent>
+                                      </Card>
+                                    )
                                   )}
-                                </CollapsibleContent>
-                              </Collapsible>
-                            )}
-                          </div>
-                        )}
+                                </div>
+
+                                {order.fulfillments.pageInfo.hasNextPage && (
+                                  <div className="mt-4 flex justify-center">
+                                    <Button
+                                      variant="outline"
+                                      onClick={() =>
+                                        fetchMoreFulfillments(
+                                          order.id,
+                                          order.fulfillments.pageInfo.endCursor
+                                        )
+                                      }
+                                    >
+                                      Load More Fulfillments
+                                    </Button>
+                                  </div>
+                                )}
+                              </CollapsibleContent>
+                            </Collapsible>
+                          )}
+                        </div>
                       </CardContent>
                     </Card>
                   ))}
                 </div>
               )}
             </CardContent>
-            <CardFooter className="flex justify-between">
-              <div className="text-sm text-muted-foreground">
-                Showing page {currentPage}
-              </div>
+            <CardFooter className="flex justify-center items-center">
               <Pagination className="m-0">
                 <PaginationContent>
                   <PaginationItem>
                     <Button
                       variant="ghost"
-                      size="icon"
+                      className="cursor-pointer"
                       onClick={() => handlePageChange("prev")}
                       disabled={
                         !customer?.orders.pageInfo.hasPreviousPage ||
@@ -1152,17 +1131,13 @@ export default function AccountPageClient() {
                   <PaginationItem>
                     <Button
                       variant="ghost"
-                      size="icon"
+                      className="cursor-pointer"
                       onClick={() => handlePageChange("next")}
                       disabled={
                         !customer?.orders.pageInfo.hasNextPage || isLoading
                       }
                     >
-                      {isLoading ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        <PaginationNext />
-                      )}
+                      <PaginationNext />
                     </Button>
                   </PaginationItem>
                 </PaginationContent>

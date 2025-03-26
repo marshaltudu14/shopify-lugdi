@@ -13,7 +13,6 @@ export default async function AccountPage() {
 
   // Check if authenticated
   if (!accessToken || !expiresAt || Date.now() > parseInt(expiresAt)) {
-    console.log("I am working");
     redirect("/login");
   }
 

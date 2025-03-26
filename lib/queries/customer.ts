@@ -38,7 +38,6 @@ export const FETCH_CUSTOMER_ORDER_DATA = gql`
             cancelReason
             currencyCode
             financialStatus
-            processedAt
             totalPrice {
               amount
               currencyCode

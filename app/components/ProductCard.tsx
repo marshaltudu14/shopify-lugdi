@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
+
 import { cn } from "@/lib/utils";
 import { getCurrencySymbol } from "@/lib/countries";
 import { useTheme } from "next-themes";
@@ -46,8 +47,8 @@ export default function ProductCard({ product }: ProductCardProps) {
   const compareAtPrice = product?.compareAtPriceRange?.minVariantPrice;
   const isDiscounted =
     price && compareAtPrice
-      ? parseFloat(compareAtPrice.amount.toString()) >
-        parseFloat(price.amount.toString())
+      ? parseFloat(compareAtPrice?.amount?.toString()) >
+        parseFloat(price?.amount?.toString())
       : false;
   const isOutOfStock = product?.availableForSale === false;
   const quantityAvailable = product?.totalInventory ?? 0;
@@ -57,16 +58,16 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   const discountPercentage = isDiscounted
     ? Math.round(
-        ((parseFloat(compareAtPrice?.amount.toString() ?? "0") -
-          parseFloat(price?.amount.toString() ?? "0")) /
-          parseFloat(compareAtPrice?.amount.toString() ?? "1")) *
+        ((parseFloat(compareAtPrice?.amount?.toString() ?? "0") -
+          parseFloat(price?.amount?.toString() ?? "0")) /
+          parseFloat(compareAtPrice?.amount?.toString() ?? "1")) *
           100
       )
     : null;
 
-  const priceSymbol = price ? getCurrencySymbol(price.currencyCode) : "";
+  const priceSymbol = price ? getCurrencySymbol(price?.currencyCode) : "";
   const compareAtSymbol = compareAtPrice
-    ? getCurrencySymbol(compareAtPrice.currencyCode)
+    ? getCurrencySymbol(compareAtPrice?.currencyCode)
     : "";
 
   const getStockIndicator = () => {
@@ -206,14 +207,14 @@ export default function ProductCard({ product }: ProductCardProps) {
                 {price && (
                   <p>
                     {priceSymbol}
-                    {parseFloat(price.amount.toString()).toString()}
+                    {parseFloat(price?.amount?.toString())?.toString()}
                   </p>
                 )}
 
                 {isDiscounted && compareAtPrice && (
                   <p className="line-through opacity-60">
                     {compareAtSymbol}
-                    {parseFloat(compareAtPrice.amount.toString()).toString()}
+                    {parseFloat(compareAtPrice?.amount?.toString())?.toString()}
                   </p>
                 )}
               </div>
