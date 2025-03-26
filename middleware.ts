@@ -47,7 +47,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
       const expiresAt = cookies.get("lugdi_shopify_expires_at")?.value;
 
       if (!accessToken || !refreshTokenValue || !expiresAt) {
-        return NextResponse.redirect(new URL("/signin", request.url));
+        return NextResponse.redirect(new URL("/login", request.url));
       }
 
       if (Date.now() > parseInt(expiresAt)) {
@@ -55,7 +55,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
         const refreshedTokens = await refreshToken(refreshTokenValue);
         if (!refreshedTokens) {
           const response = NextResponse.redirect(
-            new URL("/signin", request.url)
+            new URL("/login", request.url)
           );
           response.cookies.delete("lugdi_shopify_access_token");
           response.cookies.delete("lugdi_shopify_refresh_token");

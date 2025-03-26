@@ -12,8 +12,8 @@ import ProductCard from "../components/ProductCard";
 interface CountryPageClientProps {
   country: Country | null;
   banners: Banner[];
-  menFeaturedProducts: CollectionData;
-  womenFeaturedProducts: CollectionData;
+  menFeaturedProducts: CollectionData | null;
+  womenFeaturedProducts: CollectionData | null;
 }
 
 const CountryPageClient: React.FC<CountryPageClientProps> = ({
@@ -33,10 +33,11 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
   console.log("Men:", menFeaturedProducts);
 
   const menProducts =
-    menFeaturedProducts.collection?.products?.edges?.map((edge) => edge.node) ||
-    [];
+    menFeaturedProducts?.collection?.products?.edges?.map(
+      (edge) => edge.node
+    ) || [];
   const womenProducts =
-    womenFeaturedProducts.collection?.products?.edges?.map(
+    womenFeaturedProducts?.collection?.products?.edges?.map(
       (edge) => edge.node
     ) || [];
 

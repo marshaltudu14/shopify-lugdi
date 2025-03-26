@@ -63,14 +63,14 @@ export default function SignInPageClient() {
   // Retry login function
   const handleRetryLogin = () => {
     setLoading(true);
-    router.push("/api/auth/signin");
+    router.push("/api/auth/login");
   };
 
   // Auto redirect if no error
   useEffect(() => {
     if (!errorParam) {
       setLoading(true);
-      router.push("/api/auth/signin");
+      router.push("/api/auth/login");
     }
   }, [errorParam, router]);
 

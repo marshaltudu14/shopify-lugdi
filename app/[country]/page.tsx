@@ -1,7 +1,6 @@
 import { banners, countries, Country, Banner } from "@/lib/countries";
 import React from "react";
 import CountryPageClient from "./CountryPageClient";
-import { cookies } from "next/headers";
 import { CollectionData } from "@/lib/types/collection";
 import { initializeApollo } from "@/lib/apollo/apollo-client";
 import { GET_COLLECTION_PRODUCTS } from "@/lib/queries/collection";

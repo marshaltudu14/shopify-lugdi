@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
 
   if (!code || !state) {
     return NextResponse.redirect(
-      `${process.env.NEXT_PUBLIC_SITE_URL}/signin?error=missing_params`
+      `${process.env.NEXT_PUBLIC_SITE_URL}/login?error=missing_params`
     );
   }
 
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
 
   if (!storedState || storedState !== state || !verifier) {
     return NextResponse.redirect(
-      `${process.env.NEXT_PUBLIC_SITE_URL}/signin?error=state_mismatch`
+      `${process.env.NEXT_PUBLIC_SITE_URL}/login?error=state_mismatch`
     );
   }
 
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
 
   if (!response.ok) {
     return NextResponse.redirect(
-      `${process.env.NEXT_PUBLIC_SITE_URL}/signin?error=token_fetch_failed`
+      `${process.env.NEXT_PUBLIC_SITE_URL}/login?error=token_fetch_failed`
     );
   }
 

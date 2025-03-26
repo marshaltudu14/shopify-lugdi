@@ -44,7 +44,7 @@ export async function POST(request: Request) {
           after: after || null,
           before: before || null,
           sortKey: sortKey || "CREATED_AT",
-          reverse: reverse || false,
+          reverse: reverse || true,
           query: query || null,
           lineItemsFirst: lineItemsFirst || 5,
           lineItemsAfter: lineItemsAfter || null,
