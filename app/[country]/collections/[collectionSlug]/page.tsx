@@ -39,10 +39,10 @@ export async function generateMetadata({
     const collection = data.collection;
 
     const seoTitle =
-      collection?.seo.title ||
+      collection?.seo?.title ||
       `Buy ${collection?.title} Fashion Apparels & Accessories Online`;
     const seoDescription =
-      collection?.seo.description ||
+      collection?.seo?.description ||
       `Discover a wide selection of ${collection?.title} fashion apparels & accessories. Enjoy new arrivals, exclusive deals, and premium quality.`;
     const seoImage = collection?.image?.url || "";
 

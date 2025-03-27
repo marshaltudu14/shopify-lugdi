@@ -23,25 +23,31 @@ const baumans = localFont({
 
 export async function generateMetadata() {
   const cookieStore = await cookies();
-  const countryName = cookieStore.get(LugdiUtils.location_name_country_cookie)
-    ?.value
-    ? cookieStore.get(LugdiUtils.location_name_country_cookie)?.value
-    : null;
+  const countryName =
+    cookieStore.get(LugdiUtils.location_name_country_cookie)?.value || null;
 
   const siteTitle = countryName ? `Lugdi ${countryName}` : "Lugdi";
-  const siteDescription = `Welcome to Lugdi ${
+  const siteDescription = `Discover Lugdi ${
     countryName ? countryName : ""
-  }, a revolutionary fashion brand blending cultural heritage with contemporary style. From artistic graphic T-shirts to luxury clothing, Lugdi ${countryName} offers a diverse range of fashion-forward designs crafted for those who dare to stand out. Each collection is inspired by mythology, streetwear, futuristic aesthetics, and abstract art, ensuring a unique and wearable experience. With a 3D browsing experience and global accessibility, Lugdi ${countryName} is set to redefine the future of fashion. Explore our latest drops and elevate your wardrobe today.`;
+  }, a bold fashion brand merging cultural heritage with modern style. 
+  Shop artistic graphic T-shirts, luxury streetwear, and unique designs 
+  inspired by mythology, futuristic aesthetics, and abstract art. 
+  Elevate your wardrobe with our latest collections today.`;
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lugdi.store";
+  const ogImage = `${siteUrl}/opengraph-image.png`;
 
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: siteTitle,
     url: siteUrl,
-    logo: `${siteUrl}/LugdiTextLogoBlack.png`,
+    logo: `${siteUrl}/LugdiLogoBlack.png`,
     description: siteDescription,
+    sameAs: [
+      "https://www.instagram.com/lugdi.tudu",
+      "https://www.facebook.com/lugdi.tudu",
+    ],
   };
 
   return {
@@ -51,6 +57,8 @@ export async function generateMetadata() {
       template: `%s - ${siteTitle}`,
     },
     description: siteDescription,
+    keywords:
+      "fashion, graphic t-shirts, luxury streetwear, cultural heritage, mythology fashion, Lugdi",
     openGraph: {
       title: siteTitle,
       description: siteDescription,
@@ -58,11 +66,20 @@ export async function generateMetadata() {
       siteName: siteTitle,
       locale: "en_US",
       type: "website",
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: `${siteTitle}`,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: siteTitle,
       description: siteDescription,
+      image: ogImage,
     },
     alternates: {
       canonical: siteUrl,

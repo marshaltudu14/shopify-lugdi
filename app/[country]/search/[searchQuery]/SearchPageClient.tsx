@@ -7,6 +7,8 @@ export default function SearchPageClient() {
   const [searchQuery, setSearchQuery] = useState("");
   const params = useParams();
 
+  console.log("ppp", params);
+
   return (
     <div className="min-h-screen px-2 py-2 md:px-3 md:py-3 lg:px-5 lg:py-5"></div>
   );
