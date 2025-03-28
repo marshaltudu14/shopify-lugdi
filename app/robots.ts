@@ -9,8 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           "/api/*", // Protect API routes
           "/*/cart/*", // Protect cart pages
-          "/*/account/*", // Protect user account pages
-          "/*/login/*", // Protect login pages
           "/*/coming-soon/*", // Hide coming soon pages
           "/*/_next/*", // Disallow Next.js internal routes
           "/*.json", // Disallow JSON files

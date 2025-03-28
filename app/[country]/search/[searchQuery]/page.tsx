@@ -11,7 +11,7 @@ import { notFound } from "next/navigation";
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ searchQuery: string }>;
+  params: Promise<{ searchQuery: string; country: string }>;
 }): Promise<Metadata> {
   const { searchQuery } = await params;
   const decodedQuery = decodeURIComponent(searchQuery || "");
@@ -27,9 +27,9 @@ export async function generateMetadata({
 export default async function SearchPage({
   params,
 }: {
-  params: { searchQuery: string };
+  params: Promise<{ searchQuery: string; country: string }>;
 }) {
-  const { searchQuery } = params;
+  const { searchQuery } = await params;
   const decodedQuery = decodeURIComponent(searchQuery || "");
 
   const cookieStore = await cookies();
