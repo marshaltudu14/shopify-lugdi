@@ -4,6 +4,8 @@ import CountryPageClient from "./CountryPageClient";
 import { CollectionData } from "@/lib/types/collection";
 import { initializeApollo } from "@/lib/apollo/apollo-client";
 import { GET_COLLECTION_PRODUCTS } from "@/lib/queries/collection";
+import { ProductsData } from "@/lib/types/products";
+import { GET_PRODUCTS } from "@/lib/queries/products";
 
 export default async function CountryHomePage({
   params,
@@ -16,6 +18,7 @@ export default async function CountryHomePage({
 
   let menFeaturedProducts: CollectionData | null;
   let womenFeaturedProducts: CollectionData | null;
+  let newArrivals: ProductsData | null;
 
   try {
     const client = initializeApollo();
@@ -42,11 +45,23 @@ export default async function CountryHomePage({
       },
     });
 
+    const { data: newArrivalsData } = await client.query<ProductsData>({
+      query: GET_PRODUCTS,
+      variables: {
+        first: 12,
+        sortKey: "CREATED_AT",
+        reverse: true,
+        country: isoCountryCode,
+      },
+    });
+
     menFeaturedProducts = menData;
     womenFeaturedProducts = womenData;
+    newArrivals = newArrivalsData;
   } catch (error) {
     menFeaturedProducts = null;
     womenFeaturedProducts = null;
+    newArrivals = null;
     console.error("Error fetching collection:", error);
   }
 
@@ -60,6 +75,7 @@ export default async function CountryHomePage({
       banners={bannerData}
       menFeaturedProducts={menFeaturedProducts}
       womenFeaturedProducts={womenFeaturedProducts}
+      newArrivalsProducts={newArrivals}
     />
   );
 }

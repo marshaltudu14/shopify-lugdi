@@ -16,17 +16,35 @@ export async function generateMetadata({
   const { searchQuery } = await params;
   const decodedQuery = decodeURIComponent(searchQuery || "");
 
-  const client = initializeApollo();
+  const seoTitle = `Search results for "${decodedQuery}"`;
+  const seoDescription = `Find products matching "${decodedQuery}" in our store. Browse a wide selection of items with best deals and fast shipping.`;
+
+  return {
+    title: seoTitle,
+    description: seoDescription,
+  };
+}
+export default async function SearchPage({
+  params,
+}: {
+  params: { searchQuery: string };
+}) {
+  const { searchQuery } = params;
+  const decodedQuery = decodeURIComponent(searchQuery || "");
 
   const cookieStore = await cookies();
   const countrySlug = cookieStore.get(LugdiUtils.location_cookieName)?.value;
   const isoCountryCode = countrySlug ? countrySlug.toUpperCase() : "IN";
 
+  const client = initializeApollo();
+
+  let searchProducts: ProductsData | null = null;
+
   try {
     const { data } = await client.query<ProductsData>({
       query: GET_PRODUCTS,
       variables: {
-        first: 1,
+        first: LugdiUtils.product_quantity || 20,
         sortKey: "RELEVANCE",
         query: decodedQuery,
         reverse: false,
@@ -36,27 +54,16 @@ export async function generateMetadata({
 
     if (!data?.products) return notFound();
 
-    const products = data.products;
-
-    const seoTitle: 
+    searchProducts = data;
   } catch (error) {
     console.error("error fetching products data", error);
-    return {
-      title: "No Products Found",
-    };
   }
-}
-export default async function SearchPage({
-  params,
-}: {
-  params: Promise<{ searchQuery: string }>;
-}) {
-  const { searchQuery } = await params;
-  const decodedQuery = decodeURIComponent(searchQuery || "");
 
-  const cookieStore = await cookies();
-  const countrySlug = cookieStore.get(LugdiUtils.location_cookieName)?.value;
-  const isoCountryCode = countrySlug ? countrySlug.toUpperCase() : "IN";
-
-  return <SearchPageClient />;
+  return (
+    <SearchPageClient
+      searchProducts={searchProducts}
+      initialQuery={decodedQuery}
+      isoCountryCode={isoCountryCode}
+    />
+  );
 }

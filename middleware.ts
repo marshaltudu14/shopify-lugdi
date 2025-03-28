@@ -199,6 +199,6 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp|gltf|bin|glb)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|sitemap-index.xml|collections-sitemap.xml|products-sitemap.xml|category-sitemap.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp|gltf|bin|glb)$).*)",
   ],
 };

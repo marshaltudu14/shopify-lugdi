@@ -8,6 +8,9 @@ export interface ProductsNode {
   priceRange: {
     minVariantPrice: Price;
   };
+  compareAtPriceRange: {
+    minVariantPrice: Price;
+  };
   featuredImage: ImageNode;
   totalInventory: number;
 }

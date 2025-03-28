@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useQuery } from "@apollo/client";
 import Link from "next/link";
+import { useParams } from "next/navigation"; // Add this import
 import LugdiUtils from "@/utils/LugdiUtils";
 import SortSelect from "@/app/components/SortSelect";
 import { GET_COLLECTION_PRODUCTS } from "@/lib/queries/collection";
@@ -36,10 +37,32 @@ interface ClientCollectionPageProps {
 export default function ClientCollectionPage({
   initialData,
   collectionSlug,
-  isoCountryCode,
+  isoCountryCode: serverCountryCode, // Renamed for clarity
 }: ClientCollectionPageProps) {
+  const params = useParams();
   const [sortOption, setSortOption] = useState<SortOption>("relevance");
+  const [countryCode, setCountryCode] = useState(
+    serverCountryCode.toUpperCase()
+  );
   const sentinelRef = useRef<HTMLDivElement>(null);
+
+  // Update country code when params change
+  useEffect(() => {
+    const currentParamCountry = params?.country;
+
+    // Handle case where country param might be string or string array
+    const normalizedParamCountry = Array.isArray(currentParamCountry)
+      ? currentParamCountry[0] // Take first element if it's an array
+      : currentParamCountry;
+
+    if (
+      normalizedParamCountry &&
+      normalizedParamCountry.toLowerCase() !== countryCode.toLowerCase()
+    ) {
+      // Convert to uppercase when setting the country code
+      setCountryCode(normalizedParamCountry.toUpperCase());
+    }
+  }, [params?.country, countryCode]);
 
   const variables = useMemo<QueryVariables>(() => {
     const sortConfig = getSortConfig(sortOption);
@@ -49,9 +72,9 @@ export default function ClientCollectionPage({
       sortKey: sortConfig.sortKey,
       reverse: sortConfig.reverse,
       after: null,
-      country: isoCountryCode,
+      country: countryCode,
     };
-  }, [collectionSlug, sortOption, isoCountryCode]);
+  }, [collectionSlug, sortOption, countryCode]);
 
   const { data, fetchMore, loading, error, refetch } = useQuery<
     CollectionData,
@@ -59,7 +82,7 @@ export default function ClientCollectionPage({
   >(GET_COLLECTION_PRODUCTS, {
     variables,
     fetchPolicy: "cache-and-network",
-    skip: !collectionSlug || !isoCountryCode,
+    skip: !collectionSlug || !countryCode,
     notifyOnNetworkStatusChange: true,
   });
 
@@ -219,8 +242,8 @@ export default function ClientCollectionPage({
                     variants={itemVariants}
                     className="text-slate-700 dark:text-slate-300 md:text-lg"
                   >
-                    Looks like we don’t have products here yet. Try exploring
-                    other categories or check back later for updates.
+                    Looks like we don&apos;t have products here yet. Try
+                    exploring other categories or check back later for updates.
                   </motion.p>
                   <Link href="/">
                     <motion.div
