@@ -112,7 +112,10 @@ export default function ProductCard({ product }: ProductCardProps) {
       whileHover="hover"
       className="w-full overflow-hidden rounded-xl"
     >
-      <Link href={`/product/${product?.handle ?? "#"}`} className="group block">
+      <Link
+        href={`/products/${product?.handle ?? "#"}`}
+        className="group block"
+      >
         <div className="relative h-full border p-2 md:p-3">
           <GlowingEffect
             blur={0}
