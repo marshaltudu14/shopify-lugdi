@@ -35,6 +35,25 @@ const stockIndicatorVariants = {
   },
 };
 
+const discountBadgeVariants = {
+  initial: { scale: 0.9, opacity: 0 },
+  animate: {
+    scale: 1,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      type: "spring",
+      stiffness: 400,
+      damping: 10,
+    },
+  },
+  hover: {
+    scale: 1.05,
+    rotate: -2,
+    transition: { type: "spring", stiffness: 500 },
+  },
+};
+
 export default function ProductCard({ product }: ProductCardProps) {
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
@@ -125,6 +144,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             disabled={false}
             proximity={64}
             inactiveZone={0.01}
+            variant="vip-gold"
           />
           <div className="relative w-full overflow-hidden rounded-xl border">
             <motion.div className="relative w-full overflow-hidden rounded-t-xl">
@@ -200,6 +220,35 @@ export default function ProductCard({ product }: ProductCardProps) {
                   </motion.div>
                 </AnimatePresence>
               )}
+
+              {isDiscounted && discountPercentage && (
+                <AnimatePresence>
+                  <motion.div
+                    key="discount-badge"
+                    variants={discountBadgeVariants}
+                    initial="initial"
+                    animate="animate"
+                    whileHover="hover"
+                    className={cn(
+                      "absolute top-4 right-4 px-3 py-1.5 rounded-lg font-bold text-sm shadow-lg",
+                      "bg-gradient-to-br from-yellow-500 via-red-500 to-yellow-500",
+                      "text-white border border-white/20",
+                      "transform-gpu backdrop-blur-sm"
+                    )}
+                    style={{
+                      backgroundSize: "200% 200%",
+                      animation: "gradientShift 4s ease infinite",
+                    }}
+                  >
+                    <div className="flex flex-col items-center justify-center">
+                      <span className="text-xs font-medium">SAVE</span>
+                      <span className="text-md leading-none">
+                        {discountPercentage}%
+                      </span>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              )}
             </motion.div>
 
             <div className="px-3 pt-2 pb-3">
@@ -221,21 +270,6 @@ export default function ProductCard({ product }: ProductCardProps) {
                   </p>
                 )}
               </div>
-              {isDiscounted && discountPercentage && (
-                <motion.div
-                  initial="initial"
-                  animate="animate"
-                  className={cn(
-                    "font-medium text-xs flex items-center justify-center py-0.5",
-                    isDark
-                      ? "bg-gradient-to-r from-emerald-950/50 via-emerald-800/70 to-emerald-950/50 text-emerald-100 border border-emerald-700/40"
-                      : "bg-gradient-to-r from-emerald-50 via-emerald-100 to-emerald-50 text-emerald-700 border border-emerald-200",
-                    "bg-[length:200%_100%]"
-                  )}
-                >
-                  <p className="text-center">GET {discountPercentage}% OFF</p>
-                </motion.div>
-              )}
             </div>
           </div>
         </div>

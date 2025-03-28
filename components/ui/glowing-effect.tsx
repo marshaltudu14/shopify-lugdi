@@ -9,7 +9,7 @@ interface GlowingEffectProps {
   inactiveZone?: number;
   proximity?: number;
   spread?: number;
-  variant?: "default" | "white";
+  variant?: "default" | "white" | "vip-gold";
   glow?: boolean;
   className?: string;
   disabled?: boolean;
@@ -118,6 +118,50 @@ const GlowingEffect = memo(
       };
     }, [handleMove, disabled]);
 
+    const getGradientStyle = () => {
+      if (variant === "white") {
+        return `repeating-conic-gradient(
+          from 236.84deg at 50% 50%,
+          var(--black),
+          var(--black) calc(25% / var(--repeating-conic-gradient-times))
+        )`;
+      }
+
+      if (variant === "vip-gold") {
+        return `
+          radial-gradient(circle, #FFD700 10%, #FFD70000 20%),
+          radial-gradient(circle at 40% 40%, #FFA500 5%, #FFA50000 15%),
+          radial-gradient(circle at 60% 60%, #DAA520 10%, #DAA52000 20%),
+          radial-gradient(circle at 40% 60%, #B8860B 10%, #B8860B00 20%),
+          radial-gradient(circle at 50% 50%, #FF4500 5%, #FF450000 15%),
+          repeating-conic-gradient(
+            from 236.84deg at 50% 50%,
+            #FFD700 0%,
+            #FFA500 calc(20% / var(--repeating-conic-gradient-times)),
+            #FF4500 calc(40% / var(--repeating-conic-gradient-times)),
+            #DAA520 calc(60% / var(--repeating-conic-gradient-times)),
+            #B8860B calc(80% / var(--repeating-conic-gradient-times)),
+            #FFD700 calc(100% / var(--repeating-conic-gradient-times))
+          )
+        `;
+      }
+
+      return `
+        radial-gradient(circle, #FFD700 10%, #FFD70000 20%),
+        radial-gradient(circle at 40% 40%, #FFA500 5%, #FFA50000 15%),
+        radial-gradient(circle at 60% 60%, #DAA520 10%, #DAA52000 20%),
+        radial-gradient(circle at 40% 60%, #B8860B 10%, #B8860B00 20%),
+        repeating-conic-gradient(
+          from 236.84deg at 50% 50%,
+          #FFD700 0%,
+          #FFA500 calc(25% / var(--repeating-conic-gradient-times)),
+          #DAA520 calc(50% / var(--repeating-conic-gradient-times)),
+          #B8860B calc(75% / var(--repeating-conic-gradient-times)),
+          #FFD700 calc(100% / var(--repeating-conic-gradient-times))
+        )
+      `;
+    };
+
     return (
       <>
         <div
@@ -125,6 +169,7 @@ const GlowingEffect = memo(
             "pointer-events-none absolute -inset-px hidden rounded-[inherit] border opacity-0 transition-opacity",
             glow && "opacity-100",
             variant === "white" && "border-white",
+            variant === "vip-gold" && "border-amber-500/30",
             disabled && "!block"
           )}
         />
@@ -138,34 +183,14 @@ const GlowingEffect = memo(
               "--active": "0",
               "--glowingeffect-border-width": `${borderWidth}px`,
               "--repeating-conic-gradient-times": "5",
-              "--gradient":
-                variant === "white"
-                  ? `repeating-conic-gradient(
-                      from 236.84deg at 50% 50%,
-                      var(--black),
-                      var(--black) calc(25% / var(--repeating-conic-gradient-times))
-                    )`
-                  : // Golden gradient for light and dark modes
-                    `radial-gradient(circle, #FFD700 10%, #FFD70000 20%),
-                    radial-gradient(circle at 40% 40%, #FFA500 5%, #FFA50000 15%),
-                    radial-gradient(circle at 60% 60%, #DAA520 10%, #DAA52000 20%),
-                    radial-gradient(circle at 40% 60%, #B8860B 10%, #B8860B00 20%),
-                    repeating-conic-gradient(
-                      from 236.84deg at 50% 50%,
-                      #FFD700 0%,              /* Bright gold */
-                      #FFA500 calc(25% / var(--repeating-conic-gradient-times)), /* Orange gold */
-                      #DAA520 calc(50% / var(--repeating-conic-gradient-times)), /* Goldenrod */
-                      #B8860B calc(75% / var(--repeating-conic-gradient-times)), /* Dark gold */
-                      #FFD700 calc(100% / var(--repeating-conic-gradient-times)) /* Back to bright gold */
-                    )`,
+              "--gradient": getGradientStyle(),
             } as React.CSSProperties
           }
           className={cn(
             "pointer-events-none absolute inset-0 rounded-[inherit] opacity-100 transition-opacity",
             glow && "opacity-100",
             blur > 0 && "blur-[var(--blur)]",
-            // Tailwind dark mode support for gradient distinction
-            "dark:[--gradient:radial-gradient(circle,_#FFAA00_10%,_#FFAA0000_20%),radial-gradient(circle_at_40%_40%,_#FFD700_5%,_#FFD70000_15%),radial-gradient(circle_at_60%_60%,_#FFB107_10%,_#FFB10700_20%),radial-gradient(circle_at_40%_60%,_#E09100_10%,_#E0910000_20%),repeating-conic-gradient(from_236.84deg_at_50%_50%,_#FFAA00_0%,_#FFD700_calc(25%_/_var(--repeating-conic-gradient-times)),_#FFB107_calc(50%_/_var(--repeating-conic-gradient-times)),_#E09100_calc(75%_/_var(--repeating-conic-gradient-times)),_#FFAA00_calc(100%_/_var(--repeating-conic-gradient-times)))]",
+            // Remove the dark mode override that was replacing the light mode style
             className,
             disabled && "!hidden"
           )}
@@ -180,7 +205,8 @@ const GlowingEffect = memo(
               "after:opacity-[var(--active)] after:transition-opacity after:duration-300",
               "after:[mask-clip:padding-box,border-box]",
               "after:[mask-composite:intersect]",
-              "after:[mask-image:linear-gradient(#0000,#0000),conic-gradient(from_calc((var(--start)-var(--spread))*1deg),#00000000_0deg,#fff,#00000000_calc(var(--spread)*2deg))]"
+              "after:[mask-image:linear-gradient(#0000,#0000),conic-gradient(from_calc((var(--start)-var(--spread))*1deg),#00000000_0deg,#fff,#00000000_calc(var(--spread)*2deg))]",
+              variant === "vip-gold" && "after:mix-blend-screen"
             )}
           />
         </div>
