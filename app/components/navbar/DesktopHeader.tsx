@@ -168,7 +168,7 @@ export default function DesktopHeader({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Link href={`/account`}>
+                <Link href={`https://account.lugdi.store`}>
                   <Button
                     variant="ghost"
                     size="icon"

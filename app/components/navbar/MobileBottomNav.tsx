@@ -23,7 +23,7 @@ export default function MobileBottomNav() {
     },
     {
       name: "Account",
-      href: "/account",
+      href: "https://account.lugdi.store",
       icon: User,
     },
   ];
