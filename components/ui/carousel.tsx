@@ -276,7 +276,7 @@ function CarouselThumbnail({
   return (
     <div
       className={cn(
-        "flex items-center justify-center gap-2 mt-4",
+        "flex items-center justify-center gap-3 mt-4", // Increased gap
         orientation === "horizontal" ? "flex-row" : "flex-col",
         className
       )}
@@ -287,10 +287,10 @@ function CarouselThumbnail({
         <button
           key={index}
           className={cn(
-            "w-16 h-16 border border-transparent rounded-lg overflow-hidden focus:outline-none transition-all duration-300",
+            "w-20 h-20 border border-transparent rounded-lg overflow-hidden focus:outline-none transition-all duration-300", // Increased size
             selectedIndex === index
-              ? "border-[3px] border-black dark:border-white shadow-[0_0_15px_#ffd87a]"
-              : "border-gray-300 hover:border-[3px] hover:border-gray-400 hover:shadow-[0_0_15px_#ffd87a]"
+              ? "border-[3px] border-primary shadow-md" // Changed border color to primary, adjusted shadow
+              : "border-border hover:border-[3px] hover:border-primary/50 hover:shadow-sm" // Adjusted border/hover states
           )}
           onClick={() => scrollToSlide(index)}
           aria-label={`Go to slide ${index + 1}`}

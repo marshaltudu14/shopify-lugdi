@@ -13,6 +13,11 @@ import {
 import Link from "next/link";
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
+import Lightbox from "yet-another-react-lightbox";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
+import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
 import {
   Carousel,
   CarouselContent,
@@ -21,7 +26,7 @@ import {
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import { getCurrencySymbol } from "@/lib/countries";
-import { Alert, AlertTitle } from "@/components/ui/alert";
+// Removed unused Alert, AlertTitle imports
 import {
   AlertCircle,
   AlertTriangle,
@@ -52,6 +57,8 @@ export default function ClientProductPage({
   >({});
   const [isAdding, setIsAdding] = useState(false);
   const { cart, addToCart } = useCart();
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   useEffect(() => {
     if (product?.options?.length > 0) {
@@ -129,14 +136,27 @@ export default function ClientProductPage({
   }
 
   return (
-    <div className="min-h-screen px-2 py-2 md:px-3 md:py-3 lg:px-20 lg:py-5">
-      <div className="flex flex-col md:flex-row gap-9 pb-10 relative">
-        <div className="flex-[2] w-full md:w-1/2 md:sticky md:top-20 self-start relative">
+    <div className="min-h-screen px-4 py-4 md:px-6 md:py-6 lg:px-24 lg:py-8">
+      {" "}
+      {/* Increased padding */}
+      <div className="flex flex-col md:flex-row gap-16 pb-16 relative">
+        {" "}
+        {/* Increased gap and bottom padding */}
+        <div className="flex-[2] w-full md:w-1/2 md:sticky md:top-24 self-start relative">
+          {" "}
+          {/* Adjusted sticky top */}
           <Carousel images={product.images.edges.map((e) => e.node)}>
             <CarouselContent>
               {product.images.edges.map((edge, index) => (
                 <CarouselItem key={index}>
-                  <div className="relative w-full h-full rounded-lg overflow-hidden">
+                  <button
+                    type="button"
+                    className="relative w-full h-full rounded-lg overflow-hidden cursor-zoom-in block"
+                    onClick={() => {
+                      setLightboxIndex(index);
+                      setLightboxOpen(true);
+                    }}
+                  >
                     <Image
                       src={edge.node.url}
                       alt={edge.node.altText || product.title}
@@ -144,18 +164,46 @@ export default function ClientProductPage({
                       height={1024}
                       className="w-full h-full object-cover"
                     />
-                  </div>
+                  </button>
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselThumbnail />
+            <CarouselThumbnail />{" "}
+            {/* We might need to adjust this later if needed */}
           </Carousel>
+          <Lightbox
+            open={lightboxOpen}
+            close={() => setLightboxOpen(false)}
+            index={lightboxIndex}
+            slides={product.images.edges.map((edge) => ({
+              src: edge.node.url,
+              alt: edge.node.altText || product.title,
+              width: 1024, // Use hardcoded width like the Image component
+              height: 1024, // Use hardcoded height like the Image component
+            }))}
+            styles={{ container: { backgroundColor: "rgba(0, 0, 0, .8)" } }}
+            plugins={[Zoom, Thumbnails]} // Added Zoom and Thumbnails plugins
+            zoom={{
+              maxZoomPixelRatio: 2, // Limit max zoom
+              scrollToZoom: true, // Enable scroll to zoom
+            }}
+            thumbnails={{
+              border: 0, // Remove thumbnail border
+              padding: 0, // Remove thumbnail padding
+              gap: 8, // Gap between thumbnails
+            }}
+          />
         </div>
-
-        <div className="flex-[1] w-full md:w-1/2 md:sticky md:top-20 self-start space-y-1 md:space-y-2 lg:space-y-3">
-          <div className="space-y-4 lg:space-y-6">
-            <p className="text-2xl lg:text-4xl font-bold">{product.title}</p>
-
+        <div className="flex-[1] w-full md:w-1/2 md:sticky md:top-24 self-start space-y-4 md:space-y-6 lg:space-y-8">
+          {" "}
+          {/* Increased spacing & Adjusted sticky top */}
+          <div className="space-y-6 lg:space-y-8">
+            {" "}
+            {/* Increased spacing */}
+            <p className="text-3xl lg:text-5xl font-bold">
+              {product.title}
+            </p>{" "}
+            {/* Slightly larger title */}
             {selectedVariant && (
               <div className="space-y-1 md:space-y-2">
                 <div className="flex items-center gap-2 md:gap-4">
@@ -170,45 +218,45 @@ export default function ClientProductPage({
                     </span>
                   )}
                 </div>
-
                 {selectedVariant.taxable && (
                   <p className="text-sm text-muted-foreground">
                     Inclusive of all taxes
                   </p>
                 )}
-
                 {selectedVariant.compareAtPrice?.amount && (
-                  <Alert className="bg-green-100 dark:bg-green-950 border border-green-500">
-                    <BadgePercent className="h-4 w-4 text-green-500" />
-                    <AlertTitle>
-                      <div className="text-xs lg:text-sm">
-                        <span>Save up to </span>
-                        <span className="font-semibold text-green-500">
-                          {currencySymbol}
-                          {(
-                            Number(selectedVariant.compareAtPrice.amount) -
-                            Number(selectedVariant.price.amount)
-                          ).toFixed(2)}
-                        </span>{" "}
-                        <span className="">
-                          (
-                          {Math.round(
-                            ((Number(selectedVariant.compareAtPrice.amount) -
-                              Number(selectedVariant.price.amount)) /
-                              Number(selectedVariant.compareAtPrice.amount)) *
-                              100
-                          )}
-                          % OFF)
-                        </span>
-                      </div>
-                    </AlertTitle>
-                  </Alert>
-                )}
+                  <div className="flex items-center gap-1 text-green-600 dark:text-green-400 mt-1">
+                    {" "}
+                    {/* Changed Alert to div, removed bg/border, added text color */}
+                    <BadgePercent className="h-4 w-4 flex-shrink-0" />{" "}
+                    {/* Adjusted icon class */}
+                    <div className="text-xs lg:text-sm font-medium">
+                      {" "}
+                      {/* Changed AlertTitle to div, added font-medium */}
+                      <span>Save up to </span>
+                      <span className="font-semibold text-green-500">
+                        {currencySymbol}
+                        {(
+                          Number(selectedVariant.compareAtPrice.amount) -
+                          Number(selectedVariant.price.amount)
+                        ).toFixed(2)}
+                      </span>{" "}
+                      <span className="">
+                        (
+                        {Math.round(
+                          ((Number(selectedVariant.compareAtPrice.amount) -
+                            Number(selectedVariant.price.amount)) /
+                            Number(selectedVariant.compareAtPrice.amount)) *
+                            100
+                        )}
+                        % OFF)
+                      </span>
+                    </div>
+                  </div>
+                )}{" "}
+                {/* Moved closing parenthesis inside curly brace */}
               </div>
             )}
-
             <Separator />
-
             {product.options?.length > 0 && product.variants?.edges?.length > 1
               ? product.options.map((option) => (
                   <div key={option.id} className="space-y-2">
@@ -237,16 +285,21 @@ export default function ClientProductPage({
                             key={value.id}
                             variant={isSelected ? "default" : "outline"}
                             disabled={!isAvailable}
-                            className={`relative flex items-center rounded-full gap-2 cursor-pointer ${
-                              hasSwatch && !value.swatch?.image ? "pl-8" : ""
+                            className={`relative flex items-center justify-center rounded-md px-4 py-2 cursor-pointer border-2 ${
+                              isSelected ? "border-primary" : "border-border"
+                            } ${
+                              !isAvailable
+                                ? "opacity-50 cursor-not-allowed"
+                                : ""
                             }`}
+                            style={{ minWidth: "4rem" }} // Ensure minimum width for consistency
                             onClick={() =>
                               handleOptionChange(option.name, value.name)
                             }
                           >
                             {hasSwatch && value.swatch?.color && (
                               <span
-                                className="absolute left-2 w-5 h-5 rounded-full border"
+                                className="w-5 h-5 rounded-sm border mr-2" // Changed to rounded-sm, added margin
                                 style={{ backgroundColor: value.swatch.color }}
                               />
                             )}
@@ -256,11 +309,11 @@ export default function ClientProductPage({
                                 alt={value.swatch.image.alt || value.name}
                                 width={24}
                                 height={24}
-                                className="rounded-full"
+                                className="rounded-sm mr-2" // Changed to rounded-sm, added margin
                               />
-                            ) : (
-                              !value.swatch?.color && value.name
-                            )}
+                            ) : null}
+                            <span className="text-sm">{value.name}</span>{" "}
+                            {/* Ensure text is always visible */}
                           </Button>
                         );
                       })}
@@ -268,7 +321,6 @@ export default function ClientProductPage({
                   </div>
                 ))
               : null}
-
             {selectedVariant && (
               <div>
                 <div className="space-y-2">
@@ -277,7 +329,7 @@ export default function ClientProductPage({
                     <Button
                       variant="outline"
                       size="icon"
-                      className="cursor-pointer"
+                      className="cursor-pointer rounded-md" // Added rounded-md
                       onClick={() =>
                         setQuantity((prev) => Math.max(prev - 1, 1))
                       }
@@ -297,7 +349,7 @@ export default function ClientProductPage({
                     <Button
                       variant="outline"
                       size="icon"
-                      className="cursor-pointer"
+                      className="cursor-pointer rounded-md" // Added rounded-md
                       onClick={() =>
                         setQuantity((prev) => Math.min(prev + 1, 10))
                       }
@@ -308,12 +360,13 @@ export default function ClientProductPage({
                 </div>
               </div>
             )}
-
             {selectedVariant && (
               <div className="space-y-2 pt-4">
                 {isVariantInCart ? (
                   <Link href="/cart">
                     <Button className="w-full rounded-md py-6 text-lg font-medium transition-all flex items-center justify-center gap-2 cursor-pointer">
+                      {" "}
+                      {/* Already rounded-md */}
                       <ArrowRight className="w-5 h-5" />
                       <span>Go to Cart</span>
                     </Button>
@@ -326,7 +379,7 @@ export default function ClientProductPage({
                       selectedVariant.quantityAvailable < quantity ||
                       isAdding
                     }
-                    className="w-full py-6 flex items-center gap-2 text-lg font-medium cursor-pointer"
+                    className="w-full rounded-md py-6 flex items-center justify-center gap-2 text-lg font-medium cursor-pointer" // Added rounded-md and justify-center
                   >
                     {isAdding ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
@@ -347,10 +400,11 @@ export default function ClientProductPage({
                 {selectedVariant.quantityAvailable > 0 &&
                   selectedVariant.quantityAvailable < 10 && (
                     <div
-                      className={`flex items-center justify-center gap-2 p-2 mt-3 rounded-md ${
+                      className={`flex items-center justify-center gap-2 mt-3 ${
+                        // Removed padding and rounded-md
                         selectedVariant.quantityAvailable < 5
-                          ? "bg-red-50 text-red-600 dark:bg-red-900/30 dark:text-red-400"
-                          : "bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400"
+                          ? "text-red-600 dark:text-red-400" // Removed background, kept text color
+                          : "text-amber-600 dark:text-amber-400" // Removed background, kept text color
                       }`}
                     >
                       <div>
@@ -360,7 +414,9 @@ export default function ClientProductPage({
                           <AlertTriangle className="w-5 h-5" />
                         )}
                       </div>
-                      <p className="text-sm">
+                      <p className="text-sm font-medium">
+                        {" "}
+                        {/* Added font-medium */}
                         Hurry! Only {selectedVariant.quantityAvailable} left in
                         stock
                       </p>
@@ -368,9 +424,15 @@ export default function ClientProductPage({
                   )}
 
                 {product.descriptionHtml && (
-                  <div className="mt-5">
-                    <h2 className="text-lg font-semibold mb-2">Description</h2>
+                  <div className="mt-8 pt-6 border-t">
+                    {" "}
+                    {/* Added top margin, padding, and border */}
+                    <h2 className="text-xl font-semibold mb-4">
+                      Description
+                    </h2>{" "}
+                    {/* Increased heading size and margin */}
                     <div
+                      className="prose prose-sm dark:prose-invert max-w-none" // Added prose styling for description
                       dangerouslySetInnerHTML={{
                         __html: product.descriptionHtml,
                       }}
@@ -382,10 +444,13 @@ export default function ClientProductPage({
           </div>
         </div>
       </div>
-
       {recommendations?.length > 0 && (
-        <div className="mt-10">
-          <h2 className="text-2xl text-center font-bold mb-4">
+        <div className="mt-16 pt-10 border-t">
+          {" "}
+          {/* Increased top margin, added padding and border */}
+          <h2 className="text-3xl text-center font-bold mb-8">
+            {" "}
+            {/* Increased heading size and margin */}
             You Might Also Like
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

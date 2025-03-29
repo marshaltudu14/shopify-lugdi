@@ -5,11 +5,11 @@ import { useRef, ReactNode } from "react";
 
 // Slide-up container variants for wrapping sections
 export const containerVariantsSlideUp = {
-  hidden: { opacity: 0, y: 50, filter: "blur(10px)" },
+  hidden: { opacity: 0, y: 50 }, // Removed blur
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
+    // Removed blur
     transition: {
       duration: 0.6,
       ease: "easeOut",
@@ -33,11 +33,11 @@ export const buttonHoverVariants = {
 
 // Basic item fade-in for child elements
 export const itemVariants = {
-  hidden: { opacity: 0, y: 50, filter: "blur(10px)" },
+  hidden: { opacity: 0, y: 50 }, // Removed blur
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
+    // Removed blur
     transition: { duration: 0.6, ease: "easeOut" },
   },
 };

@@ -30,7 +30,7 @@ button,
 textarea,
 select {
   font-family: var(--font-baumans), sans-serif;
-  letter-spacing: 0.05em;
+  /* letter-spacing: 0.05em; */ /* Removed for better body text readability */
 }
 
 @theme inline {
