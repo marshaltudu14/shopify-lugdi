@@ -3,28 +3,31 @@ import {
   GET_SINGLE_PRODUCT,
   GET_SINGLE_PRODUCT_RECOMMENDATION,
 } from "@/lib/queries/product";
-import LugdiUtils from "@/utils/LugdiUtils";
-import { cookies } from "next/headers";
 import { Metadata } from "next";
 import { convertSlugToTitle } from "@/utils/SlugToTitle";
 import { notFound } from "next/navigation";
+import { countries } from "@/lib/countries";
 import {
   GetSingleProductRecommendationResponse,
   GetSingleProductResponse,
 } from "@/lib/types/product";
 import ClientProductPage from "./ClientProductPage";
 
+// Define params type for clarity
+interface ProductPageParams {
+  params: { country: string; productSlug: string };
+}
+
 export async function generateMetadata({
   params,
-}: {
-  params: Promise<{ productSlug: string }>;
-}): Promise<Metadata> {
-  const { productSlug } = await params;
+}: ProductPageParams): Promise<Metadata> {
+  const { productSlug, country } = await params;
   const client = initializeApollo();
 
-  const cookieStore = await cookies();
-  const countrySlug = cookieStore.get(LugdiUtils.location_cookieName)?.value;
-  const isoCountryCode = countrySlug ? countrySlug.toUpperCase() : "IN";
+  const isoCountryCode = country ? country.toUpperCase() : "IN";
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lugdi.store";
+  const canonicalUrl = `${siteUrl}/${country}/products/${productSlug}`;
 
   try {
     const { data } = await client.query<GetSingleProductResponse>({
@@ -51,26 +54,44 @@ export async function generateMetadata({
           },
         ],
       },
+      alternates: {
+        canonical: canonicalUrl,
+      },
     };
   } catch (error) {
     console.error("Error fetching product SEO data:", error);
-    return { title: `Buy ${convertSlugToTitle(productSlug)} Online` };
+    const defaultTitle = `Buy ${convertSlugToTitle(productSlug)} Online`;
+    return {
+      title: defaultTitle,
+      description: `Shop for ${convertSlugToTitle(
+        productSlug
+      )} and other fashion items at Lugdi.`,
+      openGraph: {
+        title: defaultTitle,
+        description: `Shop for ${convertSlugToTitle(
+          productSlug
+        )} and other fashion items at Lugdi.`,
+      },
+      alternates: {
+        canonical: canonicalUrl,
+      },
+    };
   }
 }
 
-export default async function ProductPage({
-  params,
-}: {
-  params: Promise<{ productSlug: string }>;
-}) {
-  const { productSlug } = await params;
+export default async function ProductPage({ params }: ProductPageParams) {
+  const { productSlug, country: countrySlugParam } = await params;
 
-  const cookieStore = await cookies();
-  const countrySlug = cookieStore.get(LugdiUtils.location_cookieName)?.value;
-  const countryName = cookieStore.get(
-    LugdiUtils.location_name_country_cookie
-  )?.value;
-  const isoCountryCode = countrySlug ? countrySlug.toUpperCase() : "IN";
+  // Derive country info from params
+  const currentCountry = countries.find(
+    (c) => c.slug === countrySlugParam && c.active
+  );
+  const countryName = currentCountry?.name;
+  const isoCountryCode = countrySlugParam
+    ? countrySlugParam.toUpperCase()
+    : "IN";
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lugdi.store";
 
   let productData: GetSingleProductResponse | null;
   let productRecommendation: GetSingleProductRecommendationResponse | null;
@@ -112,19 +133,21 @@ export default async function ProductPage({
     name: product?.title,
     description: product?.seo?.description || product?.description || "",
     image: product?.images?.edges.map((edge) => edge.node.url) || [],
-    url: `${process.env.NEXT_PUBLIC_SITE_URL}/product/${productSlug}`,
+    url: `${siteUrl}/${countrySlugParam}/products/${productSlug}`,
     brand: {
       "@type": "Brand",
       name:
         product?.tags
           ?.find((tag) => tag.toLowerCase().includes("brand"))
-          ?.replace("brand:", "") || `Lugdi ${countryName}`,
+          ?.replace("brand:", "") || `Lugdi ${countryName || "Global"}`,
     },
     offers: {
       "@type": "AggregateOffer",
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/product/${productSlug}`,
+      url: `${siteUrl}/${countrySlugParam}/products/${productSlug}`,
       priceCurrency:
-        product?.variants.edges[0]?.node.price.currencyCode || "INR",
+        product?.variants.edges[0]?.node.price.currencyCode ||
+        currentCountry?.currencyCode ||
+        "INR",
       lowPrice: Math.min(
         ...(product?.variants.edges.map((edge) => edge.node.price.amount) || [
           0,
@@ -152,21 +175,22 @@ export default async function ProductPage({
           })),
         },
         price: edge.node.price.amount,
-        priceCurrency: edge.node.price.currencyCode || "INR",
+        priceCurrency:
+          edge.node.price.currencyCode || currentCountry?.currencyCode || "INR",
         availability: edge.node.availableForSale
           ? "https://schema.org/InStock"
           : "https://schema.org/OutOfStock",
       })),
       seller: {
         "@type": "Organization",
-        name: `Lugdi ${countryName}`,
+        name: `Lugdi ${countryName || "Global"}`,
       },
     },
     isRelatedTo:
       productRecommendation?.productRecommendations?.map((rec) => ({
         "@type": "Product",
         name: rec.title,
-        url: `${process.env.NEXT_PUBLIC_SITE_URL}/product/${rec.handle}`,
+        url: `${siteUrl}/${countrySlugParam}/products/${rec.handle}`,
         image: rec.featuredImage?.url,
         offers: {
           "@type": "Offer",

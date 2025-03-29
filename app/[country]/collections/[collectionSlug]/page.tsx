@@ -1,26 +1,29 @@
 import { Metadata } from "next";
 import { initializeApollo } from "@/lib/apollo/apollo-client";
 import { GET_COLLECTION_PRODUCTS } from "@/lib/queries/collection";
-import LugdiUtils from "@/utils/LugdiUtils";
-import { cookies } from "next/headers";
 import React from "react";
 import { convertSlugToTitle } from "@/utils/SlugToTitle";
 import { CollectionData, CollectionProductEdge } from "@/lib/types/collection";
 import ClientCollectionPage from "./ClientCollectionPage";
 import { notFound } from "next/navigation";
+import LugdiUtils from "@/utils/LugdiUtils";
+
+// Define params type
+interface CollectionPageParams {
+  params: { country: string; collectionSlug: string };
+}
 
 // Collection Page Metadata
 export async function generateMetadata({
   params,
-}: {
-  params: Promise<{ collectionSlug: string }>;
-}): Promise<Metadata> {
-  const { collectionSlug } = await params;
+}: CollectionPageParams): Promise<Metadata> {
+  const { collectionSlug, country } = await params;
   const client = initializeApollo();
 
-  const cookieStore = await cookies();
-  const countrySlug = cookieStore.get(LugdiUtils.location_cookieName)?.value;
-  const isoCountryCode = countrySlug ? countrySlug.toUpperCase() : "IN";
+  const isoCountryCode = country ? country.toUpperCase() : "IN";
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lugdi.store";
+  const canonicalUrl = `${siteUrl}/${country}/collections/${collectionSlug}`;
 
   try {
     const { data } = await client.query<CollectionData>({
@@ -59,6 +62,9 @@ export async function generateMetadata({
           },
         ],
       },
+      alternates: {
+        canonical: canonicalUrl,
+      },
     };
   } catch (error) {
     console.error("Error fetching Collection SEO metadata:", error);
@@ -69,20 +75,19 @@ export async function generateMetadata({
       description: `Discover a wide selection of ${convertSlugToTitle(
         collectionSlug
       )} fashion apparels & accessories. Enjoy new arrivals, exclusive deals, and premium quality.`,
+      alternates: {
+        canonical: canonicalUrl,
+      },
     };
   }
 }
 
-export default async function CollectionPage({
-  params,
-}: {
-  params: Promise<{ collectionSlug: string }>;
-}) {
-  const { collectionSlug } = await params;
+export default async function CollectionPage({ params }: CollectionPageParams) {
+  const { collectionSlug, country } = await params;
 
-  const cookieStore = await cookies();
-  const countrySlug = cookieStore.get(LugdiUtils.location_cookieName)?.value;
-  const isoCountryCode = countrySlug ? countrySlug.toUpperCase() : "IN";
+  const isoCountryCode = country ? country.toUpperCase() : "IN";
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lugdi.store";
 
   let initialData: CollectionData | null;
   try {
@@ -115,7 +120,7 @@ export default async function CollectionPage({
         collection?.title || convertSlugToTitle(collectionSlug)
       } fashion apparels & accessories.`,
     image: collection?.image?.url || "",
-    url: `${process.env.NEXT_PUBLIC_SITE_URL}/collections/${collectionSlug}`,
+    url: `${siteUrl}/${country}/collections/${collectionSlug}`,
     itemListElement: (collection?.products.edges || []).map(
       (edge: CollectionProductEdge, index: number) => ({
         "@type": "ListItem",
@@ -123,7 +128,7 @@ export default async function CollectionPage({
         item: {
           "@type": "Product",
           name: edge.node.title,
-          url: `${process.env.NEXT_PUBLIC_SITE_URL}/product/${edge.node.handle}`,
+          url: `${siteUrl}/${country}/products/${edge.node.handle}`,
           image: edge.node.featuredImage?.url || "",
           offers: {
             "@type": "Offer",

@@ -4,6 +4,7 @@ export interface Country {
   active: boolean;
   currencyCode: string;
   currencySymbol: string;
+  languageCode: string;
 }
 
 export const countries: Country[] = [
@@ -13,6 +14,7 @@ export const countries: Country[] = [
     active: true,
     currencyCode: "INR",
     currencySymbol: "₹",
+    languageCode: "en-IN",
   },
   {
     name: "Australia",
@@ -20,6 +22,7 @@ export const countries: Country[] = [
     active: true,
     currencyCode: "AUD",
     currencySymbol: "$",
+    languageCode: "en-AU",
   },
   /* { name: "Afghanistan", slug: "af", active: false, currencyCode: "AFN", currencySymbol: "؋" },
   { name: "Åland Islands", slug: "ax", active: false, currencyCode: "EUR", currencySymbol: "€" },

@@ -4,10 +4,10 @@ import { ThemeProvider } from "next-themes";
 import ApolloWrapper from "@/lib/apollo/apollo-wrapper";
 import Header from "./components/navbar/Header";
 import localFont from "next/font/local";
-import { cookies } from "next/headers";
-import LugdiUtils from "@/utils/LugdiUtils";
 import Footer from "./components/navbar/Footer";
 import { Toaster } from "@/components/ui/sonner";
+import { countries } from "@/lib/countries";
+import { Metadata } from "next";
 
 const blippo = localFont({
   src: "/fonts/blippo-blk-bt.ttf",
@@ -21,14 +21,22 @@ const baumans = localFont({
   display: "swap",
 });
 
-export async function generateMetadata() {
-  const cookieStore = await cookies();
-  const countryName =
-    cookieStore.get(LugdiUtils.location_name_country_cookie)?.value || null;
+interface RootLayoutParams {
+  params: { country: string };
+}
+
+export async function generateMetadata({
+  params,
+}: RootLayoutParams): Promise<Metadata> {
+  // Find country data based on URL parameter
+  const currentCountry = countries.find(
+    (c) => c.slug === params.country && c.active
+  );
+  const countryName = currentCountry?.name;
 
   const siteTitle = countryName ? `Lugdi ${countryName}` : "Lugdi";
-  const siteDescription = `Discover Lugdi ${
-    countryName ? countryName : ""
+  const siteDescription = `Discover Lugdi${
+    countryName ? ` ${countryName}` : ""
   }, a bold fashion brand merging cultural heritage with modern style. 
   Shop artistic graphic T-shirts, luxury streetwear, and unique designs 
   inspired by mythology, futuristic aesthetics, and abstract art. 
@@ -57,14 +65,15 @@ export async function generateMetadata() {
       template: `%s - ${siteTitle}`,
     },
     description: siteDescription,
-    keywords:
-      "fashion, graphic t-shirts, luxury streetwear, cultural heritage, mythology fashion, Lugdi",
+    keywords: `fashion, graphic t-shirts, luxury streetwear, cultural heritage, mythology fashion, Lugdi${
+      countryName ? `, ${countryName}` : ""
+    }`,
     openGraph: {
       title: siteTitle,
       description: siteDescription,
       url: siteUrl,
       siteName: siteTitle,
-      locale: "en_US",
+      locale: currentCountry?.languageCode?.replace("-", "_") || "en_US",
       type: "website",
       images: [
         {
@@ -79,10 +88,7 @@ export async function generateMetadata() {
       card: "summary_large_image",
       title: siteTitle,
       description: siteDescription,
-      image: ogImage,
-    },
-    alternates: {
-      canonical: siteUrl,
+      images: [ogImage],
     },
     other: {
       "application/ld+json": JSON.stringify(structuredData),
@@ -92,11 +98,20 @@ export async function generateMetadata() {
 
 export default function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: { country: string };
 }>) {
+  // Find country data to get language code
+  const currentCountry = countries.find(
+    (c) => c.slug === params.country && c.active
+  );
+  const lang = currentCountry?.languageCode || "en"; // Default to 'en' if country/lang not found
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    // Set lang attribute dynamically
+    <html lang={lang} suppressHydrationWarning>
       <body className={`${blippo.variable} ${baumans.variable} antialiased`}>
         <ApolloWrapper>
           <ThemeProvider

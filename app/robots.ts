@@ -10,6 +10,7 @@ export default function robots(): MetadataRoute.Robots {
           "/api/*", // Protect API routes
           "/*/cart/*", // Protect cart pages
           "/*/coming-soon/*", // Hide coming soon pages
+          "/*/search/*", // Disallow search result pages
           "/*/_next/*", // Disallow Next.js internal routes
           "/*.json", // Disallow JSON files
           "/marshal_data/*", // Protect internal data

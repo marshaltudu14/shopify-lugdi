@@ -6,12 +6,44 @@ import { initializeApollo } from "@/lib/apollo/apollo-client";
 import { GET_COLLECTION_PRODUCTS } from "@/lib/queries/collection";
 import { ProductsData } from "@/lib/types/products";
 import { GET_PRODUCTS } from "@/lib/queries/products";
+import { Metadata } from "next";
+
+// Define params type
+interface CountryHomePageParams {
+  params: { country: string };
+}
+
+// Homepage Metadata
+export async function generateMetadata({
+  params,
+}: CountryHomePageParams): Promise<Metadata> {
+  const { country } = await params;
+  const currentCountry = countries.find((c) => c.slug === country && c.active);
+  const countryName = currentCountry?.name || "Global";
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lugdi.store";
+  const canonicalUrl = `${siteUrl}/${country}`;
+
+  const title = `Lugdi ${countryName}: Shop Graphic Tees, Streetwear & Fashion Online`;
+  const description = `Explore Lugdi in ${countryName}. Discover unique graphic t-shirts, modern streetwear, and fashion accessories inspired by culture and art. Shop the latest arrivals.`;
+
+  return {
+    title: title,
+    description: description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: title,
+      description: description,
+      url: canonicalUrl,
+    },
+  };
+}
 
 export default async function CountryHomePage({
   params,
-}: {
-  params: Promise<{ country: string; countrySlug: string }>;
-}) {
+}: CountryHomePageParams) {
   const { country: countrySlug } = await params;
 
   const isoCountryCode = countrySlug ? countrySlug.toUpperCase() : "IN";
