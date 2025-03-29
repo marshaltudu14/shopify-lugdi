@@ -237,6 +237,33 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [cart]);
 
+  // Helper function to map API Cart to CartState
+  const mapApiCartToState = (apiCart: Cart): CartState => ({
+    cartId: apiCart.id,
+    items: apiCart.lines.edges.map((edge) => ({
+      variantId: edge.node.merchandise.id,
+      quantity: edge.node.quantity,
+      lineId: edge.node.id,
+      merchandise: {
+        title: edge.node.merchandise.title,
+        image: edge.node.merchandise.image,
+        price: edge.node.merchandise.price,
+        compareAtPrice: edge.node.merchandise.compareAtPrice,
+        availableForSale: edge.node.merchandise.availableForSale,
+        quantityAvailable: edge.node.merchandise.quantityAvailable,
+        selectedOptions: edge.node.merchandise.selectedOptions,
+        product: {
+          handle: edge.node.merchandise.product.handle,
+          title: edge.node.merchandise.product.title,
+        },
+      },
+    })),
+    checkoutUrl: apiCart.checkoutUrl,
+    itemCount: apiCart.totalQuantity,
+    subtotalAmount: apiCart.cost.subtotalAmount,
+    totalAmount: apiCart.cost.totalAmount,
+  });
+
   const createCart = async (
     lines: { merchandiseId: string; quantity: number }[]
   ) => {
@@ -255,20 +282,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
         },
       },
     });
-    const newCart = data!.cartCreate.cart;
-    const updatedCartState: CartState = {
-      cartId: newCart.id,
-      items: newCart.lines.edges.map((edge) => ({
-        variantId: edge.node.merchandise.id,
-        quantity: edge.node.quantity,
-        lineId: edge.node.id,
-      })),
-      checkoutUrl: newCart.checkoutUrl,
-      itemCount: newCart.totalQuantity,
-      subtotalAmount: null,
-      totalAmount: null,
-    };
-    setCart(updatedCartState);
+    const newCart = data?.cartCreate?.cart;
+    if (newCart) {
+      setCart(mapApiCartToState(newCart));
+    } else {
+      throw new Error("Failed to create cart: No cart data returned.");
+    }
   };
 
   const addToCart = async (variantId: string, quantity: number) => {
@@ -283,20 +302,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
             lines: [{ merchandiseId: variantId, quantity }],
           },
         });
-        const updatedCart = data!.cartLinesAdd.cart;
-        const updatedCartState: CartState = {
-          cartId: updatedCart.id,
-          items: updatedCart.lines.edges.map((edge) => ({
-            variantId: edge.node.merchandise.id,
-            quantity: edge.node.quantity,
-            lineId: edge.node.id,
-          })),
-          checkoutUrl: updatedCart.checkoutUrl,
-          itemCount: updatedCart.totalQuantity,
-          subtotalAmount: null,
-          totalAmount: null,
-        };
-        setCart(updatedCartState);
+        const updatedCart = data?.cartLinesAdd?.cart;
+        if (updatedCart) {
+          setCart(mapApiCartToState(updatedCart));
+        } else {
+          throw new Error("Failed to add to cart: No cart data returned.");
+        }
       }
       toast.success("Item added to cart!");
     } catch (error) {
@@ -308,20 +319,39 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   const removeFromCart = async (lineId: string) => {
     try {
       if (!cart.cartId) return;
-      await client.mutate<{ cartLinesRemove: { cart: Cart } }>({
+      const { data } = await client.mutate<{
+        cartLinesRemove: { cart: Cart | null };
+      }>({
         mutation: REMOVE_FROM_CART,
         variables: {
           cartId: cart.cartId,
           lineIds: [lineId],
         },
       });
-
-      toast.success("Product removed from cart!");
-      await getCart();
+      const updatedCart = data?.cartLinesRemove?.cart;
+      if (updatedCart) {
+        setCart(mapApiCartToState(updatedCart));
+        toast.success("Product removed from cart!");
+      } else {
+        // If cart becomes null (e.g., last item removed), reset state
+        setCart({
+          cartId: null,
+          items: [],
+          checkoutUrl: null,
+          itemCount: 0,
+          subtotalAmount: null,
+          totalAmount: null,
+        });
+        if (typeof window !== "undefined") {
+          localStorage.removeItem(STORAGE_KEY);
+        }
+        toast.success("Cart emptied!");
+      }
     } catch (error) {
       console.error("Error removing from cart:", error);
       toast.error("Failed to remove product from cart.");
-      await getCart();
+      // Optionally refetch cart on error to ensure consistency
+      // await getCart();
     }
   };
 
@@ -345,20 +375,32 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
         throw new Error(`Maximum allowed quantity is ${MAX_PRODUCT_QUANTITY}.`);
       }
 
-      await client.mutate<{ cartLinesUpdate: { cart: Cart } }>({
+      const { data } = await client.mutate<{
+        cartLinesUpdate: { cart: Cart | null };
+      }>({
         mutation: UPDATE_CART_ITEMS,
         variables: {
           cartId: cart.cartId,
           lines: [{ id: lineId, quantity }],
         },
       });
-
-      toast.success("Cart updated successfully!");
-      await getCart();
-    } catch (error) {
+      const updatedCart = data?.cartLinesUpdate?.cart;
+      if (updatedCart) {
+        setCart(mapApiCartToState(updatedCart));
+        toast.success("Cart updated successfully!");
+      } else {
+        throw new Error("Failed to update cart: No cart data returned.");
+      }
+    } catch (error: unknown) {
+      // Use unknown and type guard
       console.error("Error updating cart:", error);
-      toast.error("Failed to update cart.");
-      await getCart();
+      let errorMessage = "Failed to update cart.";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      toast.error(errorMessage);
+      // Optionally refetch cart on error to ensure consistency
+      // await getCart();
     }
   };
 

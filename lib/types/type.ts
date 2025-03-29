@@ -9,7 +9,7 @@ export interface SEO {
 }
 
 export interface Price {
-  amount: number;
+  amount: string;
   currencyCode: string;
 }
 

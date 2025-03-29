@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { BasicProductFragment, ImageFragment } from "../fragments";
 
 export const GET_COLLECTION_PRODUCTS = gql`
   query getCollectionProducts(
@@ -14,8 +15,7 @@ export const GET_COLLECTION_PRODUCTS = gql`
       title
 
       image {
-        url
-        altText
+        ...ImageFragment
       }
 
       seo {
@@ -32,27 +32,7 @@ export const GET_COLLECTION_PRODUCTS = gql`
         edges {
           cursor
           node {
-            id
-            title
-            handle
-            availableForSale
-            totalInventory
-            priceRange {
-              minVariantPrice {
-                amount
-                currencyCode
-              }
-            }
-            compareAtPriceRange {
-              minVariantPrice {
-                amount
-                currencyCode
-              }
-            }
-            featuredImage {
-              url
-              altText
-            }
+            ...BasicProductFragment
           }
         }
         pageInfo {
@@ -62,4 +42,6 @@ export const GET_COLLECTION_PRODUCTS = gql`
       }
     }
   }
+  ${BasicProductFragment}
+  ${ImageFragment}
 `;

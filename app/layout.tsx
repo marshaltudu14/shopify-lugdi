@@ -28,10 +28,9 @@ interface RootLayoutParams {
 export async function generateMetadata({
   params,
 }: RootLayoutParams): Promise<Metadata> {
+  const { country } = await params;
   // Find country data based on URL parameter
-  const currentCountry = countries.find(
-    (c) => c.slug === params.country && c.active
-  );
+  const currentCountry = countries.find((c) => c.slug === country && c.active);
   const countryName = currentCountry?.name;
 
   const siteTitle = countryName ? `Lugdi ${countryName}` : "Lugdi";
@@ -96,17 +95,16 @@ export async function generateMetadata({
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
   params,
 }: Readonly<{
   children: React.ReactNode;
   params: { country: string };
 }>) {
+  const { country } = await params;
   // Find country data to get language code
-  const currentCountry = countries.find(
-    (c) => c.slug === params.country && c.active
-  );
+  const currentCountry = countries.find((c) => c.slug === country && c.active);
   const lang = currentCountry?.languageCode || "en"; // Default to 'en' if country/lang not found
 
   return (

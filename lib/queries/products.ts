@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { BasicProductFragment } from "../fragments";
 
 export const GET_PRODUCTS = gql`
   query getProducts(
@@ -19,27 +20,7 @@ export const GET_PRODUCTS = gql`
       edges {
         cursor
         node {
-          id
-          title
-          handle
-          availableForSale
-          totalInventory
-          priceRange {
-            minVariantPrice {
-              amount
-              currencyCode
-            }
-          }
-          compareAtPriceRange {
-            minVariantPrice {
-              amount
-              currencyCode
-            }
-          }
-          featuredImage {
-            url
-            altText
-          }
+          ...BasicProductFragment
         }
       }
       pageInfo {
@@ -48,4 +29,5 @@ export const GET_PRODUCTS = gql`
       }
     }
   }
+  ${BasicProductFragment}
 `;

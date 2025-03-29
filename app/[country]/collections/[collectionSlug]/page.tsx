@@ -132,7 +132,7 @@ export default async function CollectionPage({ params }: CollectionPageParams) {
           image: edge.node.featuredImage?.url || "",
           offers: {
             "@type": "Offer",
-            price: edge.node.priceRange.minVariantPrice.amount,
+            price: Number(edge.node.priceRange.minVariantPrice.amount),
             priceCurrency: edge.node.priceRange.minVariantPrice.currencyCode,
             availability: edge.node.availableForSale
               ? "https://schema.org/InStock"
@@ -140,7 +140,9 @@ export default async function CollectionPage({ params }: CollectionPageParams) {
             ...(edge.node.compareAtPriceRange.minVariantPrice.amount && {
               compareAtPrice: {
                 "@type": "Offer",
-                price: edge.node.compareAtPriceRange.minVariantPrice.amount,
+                price: Number(
+                  edge.node.compareAtPriceRange.minVariantPrice.amount
+                ),
                 priceCurrency:
                   edge.node.compareAtPriceRange.minVariantPrice.currencyCode,
               },

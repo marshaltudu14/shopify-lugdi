@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { MoneyFragment, ImageFragment } from "../fragments";
 
 export const GET_SINGLE_PRODUCT = gql`
   query getSingleProduct($handle: String!, $country: CountryCode!)
@@ -16,8 +17,7 @@ export const GET_SINGLE_PRODUCT = gql`
         edges {
           cursor
           node {
-            url
-            altText
+            ...ImageFragment
           }
         }
       }
@@ -56,16 +56,13 @@ export const GET_SINGLE_PRODUCT = gql`
               value
             }
             image {
-              url
-              altText
+              ...ImageFragment
             }
             price {
-              amount
-              currencyCode
+              ...MoneyFragment
             }
             compareAtPrice {
-              amount
-              currencyCode
+              ...MoneyFragment
             }
           }
         }
@@ -76,6 +73,8 @@ export const GET_SINGLE_PRODUCT = gql`
       }
     }
   }
+  ${ImageFragment}
+  ${MoneyFragment}
 `;
 
 export const GET_SINGLE_PRODUCT_RECOMMENDATION = gql`
@@ -91,23 +90,22 @@ export const GET_SINGLE_PRODUCT_RECOMMENDATION = gql`
       totalInventory
 
       featuredImage {
-        url
-        altText
+        ...ImageFragment
       }
 
       compareAtPriceRange {
         minVariantPrice {
-          amount
-          currencyCode
+          ...MoneyFragment
         }
       }
 
       priceRange {
         minVariantPrice {
-          amount
-          currencyCode
+          ...MoneyFragment
         }
       }
     }
   }
+  ${ImageFragment}
+  ${MoneyFragment}
 `;

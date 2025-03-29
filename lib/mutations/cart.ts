@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { MoneyFragment, ImageFragment } from "../fragments";
 
 export const CART_FRAGMENT = gql`
   fragment CartDetails on Cart {
@@ -6,12 +7,10 @@ export const CART_FRAGMENT = gql`
     checkoutUrl
     cost {
       subtotalAmount {
-        amount
-        currencyCode
+        ...MoneyFragment
       }
       totalAmount {
-        amount
-        currencyCode
+        ...MoneyFragment
       }
     }
     lines(first: 100) {
@@ -21,16 +20,13 @@ export const CART_FRAGMENT = gql`
           quantity
           cost {
             amountPerQuantity {
-              amount
-              currencyCode
+              ...MoneyFragment
             }
             compareAtAmountPerQuantity {
-              amount
-              currencyCode
+              ...MoneyFragment
             }
             totalAmount {
-              amount
-              currencyCode
+              ...MoneyFragment
             }
           }
           merchandise {
@@ -40,16 +36,13 @@ export const CART_FRAGMENT = gql`
               availableForSale
               quantityAvailable
               price {
-                amount
-                currencyCode
+                ...MoneyFragment
               }
               compareAtPrice {
-                amount
-                currencyCode
+                ...MoneyFragment
               }
               image {
-                url
-                altText
+                ...ImageFragment
               }
               selectedOptions {
                 name
@@ -66,106 +59,52 @@ export const CART_FRAGMENT = gql`
     }
     totalQuantity
   }
+  ${MoneyFragment}
+  ${ImageFragment}
 `;
 
 export const CREATE_CART = gql`
   mutation CreateCart($input: CartInput!) {
     cartCreate(input: $input) {
       cart {
-        id
-        checkoutUrl
-        totalQuantity
-        lines(first: 100) {
-          edges {
-            node {
-              id
-              quantity
-              merchandise {
-                ... on ProductVariant {
-                  id
-                }
-              }
-            }
-          }
-        }
+        ...CartDetails
       }
     }
   }
+  ${CART_FRAGMENT}
 `;
 
 export const ADD_TO_CART = gql`
   mutation AddToCart($cartId: ID!, $lines: [CartLineInput!]!) {
     cartLinesAdd(cartId: $cartId, lines: $lines) {
       cart {
-        id
-        checkoutUrl
-        totalQuantity
-        lines(first: 100) {
-          edges {
-            node {
-              id
-              quantity
-              merchandise {
-                ... on ProductVariant {
-                  id
-                }
-              }
-            }
-          }
-        }
+        ...CartDetails
       }
     }
   }
+  ${CART_FRAGMENT}
 `;
 
 export const REMOVE_FROM_CART = gql`
   mutation RemoveFromCart($cartId: ID!, $lineIds: [ID!]!) {
     cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
       cart {
-        id
-        checkoutUrl
-        totalQuantity
-        lines(first: 100) {
-          edges {
-            node {
-              id
-              quantity
-              merchandise {
-                ... on ProductVariant {
-                  id
-                }
-              }
-            }
-          }
-        }
+        ...CartDetails
       }
     }
   }
+  ${CART_FRAGMENT}
 `;
 
 export const UPDATE_CART_ITEMS = gql`
   mutation UpdateCartItems($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
     cartLinesUpdate(cartId: $cartId, lines: $lines) {
       cart {
-        id
-        checkoutUrl
-        totalQuantity
-        lines(first: 100) {
-          edges {
-            node {
-              id
-              quantity
-              merchandise {
-                ... on ProductVariant {
-                  id
-                }
-              }
-            }
-          }
-        }
+        ...CartDetails
       }
     }
   }
+  ${CART_FRAGMENT}
 `;
 
 export const GET_CART = gql`

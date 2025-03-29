@@ -149,14 +149,14 @@ export default async function ProductPage({ params }: ProductPageParams) {
         currentCountry?.currencyCode ||
         "INR",
       lowPrice: Math.min(
-        ...(product?.variants.edges.map((edge) => edge.node.price.amount) || [
-          0,
-        ])
+        ...(product?.variants.edges.map((edge) =>
+          Number(edge.node.price.amount)
+        ) || [0])
       ).toFixed(2),
       highPrice: Math.max(
-        ...(product?.variants.edges.map((edge) => edge.node.price.amount) || [
-          0,
-        ])
+        ...(product?.variants.edges.map((edge) =>
+          Number(edge.node.price.amount)
+        ) || [0])
       ).toFixed(2),
       itemCondition: "https://schema.org/NewCondition",
       availability: product?.availableForSale
@@ -174,7 +174,7 @@ export default async function ProductPage({ params }: ProductPageParams) {
             value: option.value,
           })),
         },
-        price: edge.node.price.amount,
+        price: Number(edge.node.price.amount),
         priceCurrency:
           edge.node.price.currencyCode || currentCountry?.currencyCode || "INR",
         availability: edge.node.availableForSale
@@ -194,7 +194,7 @@ export default async function ProductPage({ params }: ProductPageParams) {
         image: rec.featuredImage?.url,
         offers: {
           "@type": "Offer",
-          price: rec.priceRange.minVariantPrice.amount,
+          price: Number(rec.priceRange.minVariantPrice.amount),
           priceCurrency: rec.priceRange.minVariantPrice.currencyCode,
         },
       })) || [],

@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { MoneyFragment, ImageFragment } from "../fragments";
 
 export const GET_CART_VARIANTS = gql`
   query getCartVariants($ids: [ID!]!, $country: CountryCode!)
@@ -10,20 +11,17 @@ export const GET_CART_VARIANTS = gql`
         availableForSale
         quantityAvailable
         price {
-          amount
-          currencyCode
+          ...MoneyFragment
         }
         compareAtPrice {
-          amount
-          currencyCode
+          ...MoneyFragment
         }
         selectedOptions {
           name
           value
         }
         image {
-          url
-          altText
+          ...ImageFragment
         }
         product {
           id
@@ -33,4 +31,6 @@ export const GET_CART_VARIANTS = gql`
       }
     }
   }
+  ${MoneyFragment}
+  ${ImageFragment}
 `;
