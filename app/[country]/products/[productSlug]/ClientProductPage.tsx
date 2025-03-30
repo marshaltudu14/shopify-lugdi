@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import { getCurrencySymbol } from "@/lib/countries";
-// Removed unused Alert, AlertTitle imports
+import { Alert, AlertTitle } from "@/components/ui/alert"; // Re-added Alert and AlertTitle
 import {
   AlertCircle,
   AlertTriangle,
@@ -223,37 +223,35 @@ export default function ClientProductPage({
                     Inclusive of all taxes
                   </p>
                 )}
+                {/* Reverted Discount Section Start */}
                 {selectedVariant.compareAtPrice?.amount && (
-                  <div className="flex items-center gap-1 text-green-600 dark:text-green-400 mt-1">
-                    {" "}
-                    {/* Changed Alert to div, removed bg/border, added text color */}
-                    <BadgePercent className="h-4 w-4 flex-shrink-0" />{" "}
-                    {/* Adjusted icon class */}
-                    <div className="text-xs lg:text-sm font-medium">
-                      {" "}
-                      {/* Changed AlertTitle to div, added font-medium */}
-                      <span>Save up to </span>
-                      <span className="font-semibold text-green-500">
-                        {currencySymbol}
-                        {(
-                          Number(selectedVariant.compareAtPrice.amount) -
-                          Number(selectedVariant.price.amount)
-                        ).toFixed(2)}
-                      </span>{" "}
-                      <span className="">
-                        (
-                        {Math.round(
-                          ((Number(selectedVariant.compareAtPrice.amount) -
-                            Number(selectedVariant.price.amount)) /
-                            Number(selectedVariant.compareAtPrice.amount)) *
-                            100
-                        )}
-                        % OFF)
-                      </span>
-                    </div>
-                  </div>
-                )}{" "}
-                {/* Moved closing parenthesis inside curly brace */}
+                  <Alert className="bg-green-100 dark:bg-green-950 border border-green-500">
+                    <BadgePercent className="h-4 w-4 text-green-500" />
+                    <AlertTitle>
+                      <div className="text-xs lg:text-sm">
+                        <span>Save up to </span>
+                        <span className="font-semibold text-green-500">
+                          {currencySymbol}
+                          {(
+                            Number(selectedVariant.compareAtPrice.amount) -
+                            Number(selectedVariant.price.amount)
+                          ).toFixed(2)}
+                        </span>{" "}
+                        <span className="">
+                          (
+                          {Math.round(
+                            ((Number(selectedVariant.compareAtPrice.amount) -
+                              Number(selectedVariant.price.amount)) /
+                              Number(selectedVariant.compareAtPrice.amount)) *
+                              100
+                          )}
+                          % OFF)
+                        </span>
+                      </div>
+                    </AlertTitle>
+                  </Alert>
+                )}
+                {/* Reverted Discount Section End */}
               </div>
             )}
             <Separator />
