@@ -2,18 +2,26 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { Home, ShoppingBag, User } from "lucide-react";
+import { Home, ShoppingBag, User, Heart } from "lucide-react"; // Added Heart
 import { useCart } from "@/app/[country]/cart/CartContext";
+import { useWishlist } from "@/lib/contexts/WishlistContext"; // Added Wishlist hook
 
 export default function MobileBottomNav() {
   const pathname = usePathname();
   const { cart } = useCart();
+  const { wishlistedVariantIds } = useWishlist(); // Use wishlist hook
 
   const navItems = [
     {
       name: "Home",
       href: "/",
       icon: Home,
+    },
+    {
+      name: "Wishlist", // Added Wishlist item
+      href: "/wishlist",
+      icon: Heart,
+      badge: wishlistedVariantIds.length,
     },
     {
       name: "Bag",

@@ -8,6 +8,7 @@ import Footer from "./components/navbar/Footer";
 import { Toaster } from "@/components/ui/sonner";
 import { countries } from "@/lib/countries";
 import { Metadata } from "next";
+import { WishlistProvider } from "@/lib/contexts/WishlistContext"; // Added import
 
 const blippo = localFont({
   src: "/fonts/blippo-blk-bt.ttf",
@@ -117,10 +118,15 @@ export default async function RootLayout({
             defaultTheme="system"
             enableSystem={true}
           >
-            <Header />
-            <main>{children}</main>
-            <Toaster />
-            <Footer />
+            <WishlistProvider>
+              {" "}
+              {/* Added WishlistProvider wrapper */}
+              <Header />
+              <main>{children}</main>
+              <Toaster />
+              <Footer />
+            </WishlistProvider>{" "}
+            {/* Closing tag */}
           </ThemeProvider>
         </ApolloWrapper>
       </body>

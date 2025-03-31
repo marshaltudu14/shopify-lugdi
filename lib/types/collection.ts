@@ -13,6 +13,14 @@ export interface CollectionProductNode {
   };
   featuredImage: ImageNode;
   totalInventory: number;
+  // Added variants field to hold the first variant's ID
+  variants: {
+    edges: {
+      node: {
+        id: string;
+      };
+    }[];
+  };
 }
 
 export interface CollectionProductEdge {

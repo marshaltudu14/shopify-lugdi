@@ -9,8 +9,9 @@ import { GlowingEffect } from "@/components/ui/glowing-effect";
 import { cn } from "@/lib/utils";
 import { getCurrencySymbol } from "@/lib/countries";
 import { useTheme } from "next-themes";
-import { Sparkles, AlertCircle } from "lucide-react";
+import { Sparkles, AlertCircle } from "lucide-react"; // Removed Heart import
 import { CollectionProductNode } from "@/lib/types/collection";
+import WishlistButton from "./WishlistButton"; // Added import
 
 interface ProductCardProps {
   product: CollectionProductNode;
@@ -122,6 +123,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   const stockIndicator = getStockIndicator();
+  const defaultVariantId = product?.variants?.edges?.[0]?.node?.id; // Correctly access variant ID
 
   return (
     <motion.div
@@ -166,6 +168,8 @@ export default function ProductCard({ product }: ProductCardProps) {
               ) : (
                 <Skeleton className="w-full h-[250px] md:h-[300px] lg:h-[350px] rounded-t-xl" />
               )}
+
+              {/* Wishlist Button Removed From Here */}
 
               {isOutOfStock && (
                 <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-black/70 to-black/40">
@@ -251,23 +255,46 @@ export default function ProductCard({ product }: ProductCardProps) {
               )}
             </motion.div>
 
-            <div className="px-3 pt-2 pb-3">
+            <div className="px-3 pt-2 pb-3 space-y-1">
+              {" "}
+              {/* Added space-y-1 */}
+              {/* Title - Ensure truncate is applied */}
               <p className="font-semibold text-sm md:text-md lg:text-lg line-clamp-1 truncate">
                 {product?.title ?? "Unnamed Product"}
               </p>
-              <div className="flex items-center space-x-2 text-sm md:text-md lg:text-lg">
-                {price && (
-                  <p>
-                    {priceSymbol}
-                    {parseFloat(price?.amount?.toString())?.toString()}
-                  </p>
-                )}
-
-                {isDiscounted && compareAtPrice && (
-                  <p className="line-through opacity-60">
-                    {compareAtSymbol}
-                    {parseFloat(compareAtPrice?.amount?.toString())?.toString()}
-                  </p>
+              {/* Price and Wishlist Button Container */}
+              <div className="flex justify-between items-center gap-2">
+                {" "}
+                {/* Use flex justify-between */}
+                {/* Price Group */}
+                <div className="flex items-baseline space-x-2 text-sm md:text-md lg:text-lg flex-shrink min-w-0">
+                  {" "}
+                  {/* Allow shrinking, prevent overflow */}
+                  {price && (
+                    <p className="truncate">
+                      {" "}
+                      {/* Truncate price if needed */}
+                      {priceSymbol}
+                      {parseFloat(price?.amount?.toString())?.toString()}
+                    </p>
+                  )}
+                  {isDiscounted && compareAtPrice && (
+                    <p className="line-through opacity-60 truncate">
+                      {" "}
+                      {/* Truncate compare price */}
+                      {compareAtSymbol}
+                      {parseFloat(
+                        compareAtPrice?.amount?.toString()
+                      )?.toString()}
+                    </p>
+                  )}
+                </div>
+                {/* Wishlist Button */}
+                {defaultVariantId && (
+                  <WishlistButton
+                    variantId={defaultVariantId}
+                    className="flex-shrink-0 cursor-pointer" // Prevent shrinking, add cursor
+                  />
                 )}
               </div>
             </div>

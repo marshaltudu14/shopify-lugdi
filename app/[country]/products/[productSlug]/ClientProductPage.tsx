@@ -37,9 +37,10 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import ProductCard from "@/app/components/ProductCard";
-import { Loader2 } from "lucide-react";
+import { Loader2, Heart } from "lucide-react"; // Keep Heart
 import { useCart } from "../../cart/CartContext";
 import { Separator } from "@/components/ui/separator";
+import { useWishlist } from "@/lib/contexts/WishlistContext"; // Keep wishlist hook
 
 export default function ClientProductPage({
   productData,
@@ -359,42 +360,54 @@ export default function ClientProductPage({
               </div>
             )}
             {selectedVariant && (
-              <div className="space-y-2 pt-4">
-                {isVariantInCart ? (
-                  <Link href="/cart">
-                    <Button className="w-full rounded-md py-6 text-lg font-medium transition-all flex items-center justify-center gap-2 cursor-pointer">
+              <div className="space-y-4 pt-4">
+                {" "}
+                {/* Increased spacing */}
+                {/* Container for Action Buttons */}
+                <div className="space-y-3">
+                  {" "}
+                  {/* Add space between buttons */}
+                  {/* Add to Cart / Go to Cart Button */}
+                  {isVariantInCart ? (
+                    <Link href="/cart" className="block">
                       {" "}
-                      {/* Already rounded-md */}
-                      <ArrowRight className="w-5 h-5" />
-                      <span>Go to Cart</span>
+                      {/* Use block for full width */}
+                      <Button className="w-full rounded-md py-3 text-lg font-medium transition-all flex items-center justify-center gap-2 cursor-pointer">
+                        {" "}
+                        {/* Adjusted padding */}
+                        <ArrowRight className="w-5 h-5" />
+                        <span>Go to Cart</span>
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Button
+                      onClick={handleAddToCart}
+                      disabled={
+                        !selectedVariant.availableForSale ||
+                        selectedVariant.quantityAvailable < quantity ||
+                        isAdding
+                      }
+                      className="w-full rounded-md py-6 flex items-center justify-center gap-2 text-lg font-medium cursor-pointer" // Changed flex-grow to w-full
+                    >
+                      {isAdding ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : selectedVariant.availableForSale &&
+                        selectedVariant.quantityAvailable >= quantity ? (
+                        <div className="flex items-center gap-2">
+                          <ShoppingCart className="w-5 h-5" />
+                          Add to Cart
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <XCircle className="w-5 h-5" />
+                          Out of Stock
+                        </div>
+                      )}
                     </Button>
-                  </Link>
-                ) : (
-                  <Button
-                    onClick={handleAddToCart}
-                    disabled={
-                      !selectedVariant.availableForSale ||
-                      selectedVariant.quantityAvailable < quantity ||
-                      isAdding
-                    }
-                    className="w-full rounded-md py-6 flex items-center justify-center gap-2 text-lg font-medium cursor-pointer" // Added rounded-md and justify-center
-                  >
-                    {isAdding ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : selectedVariant.availableForSale &&
-                      selectedVariant.quantityAvailable >= quantity ? (
-                      <div className="flex items-center gap-2">
-                        <ShoppingCart className="w-5 h-5" />
-                        Add to Cart
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <XCircle className="w-5 h-5" />
-                        Out of Stock
-                      </div>
-                    )}
-                  </Button>
-                )}
+                  )}
+                  {/* Wishlist Button (Full Width) */}
+                  <WishlistActionButton variantId={selectedVariant.id} />
+                </div>
                 {selectedVariant.quantityAvailable > 0 &&
                   selectedVariant.quantityAvailable < 10 && (
                     <div
@@ -420,7 +433,6 @@ export default function ClientProductPage({
                       </p>
                     </div>
                   )}
-
                 {product.descriptionHtml && (
                   <div className="mt-8 pt-6 border-t">
                     {" "}
@@ -463,3 +475,40 @@ export default function ClientProductPage({
     </div>
   );
 }
+
+// --- WishlistActionButton Component (Moved outside ClientProductPage for clarity) ---
+interface WishlistActionButtonProps {
+  variantId: string;
+}
+
+const WishlistActionButton: React.FC<WishlistActionButtonProps> = ({
+  variantId,
+}) => {
+  const { addToWishlist, removeFromWishlist, isItemInWishlist } = useWishlist();
+  // No need for local state here, rely directly on context for button state
+  const isInWishlist = isItemInWishlist(variantId);
+
+  const handleToggle = () => {
+    if (isInWishlist) {
+      removeFromWishlist(variantId);
+    } else {
+      addToWishlist(variantId);
+    }
+  };
+
+  return (
+    <Button
+      variant="outline" // Use outline variant
+      className="w-full rounded-md py-6 flex items-center justify-center gap-2 cursor-pointer text-lg font-medium" // Match py-6 and text/font styles
+      onClick={handleToggle}
+      aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+    >
+      <Heart
+        className={`w-5 h-5 transition-colors duration-200 ${
+          isInWishlist ? "fill-red-500 text-red-500" : "text-gray-500" // Add default color
+        }`}
+      />
+      {isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
+    </Button>
+  );
+};

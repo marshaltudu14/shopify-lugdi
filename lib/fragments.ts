@@ -35,6 +35,14 @@ export const BasicProductFragment = gql`
         ...MoneyFragment
       }
     }
+    # Fetch the ID of the first variant for wishlist functionality
+    variants(first: 1) {
+      edges {
+        node {
+          id
+        }
+      }
+    }
   }
   ${ImageFragment}
   ${MoneyFragment}

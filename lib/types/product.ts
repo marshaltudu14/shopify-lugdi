@@ -33,6 +33,13 @@ export interface ProductVariant {
   image: ImageNode | null;
   price: Price;
   compareAtPrice: Price | null;
+  // Added nested product field as returned by wishlist query
+  product: {
+    id: string;
+    title: string;
+    handle: string;
+    featuredImage?: ImageNode | null; // Ensure featuredImage is included
+  };
 }
 
 // Product Option related types
@@ -94,6 +101,14 @@ export interface ProductRecommendation {
   featuredImage: ImageNode;
   compareAtPriceRange: PriceRange;
   priceRange: PriceRange;
+  // Added variants field to hold the first variant's ID
+  variants: {
+    edges: {
+      node: {
+        id: string;
+      };
+    }[];
+  };
 }
 
 // Response type for SINGLE_PRODUCT_RECOMMENDATION

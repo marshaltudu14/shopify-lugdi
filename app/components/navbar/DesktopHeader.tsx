@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { Search, User, ShoppingCart, Menu, X } from "lucide-react";
+import { Search, User, ShoppingCart, Menu, X, Heart } from "lucide-react"; // Added Heart
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
@@ -18,6 +18,7 @@ import { getCookie } from "@/utils/CookieUtils";
 import LugdiUtils from "@/utils/LugdiUtils";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/app/[country]/cart/CartContext";
+import { useWishlist } from "@/lib/contexts/WishlistContext"; // Added Wishlist hook
 
 interface DesktopHeaderProps {
   menuItems: MenuItem[];
@@ -40,6 +41,7 @@ export default function DesktopHeader({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const { cart } = useCart();
+  const { wishlistedVariantIds } = useWishlist(); // Use wishlist hook
 
   const router = useRouter();
 
@@ -175,6 +177,27 @@ export default function DesktopHeader({
                     className="rounded-full bg-neutral-100 dark:bg-neutral-900 cursor-pointer"
                   >
                     <User className="h-4 w-4" />
+                  </Button>
+                </Link>
+              </motion.div>
+
+              {/* Wishlist */}
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Link href={`/wishlist`}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-full bg-neutral-100 dark:bg-neutral-900 relative cursor-pointer"
+                  >
+                    <Heart className="h-4 w-4" />
+                    {wishlistedVariantIds.length > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-primary text-white dark:text-black text-xs w-4 h-4 flex items-center justify-center rounded-full text-[10px]">
+                        {wishlistedVariantIds.length}
+                      </span>
+                    )}
                   </Button>
                 </Link>
               </motion.div>
