@@ -388,6 +388,7 @@ export default function ClientProductPage({
                         isAdding
                       }
                       className="w-full rounded-md py-6 flex items-center justify-center gap-2 text-lg font-medium cursor-pointer" // Changed flex-grow to w-full
+                      glowVariant="vip-gold" // Add the glow effect here
                     >
                       {isAdding ? (
                         <Loader2 className="w-5 h-5 animate-spin" />

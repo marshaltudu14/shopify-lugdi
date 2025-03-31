@@ -1,8 +1,9 @@
-import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
+import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
+import { GlowingEffect } from "./glowing-effect"; // Import the GlowingEffect
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
@@ -33,27 +34,54 @@ const buttonVariants = cva(
       size: "default",
     },
   }
-)
+);
 
-function Button({
-  className,
-  variant,
-  size,
-  asChild = false,
-  ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
-  }) {
-  const Comp = asChild ? Slot : "button"
-
-  return (
-    <Comp
-      data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
-  )
+// Define the props interface explicitly
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>, // Use ButtonHTMLAttributes
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+  glowVariant?: "vip-gold" | null; // Add prop to control glow
 }
 
-export { Button, buttonVariants }
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>( // Use forwardRef
+  (
+    { className, variant, size, asChild = false, glowVariant, ...props },
+    ref
+  ) => {
+    // Add ref
+    const Comp = asChild ? Slot : "button";
+    const showGlow = glowVariant === "vip-gold";
+
+    // Apply relative positioning only when glow is active
+    const wrapperClassName = cn(showGlow && "relative");
+
+    return (
+      // Wrap the component to contain the glow effect
+      <div className={wrapperClassName}>
+        <Comp
+          data-slot="button"
+          className={cn(buttonVariants({ variant, size, className }))}
+          ref={ref} // Pass ref to the underlying component
+          {...props}
+        />
+        {showGlow && (
+          <GlowingEffect
+            variant="vip-gold"
+            glow={true}
+            // Adjust proximity/spread/blur as needed for buttons
+            proximity={10}
+            spread={15}
+            blur={5}
+            movementDuration={1}
+            borderWidth={1}
+            disabled={props.disabled} // Pass disabled state to the effect
+          />
+        )}
+      </div>
+    );
+  }
+);
+Button.displayName = "Button"; // Add display name for forwardRef
+
+export { Button, buttonVariants };

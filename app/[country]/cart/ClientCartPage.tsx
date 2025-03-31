@@ -234,6 +234,7 @@ export default function ClientCartPage() {
               className="w-full mt-3 font-medium cursor-pointer"
               onClick={handleCheckout}
               disabled={isSubmitting || hasOutOfStockItems}
+              glowVariant="vip-gold" // Add glow to mobile checkout button
             >
               {isSubmitting ? (
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -656,6 +657,7 @@ export default function ClientCartPage() {
                 className="cursor-pointer w-full h-12 text-lg font-medium transition-all duration-300 relative overflow-hidden group"
                 onClick={handleCheckout}
                 disabled={isSubmitting || hasOutOfStockItems}
+                glowVariant="vip-gold" // Add glow to desktop checkout button
               >
                 {isSubmitting ? (
                   <Loader2 className="w-5 h-5 animate-spin mr-2" />
