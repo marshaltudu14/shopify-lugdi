@@ -6,10 +6,11 @@ import { Loader2 } from "lucide-react";
 import BannerCarousel from "../components/BannerCarousel";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { CollectionData } from "@/lib/types/collection";
 import ProductCard from "../components/ProductCard";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { GetCollectionsByMenuResponse } from "@/lib/queries/menu"; // Import the new type
+import { MenuItemWithCollection } from "@/lib/types/menu"; // Import the menu item type
 import { useRef } from "react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { ProductsData } from "@/lib/types/products";
@@ -17,16 +18,18 @@ import { ProductsData } from "@/lib/types/products";
 interface CountryPageClientProps {
   country: Country | null;
   banners: Banner[];
-  menFeaturedProducts: CollectionData | null;
-  womenFeaturedProducts: CollectionData | null;
+  // Update props to use menu data
+  menCollectionsMenu: GetCollectionsByMenuResponse | null;
+  womenCollectionsMenu: GetCollectionsByMenuResponse | null;
   newArrivalsProducts: ProductsData | null;
 }
 
 const CountryPageClient: React.FC<CountryPageClientProps> = ({
   country,
   banners,
-  menFeaturedProducts,
-  womenFeaturedProducts,
+  // Use new props
+  menCollectionsMenu,
+  womenCollectionsMenu,
   newArrivalsProducts,
 }) => {
   const containerRef = useRef(null);
@@ -45,16 +48,27 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
     );
   }
 
-  const menProducts =
-    menFeaturedProducts?.collection?.products?.edges?.map(
-      (edge) => edge.node
+  // Extract collection items from menu data, filtering for valid resources
+  const menCollections =
+    menCollectionsMenu?.menu?.items?.filter(
+      (item): item is MenuItemWithCollection =>
+        item.resource?.__typename === "Collection" && !!item.resource.handle
     ) || [];
-  const womenProducts =
-    womenFeaturedProducts?.collection?.products?.edges?.map(
-      (edge) => edge.node
+
+  const womenCollections =
+    womenCollectionsMenu?.menu?.items?.filter(
+      (item): item is MenuItemWithCollection =>
+        item.resource?.__typename === "Collection" && !!item.resource.handle
     ) || [];
+
+  // Keep new arrivals logic
   const newArrivals =
     newArrivalsProducts?.products?.edges?.map((edge) => edge.node) || [];
+
+  // Note: The featured product sections ("Curated For Him", "Designed For Her")
+  // are currently using different data sources (GET_COLLECTION_PRODUCTS).
+  // This change only affects the "EXPLORE OUR COLLECTIONS" section below.
+  // We might need to adjust the featured sections later if they should also use menu data.
 
   return (
     <div
@@ -113,9 +127,10 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
         </div>
       </section>
 
-      {/* Featured Products - For Him */}
+      {/* Featured Products - For Him (Keep existing logic for now) */}
+      {/* This section uses data from GET_COLLECTION_PRODUCTS, not the menu */}
       <section className="py-16 bg-background relative z-10">
-        {menProducts.length > 0 && (
+        {newArrivals.length > 0 && ( // Placeholder condition, adjust if needed
           <div className="container mx-auto px-4 space-y-8">
             <div className="relative">
               <motion.div
@@ -164,9 +179,10 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
 
             <ScrollArea className="w-full whitespace-nowrap">
               <div className="flex w-max space-x-6 pb-4">
-                {menProducts.map((product, index) => (
+                {/* Map over newArrivals or adjust as needed for featured products */}
+                {newArrivals.slice(0, 6).map((product, index) => (
                   <motion.div
-                    key={`men-${product.id}`}
+                    key={`men-feat-${product.id}`} // Use a distinct key prefix
                     initial={{ opacity: 0, x: 50 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -191,9 +207,10 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
         )}
       </section>
 
-      {/* Featured Products - For Her */}
+      {/* Featured Products - For Her (Keep existing logic for now) */}
+      {/* This section uses data from GET_COLLECTION_PRODUCTS, not the menu */}
       <section className="py-16 bg-background relative z-10">
-        {womenProducts.length > 0 && (
+        {newArrivals.length > 0 && ( // Placeholder condition, adjust if needed
           <div className="container mx-auto px-4 space-y-8">
             <div className="relative">
               <motion.div
@@ -242,9 +259,10 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
 
             <ScrollArea className="w-full whitespace-nowrap">
               <div className="flex w-max space-x-6 pb-4">
-                {womenProducts.map((product, index) => (
+                {/* Map over newArrivals or adjust as needed for featured products */}
+                {newArrivals.slice(6, 12).map((product, index) => (
                   <motion.div
-                    key={`women-${product.id}`}
+                    key={`women-feat-${product.id}`} // Use a distinct key prefix
                     initial={{ opacity: 0, x: 50 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -328,69 +346,44 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
               </Link>
             </motion.div>
 
-            {/* Men's Subcategory 1 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              viewport={{ once: true }}
-              className="group relative h-[200px] rounded-xl overflow-hidden shadow-lg cursor-pointer"
-            >
-              <Link href="/collections/mens-collection/formal">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10 flex flex-col justify-end p-4">
-                  <div>
-                    <h3 className="text-lg font-bold text-white">
-                      Formal Wear
-                    </h3>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="p-0 h-auto text-white/80 hover:text-white hover:bg-transparent mt-1"
-                    >
-                      Shop Now →
-                    </Button>
+            {/* Dynamically render Men's Subcategories */}
+            {menCollections.map((item, index) => (
+              <motion.div
+                key={item.resource!.id} // Use collection ID as key
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }} // Stagger animation
+                viewport={{ once: true }}
+                className="group relative h-[200px] rounded-xl overflow-hidden shadow-lg cursor-pointer" // Added cursor-pointer
+              >
+                <Link href={`/collections/${item.resource!.handle}`}>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10 flex flex-col justify-end p-4">
+                    <div>
+                      <h3 className="text-lg font-bold text-white">
+                        {item.title} {/* Use dynamic title */}
+                      </h3>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="p-0 h-auto text-white/80 hover:text-white hover:bg-transparent mt-1"
+                        tabIndex={-1} // Prevent button from being focusable if Link handles click
+                      >
+                        Shop Now →
+                      </Button>
+                    </div>
                   </div>
-                </div>
-                <Image
-                  fill
-                  src="/collections/men-formal.webp"
-                  alt="Men's Formal Wear"
-                  className="object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
-                />
-              </Link>
-            </motion.div>
-
-            {/* Men's Subcategory 2 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="group relative h-[200px] rounded-xl overflow-hidden shadow-lg cursor-pointer"
-            >
-              <Link href="/collections/mens-collection/casual">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10 flex flex-col justify-end p-4">
-                  <div>
-                    <h3 className="text-lg font-bold text-white">
-                      Casual Wear
-                    </h3>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="p-0 h-auto text-white/80 hover:text-white hover:bg-transparent mt-1"
-                    >
-                      Shop Now →
-                    </Button>
-                  </div>
-                </div>
-                <Image
-                  fill
-                  src="/collections/men-casual.webp"
-                  alt="Men's Casual Wear"
-                  className="object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
-                />
-              </Link>
-            </motion.div>
+                  {item.resource!.image?.url && ( // Check if image exists
+                    <Image
+                      fill
+                      src={item.resource!.image.url} // Use dynamic image URL
+                      alt={item.resource!.image.altText || item.title} // Use alt text or title
+                      className="object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
+                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 25vw, 20vw" // Add sizes for optimization
+                    />
+                  )}
+                </Link>
+              </motion.div>
+            ))}
 
             {/* Main Women's Collection */}
             <motion.div
@@ -428,67 +421,47 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
               </Link>
             </motion.div>
 
-            {/* Women's Subcategory 1 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              viewport={{ once: true }}
-              className="group relative h-[200px] rounded-xl overflow-hidden shadow-lg cursor-pointer"
-            >
-              <Link href="/collections/womens-collection/dresses">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10 flex flex-col justify-end p-4">
-                  <div>
-                    <h3 className="text-lg font-bold text-white">Dresses</h3>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="p-0 h-auto text-white/80 hover:text-white hover:bg-transparent mt-1"
-                    >
-                      Shop Now →
-                    </Button>
+            {/* Dynamically render Women's Subcategories */}
+            {womenCollections.map((item, index) => (
+              <motion.div
+                key={item.resource!.id} // Use collection ID as key
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.6,
+                  delay: (menCollections.length + index) * 0.1,
+                }} // Adjust delay based on men's items
+                viewport={{ once: true }}
+                className="group relative h-[200px] rounded-xl overflow-hidden shadow-lg cursor-pointer" // Added cursor-pointer
+              >
+                <Link href={`/collections/${item.resource!.handle}`}>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10 flex flex-col justify-end p-4">
+                    <div>
+                      <h3 className="text-lg font-bold text-white">
+                        {item.title} {/* Use dynamic title */}
+                      </h3>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="p-0 h-auto text-white/80 hover:text-white hover:bg-transparent mt-1"
+                        tabIndex={-1} // Prevent button from being focusable if Link handles click
+                      >
+                        Shop Now →
+                      </Button>
+                    </div>
                   </div>
-                </div>
-                <Image
-                  fill
-                  src="/collections/women-dresses.webp"
-                  alt="Women's Dresses"
-                  className="object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
-                />
-              </Link>
-            </motion.div>
-
-            {/* Women's Subcategory 2 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              viewport={{ once: true }}
-              className="group relative h-[200px] rounded-xl overflow-hidden shadow-lg cursor-pointer"
-            >
-              <Link href="/collections/womens-collection/accessories">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10 flex flex-col justify-end p-4">
-                  <div>
-                    <h3 className="text-lg font-bold text-white">
-                      Accessories
-                    </h3>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="p-0 h-auto text-white/80 hover:text-white hover:bg-transparent mt-1"
-                    >
-                      Shop Now →
-                    </Button>
-                  </div>
-                </div>
-                <Image
-                  fill
-                  src="/collections/women-accessories.webp"
-                  alt="Women's Accessories"
-                  className="object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
-                />
-              </Link>
-            </motion.div>
+                  {item.resource!.image?.url && ( // Check if image exists
+                    <Image
+                      fill
+                      src={item.resource!.image.url} // Use dynamic image URL
+                      alt={item.resource!.image.altText || item.title} // Use alt text or title
+                      className="object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
+                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 25vw, 20vw" // Add sizes for optimization
+                    />
+                  )}
+                </Link>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>

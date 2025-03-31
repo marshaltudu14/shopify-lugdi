@@ -13,6 +13,14 @@ export interface ProductsNode {
   };
   featuredImage: ImageNode;
   totalInventory: number;
+  // Add variants field to match BasicProductFragment and CollectionProductNode
+  variants: {
+    edges: {
+      node: {
+        id: string;
+      };
+    }[];
+  };
 }
 
 export interface ProductsEdge {

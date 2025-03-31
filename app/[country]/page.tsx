@@ -1,12 +1,14 @@
 import { banners, countries, Country, Banner } from "@/lib/countries";
 import React from "react";
 import CountryPageClient from "./CountryPageClient";
-import { CollectionData } from "@/lib/types/collection";
 import { initializeApollo } from "@/lib/apollo/apollo-client";
-import { GET_COLLECTION_PRODUCTS } from "@/lib/queries/collection";
 import { ProductsData } from "@/lib/types/products";
 import { GET_PRODUCTS } from "@/lib/queries/products";
 import { Metadata } from "next";
+import {
+  GET_COLLECTIONS_BY_MENU,
+  GetCollectionsByMenuResponse,
+} from "@/lib/queries/menu"; // Import new query and type
 
 // Homepage Metadata
 export async function generateMetadata({
@@ -47,35 +49,29 @@ export default async function CountryHomePage({
 
   const isoCountryCode = countrySlug ? countrySlug.toUpperCase() : "IN";
 
-  let menFeaturedProducts: CollectionData | null;
-  let womenFeaturedProducts: CollectionData | null;
-  let newArrivals: ProductsData | null;
+  // Update variable declarations for menu data
+  let menCollectionsMenu: GetCollectionsByMenuResponse | null = null;
+  let womenCollectionsMenu: GetCollectionsByMenuResponse | null = null;
+  let newArrivals: ProductsData | null = null;
 
   try {
     const client = initializeApollo();
 
-    const { data: menData } = await client.query<CollectionData>({
-      query: GET_COLLECTION_PRODUCTS,
-      variables: {
-        handle: "mens-collection",
-        first: 12,
-        sortKey: "BEST_SELLING",
-        reverse: false,
-        country: isoCountryCode,
-      },
-    });
+    // Fetch men's collections menu
+    const { data: menMenuData } =
+      await client.query<GetCollectionsByMenuResponse>({
+        query: GET_COLLECTIONS_BY_MENU,
+        variables: { handle: "men-collections" },
+      });
 
-    const { data: womenData } = await client.query<CollectionData>({
-      query: GET_COLLECTION_PRODUCTS,
-      variables: {
-        handle: "womens-collection",
-        first: 12,
-        sortKey: "BEST_SELLING",
-        reverse: false,
-        country: isoCountryCode,
-      },
-    });
+    // Fetch women's collections menu
+    const { data: womenMenuData } =
+      await client.query<GetCollectionsByMenuResponse>({
+        query: GET_COLLECTIONS_BY_MENU,
+        variables: { handle: "women-collections" },
+      });
 
+    // Fetch new arrivals (unchanged)
     const { data: newArrivalsData } = await client.query<ProductsData>({
       query: GET_PRODUCTS,
       variables: {
@@ -86,14 +82,16 @@ export default async function CountryHomePage({
       },
     });
 
-    menFeaturedProducts = menData;
-    womenFeaturedProducts = womenData;
+    // Assign fetched menu data
+    menCollectionsMenu = menMenuData;
+    womenCollectionsMenu = womenMenuData;
     newArrivals = newArrivalsData;
   } catch (error) {
-    menFeaturedProducts = null;
-    womenFeaturedProducts = null;
+    // Update catch block assignments
+    menCollectionsMenu = null;
+    womenCollectionsMenu = null;
     newArrivals = null;
-    console.error("Error fetching collection:", error);
+    console.error("Error fetching homepage data:", error); // Updated error message
   }
 
   const country: Country | null =
@@ -101,11 +99,12 @@ export default async function CountryHomePage({
   const bannerData: Banner[] = banners[countrySlug] || [];
 
   return (
+    // Update props passed to client component
     <CountryPageClient
       country={country}
       banners={bannerData}
-      menFeaturedProducts={menFeaturedProducts}
-      womenFeaturedProducts={womenFeaturedProducts}
+      menCollectionsMenu={menCollectionsMenu}
+      womenCollectionsMenu={womenCollectionsMenu}
       newArrivalsProducts={newArrivals}
     />
   );
