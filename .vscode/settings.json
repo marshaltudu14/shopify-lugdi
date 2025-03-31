@@ -1,3 +1,6 @@
 {
-  "zencoder.enableRepoIndexing": true
+  "zencoder.enableRepoIndexing": true,
+  "appService.zipIgnorePattern": ["node_modules{,/**}", ".vscode{,/**}"],
+  "appService.defaultWebAppToDeploy": "/subscriptions/95d3deb0-e87a-467b-b546-e2a6b9ea52fa/resourceGroups/Lugdi/providers/Microsoft.Web/sites/lugdi",
+  "appService.deploySubpath": "."
 }

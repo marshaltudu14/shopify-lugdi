@@ -8,20 +8,15 @@ import ClientCollectionPage from "./ClientCollectionPage";
 import { notFound } from "next/navigation";
 import LugdiUtils from "@/utils/LugdiUtils";
 
-// Define params type
-interface CollectionPageParams {
-  params: { country: string; collectionSlug: string };
-}
-
-// Collection Page Metadata
 export async function generateMetadata({
   params,
-}: CollectionPageParams): Promise<Metadata> {
+}: {
+  params: Promise<{ country: string; collectionSlug: string }>;
+}): Promise<Metadata> {
   const { collectionSlug, country } = await params;
   const client = initializeApollo();
 
   const isoCountryCode = country ? country.toUpperCase() : "IN";
-
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lugdi.store";
   const canonicalUrl = `${siteUrl}/${country}/collections/${collectionSlug}`;
 
@@ -82,11 +77,13 @@ export async function generateMetadata({
   }
 }
 
-export default async function CollectionPage({ params }: CollectionPageParams) {
+export default async function CollectionPage({
+  params,
+}: {
+  params: Promise<{ collectionSlug: string; country: string }>;
+}) {
   const { collectionSlug, country } = await params;
-
   const isoCountryCode = country ? country.toUpperCase() : "IN";
-
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lugdi.store";
 
   let initialData: CollectionData | null;
@@ -108,8 +105,11 @@ export default async function CollectionPage({ params }: CollectionPageParams) {
     initialData = null;
   }
 
-  // Prepare JSON-LD for the collection
-  const collection = initialData?.collection;
+  if (!initialData?.collection) {
+    return notFound();
+  }
+
+  const collection = initialData.collection;
   const collectionJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -121,7 +121,7 @@ export default async function CollectionPage({ params }: CollectionPageParams) {
       } fashion apparels & accessories.`,
     image: collection?.image?.url || "",
     url: `${siteUrl}/${country}/collections/${collectionSlug}`,
-    itemListElement: (collection?.products.edges || []).map(
+    itemListElement: collection.products.edges.map(
       (edge: CollectionProductEdge, index: number) => ({
         "@type": "ListItem",
         position: index + 1,

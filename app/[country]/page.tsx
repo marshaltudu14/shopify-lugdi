@@ -8,15 +8,12 @@ import { ProductsData } from "@/lib/types/products";
 import { GET_PRODUCTS } from "@/lib/queries/products";
 import { Metadata } from "next";
 
-// Define params type
-interface CountryHomePageParams {
-  params: { country: string };
-}
-
 // Homepage Metadata
 export async function generateMetadata({
   params,
-}: CountryHomePageParams): Promise<Metadata> {
+}: {
+  params: Promise<{ country: string }>;
+}): Promise<Metadata> {
   const { country } = await params;
   const currentCountry = countries.find((c) => c.slug === country && c.active);
   const countryName = currentCountry?.name || "Global";
@@ -43,7 +40,9 @@ export async function generateMetadata({
 
 export default async function CountryHomePage({
   params,
-}: CountryHomePageParams) {
+}: {
+  params: Promise<{ country: string }>;
+}) {
   const { country: countrySlug } = await params;
 
   const isoCountryCode = countrySlug ? countrySlug.toUpperCase() : "IN";

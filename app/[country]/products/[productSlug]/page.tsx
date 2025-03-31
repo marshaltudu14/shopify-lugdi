@@ -13,14 +13,11 @@ import {
 } from "@/lib/types/product";
 import ClientProductPage from "./ClientProductPage";
 
-// Define params type for clarity
-interface ProductPageParams {
-  params: { country: string; productSlug: string };
-}
-
 export async function generateMetadata({
   params,
-}: ProductPageParams): Promise<Metadata> {
+}: {
+  params: Promise<{ country: string; productSlug: string }>;
+}): Promise<Metadata> {
   const { productSlug, country } = await params;
   const client = initializeApollo();
 
@@ -79,7 +76,11 @@ export async function generateMetadata({
   }
 }
 
-export default async function ProductPage({ params }: ProductPageParams) {
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ country: string; productSlug: string }>;
+}) {
   const { productSlug, country: countrySlugParam } = await params;
 
   // Derive country info from params
