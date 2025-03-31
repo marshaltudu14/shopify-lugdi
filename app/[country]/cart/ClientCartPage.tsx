@@ -154,9 +154,10 @@ export default function ClientCartPage() {
     return (
       <AnimatedSection delay={0.2}>
         <div className="flex flex-col items-center justify-center min-h-[80vh] py-16 px-4 text-center">
+          {/* Updated icon background and text color */}
           <motion.div
             variants={iconVariants}
-            className="mb-8 p-6 rounded-full bg-primary/10 dark:bg-primary/20"
+            className="mb-8 p-6 rounded-full bg-secondary dark:bg-secondary/50"
           >
             <ShoppingCart className="w-16 h-16 text-primary" />
           </motion.div>
@@ -178,9 +179,11 @@ export default function ClientCartPage() {
               initial="initial"
               className="mt-8"
             >
+              {/* Applied gold gradient/shadow to button */}
               <Button
                 size="lg"
-                className="px-8 py-6 text-lg cursor-pointer group rounded-full shadow-md"
+                variant="default" // Ensure default variant is used for gradient/shadow
+                className="px-8 py-6 text-lg cursor-pointer group rounded-full" // Removed shadow-md as it's part of the variant now
               >
                 <ArrowLeft className="w-5 h-5 mr-2 transition-transform group-hover:-translate-x-1" />
                 Continue Shopping
@@ -278,22 +281,30 @@ export default function ClientCartPage() {
           className="flex justify-center items-center my-8"
         >
           <div className="flex items-center w-full max-w-md">
+            {/* Step 1: Cart (Active) */}
             <div className="flex flex-col items-center flex-1">
-              <div className="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-white dark:text-black font-bold shadow-md">
-                1
+              <div className="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-primary-foreground font-bold shadow-[var(--shadow-gold-md)]">
+                {" "}
+                {/* Use gold shadow */}1
               </div>
-              <span className="mt-2 font-medium text-primary dark:text-primary">
+              <span className="mt-2 font-medium text-primary">
+                {" "}
+                {/* Use primary text color */}
                 Cart
               </span>
             </div>
-
-            <div className="h-1 flex-1 bg-gradient-to-r from-primary to-gray-300 dark:to-gray-600"></div>
-
+            {/* Connecting Line */}
+            <div className="h-1 flex-1 bg-gradient-to-r from-primary to-muted"></div>{" "}
+            {/* Use muted color */}
+            {/* Step 2: Checkout (Inactive) */}
             <div className="flex flex-col items-center flex-1">
-              <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-bold shadow-md">
-                2
+              <div className="w-10 h-10 flex items-center justify-center rounded-full bg-muted text-muted-foreground font-bold shadow-sm">
+                {" "}
+                {/* Use muted colors and shadow */}2
               </div>
-              <span className="mt-2 font-medium text-gray-500 dark:text-gray-400">
+              <span className="mt-2 font-medium text-muted-foreground">
+                {" "}
+                {/* Use muted text color */}
                 Checkout
               </span>
             </div>
@@ -320,9 +331,11 @@ export default function ClientCartPage() {
           <div className="lg:flex-2 w-full lg:w-2/3 space-y-6">
             <motion.div
               variants={itemVariants}
-              className="w-full border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-white via-gray-50 to-white dark:from-black dark:via-gray-900 dark:to-black rounded-xl p-4 md:p-6 shadow-sm sticky top-20 lg:top-6 max-h-[calc(100vh-120px)] overflow-y-auto"
+              className="w-full border border-border bg-gradient-to-br from-background via-secondary/30 to-background dark:from-background dark:via-secondary/10 dark:to-background rounded-xl p-4 md:p-6 shadow-[var(--shadow-gold-md)] sticky top-20 lg:top-6 max-h-[calc(100vh-120px)] overflow-y-auto" // Applied gold shadow, updated border/bg
             >
-              <h2 className="text-xl font-semibold mb-6 text-gray-800 dark:text-gray-200">
+              <h2 className="text-xl font-semibold mb-6 text-foreground">
+                {" "}
+                {/* Use foreground color */}
                 Your Items
               </h2>
 
@@ -501,11 +514,13 @@ export default function ClientCartPage() {
                                   item.quantity <= 1 ||
                                   isOutOfStock
                                 }
-                                className="w-8 h-8 flex items-center justify-center cursor-pointer text-black dark:text-white bg-gray-100 dark:bg-gray-800 rounded-l-md hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 border border-gray-300 dark:border-gray-700"
+                                className="w-8 h-8 flex items-center justify-center cursor-pointer text-foreground bg-secondary dark:bg-secondary/50 rounded-l-md hover:bg-secondary/80 dark:hover:bg-secondary/70 disabled:opacity-50 border border-border" // Use themed colors
                               >
                                 -
                               </Button>
-                              <span className="w-10 h-8 flex items-center justify-center border-t border-b border-gray-300 dark:border-gray-700 text-center bg-white dark:bg-gray-900">
+                              <span className="w-10 h-8 flex items-center justify-center border-t border-b border-border text-center bg-background">
+                                {" "}
+                                {/* Use themed colors */}
                                 {item.quantity}
                               </span>
                               <Button
@@ -527,7 +542,7 @@ export default function ClientCartPage() {
                                       LugdiUtils.maxProductQuantityUserCanAdd // Max limit of 10
                                     )
                                 }
-                                className="w-8 h-8 flex items-center justify-center cursor-pointer text-black dark:text-white bg-gray-100 dark:bg-gray-800 rounded-r-md hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 border border-gray-300 dark:border-gray-700"
+                                className="w-8 h-8 flex items-center justify-center cursor-pointer text-foreground bg-secondary dark:bg-secondary/50 rounded-r-md hover:bg-secondary/80 dark:hover:bg-secondary/70 disabled:opacity-50 border border-border" // Use themed colors
                               >
                                 +
                               </Button>
@@ -571,9 +586,11 @@ export default function ClientCartPage() {
           <div className="lg:flex-1 w-full lg:w-1/3">
             <motion.div
               variants={itemVariants}
-              className="w-full border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-white via-gray-50 to-white dark:from-black dark:via-gray-900 dark:to-black rounded-xl p-6 h-fit sticky top-20 lg:top-6 shadow-sm"
+              className="w-full border border-border bg-gradient-to-br from-background via-secondary/30 to-background dark:from-background dark:via-secondary/10 dark:to-background rounded-xl p-6 h-fit sticky top-20 lg:top-6 shadow-[var(--shadow-gold-lg)]" // Applied larger gold shadow, updated border/bg
             >
-              <h2 className="text-xl font-semibold mb-6 text-gray-800 dark:text-gray-200">
+              <h2 className="text-xl font-semibold mb-6 text-foreground">
+                {" "}
+                {/* Use foreground color */}
                 Order Summary
               </h2>
 
@@ -647,9 +664,14 @@ export default function ClientCartPage() {
                   </span>
                   <span className="font-bold text-xl text-primary">
                     {priceSymbol}
-                    {cart.totalAmount?.amount}
+                    {cart.subtotalAmount?.amount}{" "}
+                    {/* Changed from totalAmount */}
                   </span>
                 </div>
+                <p className="text-xs text-muted-foreground text-right">
+                  Shipping & Taxes calculated at checkout
+                </p>{" "}
+                {/* Added clarification */}
               </div>
 
               {/* Checkout Button */}
@@ -691,15 +713,23 @@ export default function ClientCartPage() {
 
               {/* Trust elements */}
               <div className="mt-6 grid grid-cols-2 gap-4">
-                <div className="flex items-center justify-center gap-2 p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
+                <div className="flex items-center justify-center gap-2 p-3 rounded-lg bg-secondary dark:bg-secondary/50 border border-border">
+                  {" "}
+                  {/* Use themed colors */}
                   <Shield className="w-4 h-4 text-primary" />
-                  <span className="text-xs text-gray-600 dark:text-gray-400">
+                  <span className="text-xs text-muted-foreground">
+                    {" "}
+                    {/* Use themed text color */}
                     Secure Payment
                   </span>
                 </div>
-                <div className="flex items-center justify-center gap-2 p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
+                <div className="flex items-center justify-center gap-2 p-3 rounded-lg bg-secondary dark:bg-secondary/50 border border-border">
+                  {" "}
+                  {/* Use themed colors */}
                   <Lock className="w-4 h-4 text-primary" />
-                  <span className="text-xs text-gray-600 dark:text-gray-400">
+                  <span className="text-xs text-muted-foreground">
+                    {" "}
+                    {/* Use themed text color */}
                     SSL Encrypted
                   </span>
                 </div>
