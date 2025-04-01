@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input"; // Added Input import
 import { motion } from "framer-motion";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
@@ -32,7 +33,18 @@ import LugdiUtils from "@/utils/LugdiUtils";
 import Link from "next/link";
 
 export default function ClientCartPage() {
-  const { cart, getCart, updateCartItem, removeFromCart } = useCart();
+  const {
+    cart,
+    getCart,
+    updateCartItem,
+    removeFromCart,
+    discountCodeInput, // Added discount state
+    setDiscountCodeInput, // Added discount state setter
+    applyDiscountCode, // Added discount function
+    removeDiscountCode, // Added remove discount function
+    // Removed unused discountError state
+    isApplyingDiscount, // Added discount loading state
+  } = useCart();
   const [loadingItems, setLoadingItems] = React.useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const router = useRouter();
@@ -641,20 +653,88 @@ export default function ClientCartPage() {
                     Calculated at checkout
                   </span>
                 </div>
-
-                {/* Tax */}
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 dark:text-gray-400">
-                    Estimated Tax:
-                  </span>
-                  <span className="text-gray-900 dark:text-gray-100">
-                    Calculated at checkout
-                  </span>
-                </div>
               </div>
 
               {/* Separator */}
               <Separator className="my-6" />
+
+              {/* Discount Code Input */}
+              <div className="space-y-2 mb-6">
+                <label
+                  htmlFor="discount-code"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
+                  Discount Code
+                </label>
+                <div className="flex gap-2">
+                  <Input
+                    id="discount-code"
+                    type="text"
+                    placeholder="Enter code"
+                    value={discountCodeInput}
+                    onChange={(e) => setDiscountCodeInput(e.target.value)}
+                    className="flex-grow"
+                    disabled={isApplyingDiscount}
+                  />
+                  <Button
+                    onClick={applyDiscountCode}
+                    disabled={isApplyingDiscount || !discountCodeInput.trim()}
+                    className="shrink-0 cursor-pointer"
+                  >
+                    {isApplyingDiscount ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      "Apply"
+                    )}
+                  </Button>
+                </div>
+                {/* Removed specific discountError display below input */}
+                {/* Display All Applied/Attempted Codes */}
+                {cart.discountCodes && cart.discountCodes.length > 0 && (
+                  <div className="pt-2 space-y-1">
+                    <p className="text-xs font-medium text-gray-600 dark:text-gray-400">
+                      Applied Discounts:
+                    </p>
+                    {cart.discountCodes // Iterate over ALL codes associated with the cart
+                      .map((dCode) => (
+                        <div
+                          key={dCode.code} // Use code as key
+                          className={`flex justify-between items-center text-xs p-2 rounded-md border ${
+                            dCode.applicable
+                              ? "bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800"
+                              : "bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800"
+                          }`}
+                        >
+                          <span
+                            className={`font-medium flex items-center gap-1 ${
+                              dCode.applicable
+                                ? "text-green-700 dark:text-green-300"
+                                : "text-red-700 dark:text-red-400"
+                            }`}
+                          >
+                            <Tag className="w-3 h-3" /> {dCode.code}
+                            {!dCode.applicable && (
+                              <span className="ml-1 font-normal text-red-500">
+                                (Not valid)
+                              </span>
+                            )}
+                          </span>
+                          {/* Remove Button (always show if code is listed) */}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeDiscountCode(dCode.code)}
+                            disabled={isApplyingDiscount} // Disable while any discount operation is in progress
+                            className="h-auto p-1 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/50"
+                            aria-label={`Remove discount code ${dCode.code}`}
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
 
               {/* Total */}
               <div className="mb-6">
@@ -665,13 +745,9 @@ export default function ClientCartPage() {
                   <span className="font-bold text-xl text-primary">
                     {priceSymbol}
                     {cart.subtotalAmount?.amount}{" "}
-                    {/* Changed from totalAmount */}
+                    {/* Use subtotalAmount which reflects discounts */}
                   </span>
                 </div>
-                <p className="text-xs text-muted-foreground text-right">
-                  Shipping & Taxes calculated at checkout
-                </p>{" "}
-                {/* Added clarification */}
               </div>
 
               {/* Checkout Button */}

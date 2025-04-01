@@ -58,6 +58,11 @@ export const CART_FRAGMENT = gql`
       }
     }
     totalQuantity
+    discountCodes {
+      # Added discount codes to the fragment
+      applicable
+      code
+    }
   }
   ${MoneyFragment}
   ${ImageFragment}
@@ -68,6 +73,27 @@ export const CREATE_CART = gql`
     cartCreate(input: $input) {
       cart {
         ...CartDetails
+      }
+    }
+  }
+  ${CART_FRAGMENT}
+`;
+
+// Mutation to apply discount codes to the cart
+export const CART_DISCOUNT_CODES_UPDATE = gql`
+  mutation CartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!]) {
+    cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
+      cart {
+        ...CartDetails
+        # Ensure the fragment includes discountCodes or fetch them explicitly if needed
+        discountCodes {
+          applicable
+          code
+        }
+      }
+      userErrors {
+        field
+        message
       }
     }
   }

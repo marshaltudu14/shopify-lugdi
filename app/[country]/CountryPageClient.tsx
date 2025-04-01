@@ -199,7 +199,7 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
             <div className="md:hidden text-right">
               <Link href="/collections/mens-collection">
                 <Button variant="link" className="cursor-pointer">
-                  Shop all men&apos;s collection →
+                  Shop all men's collection →
                 </Button>
               </Link>
             </div>
@@ -279,7 +279,7 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
             <div className="md:hidden text-right">
               <Link href="/collections/womens-collection">
                 <Button variant="link" className="cursor-pointer">
-                  Shop all women&apos;s collection →
+                  Shop all women's collection →
                 </Button>
               </Link>
             </div>
@@ -322,7 +322,7 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10 flex flex-col justify-end p-6">
                   <div>
                     <h3 className="text-2xl md:text-3xl font-bold text-white">
-                      Men&apos;s Collection
+                      Men's Collection
                     </h3>
                     <p className="text-white/80 mt-2 mb-4 text-sm md:text-base">
                       Sophisticated styles for the modern gentleman
@@ -397,7 +397,7 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10 flex flex-col justify-end p-6">
                   <div>
                     <h3 className="text-2xl md:text-3xl font-bold text-white">
-                      Women&apos;s Collection
+                      Women's Collection
                     </h3>
                     <p className="text-white/80 mt-2 mb-4 text-sm md:text-base">
                       Timeless pieces that celebrate femininity

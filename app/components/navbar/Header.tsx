@@ -15,6 +15,7 @@ import { getCookie, setCookie } from "@/utils/CookieUtils";
 import LugdiUtils from "@/utils/LugdiUtils";
 import { Skeleton } from "@/components/ui/skeleton";
 import MobileBottomNav from "./MobileBottomNav";
+// Removed unused BadgePercent import
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -85,6 +86,14 @@ export default function Header() {
           showHeader ? "translate-y-0" : "-translate-y-full"
         )}
       >
+        {/* India Launch Offer Banner */}
+        {selectedCountrySlug === "in" && (
+          <div className="bg-gradient-to-r from-primary via-red-500 to-yellow-500 text-primary-foreground text-center text-xs sm:text-sm font-medium py-1.5 px-4 shadow-md">
+            🎉 Welcome Offer! Use code{" "}
+            <span className="font-bold tracking-wider">LUGDIINDIA100</span> for
+            ₹100 off your first order in India! 🎉
+          </div>
+        )}
         <Suspense fallback={<Skeleton className="h-16 w-full" />}>
           <DesktopHeader
             menuItems={menuItems}
