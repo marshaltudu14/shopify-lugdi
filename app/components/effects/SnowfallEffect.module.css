@@ -1,0 +1,46 @@
+/* app/components/effects/SnowfallEffect.module.css */
+
+.snowfallContainer {
+  position: fixed; /* Or absolute, depending on desired container */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Allow clicks to pass through */
+  overflow: hidden;
+  z-index: 9999; /* Ensure it's on top, adjust as needed */
+}
+
+.snowflake {
+  position: absolute;
+  top: -10px; /* Start above the screen */
+  left: var(--flake-left); /* Use CSS variable for horizontal position */
+  width: var(--flake-size); /* Use CSS variable for size */
+  height: var(--flake-size); /* Use CSS variable for size */
+  background: white;
+  border-radius: 50%;
+  opacity: var(--flake-opacity); /* Use CSS variable for opacity */
+  animation: snowfall var(--flake-duration) linear var(--flake-delay) infinite; /* Use CSS variables */
+  will-change: transform; /* Optimize animation */
+}
+
+/* Define the falling animation */
+@keyframes snowfall {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: var(--flake-opacity);
+  }
+  50% {
+    /* Add slight horizontal drift */
+    transform: translateY(50vh) translateX(10px);
+    opacity: calc(var(--flake-opacity) * 0.8); /* Fade slightly */
+  }
+  100% {
+    transform: translateY(105vh) translateX(-10px); /* Fall below screen, drift back */
+    opacity: 0; /* Fade out completely */
+  }
+}
+
+/* Optional: Add variations for different snowflake appearances */
+/* .snowflake:nth-child(3n) { ... } */
+/* .snowflake:nth-child(4n) { ... } */

@@ -247,3 +247,41 @@ select {
     @apply bg-background text-foreground;
   }
 }
+
+/* ========================================== */
+/* Festive/Seasonal Theme Overrides           */
+/* ========================================== */
+
+/* Example: Diwali Theme */
+.theme-diwali {
+  --primary: oklch(0.7 0.2 50); /* Example: Deeper Orange/Saffron for Diwali */
+  --primary-foreground: oklch(0.98 0.01 85); /* Light text on orange */
+
+  /* Example: Add a subtle background pattern to a specific element if needed */
+  /* .some-element-class {
+    background-image: url('/path/to/diwali-pattern.svg');
+  } */
+}
+.dark.theme-diwali {
+  --primary: oklch(0.75 0.22 55); /* Brighter Orange/Saffron for dark mode */
+  --primary-foreground: oklch(0.15 0.02 85); /* Darker text */
+}
+
+/* Example: Christmas Theme */
+.theme-christmas {
+  --primary: oklch(0.6 0.25 15); /* Example: Festive Red */
+  --primary-foreground: oklch(0.98 0.01 85); /* White text */
+  --secondary: oklch(0.6 0.15 140); /* Example: Forest Green */
+  --secondary-foreground: oklch(0.98 0.01 85); /* White text */
+
+  /* Example: Change border color */
+  /* --border: oklch(0.8 0.1 85); */ /* Gold border */
+}
+.dark.theme-christmas {
+  --primary: oklch(0.65 0.28 18); /* Slightly brighter red */
+  --primary-foreground: oklch(0.98 0.01 85);
+  --secondary: oklch(0.55 0.18 145); /* Slightly darker green */
+  --secondary-foreground: oklch(0.98 0.01 85);
+}
+
+/* Add more theme overrides here... */

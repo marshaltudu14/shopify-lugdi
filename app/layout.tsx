@@ -8,7 +8,10 @@ import Footer from "./components/navbar/Footer";
 import { Toaster } from "@/components/ui/sonner";
 import { countries } from "@/lib/countries";
 import { Metadata } from "next";
-import { WishlistProvider } from "@/lib/contexts/WishlistContext"; // Added import
+import { WishlistProvider } from "@/lib/contexts/WishlistContext";
+import { getActiveTheme } from "@/lib/theme-utils"; // Import theme logic
+import { cn } from "@/lib/utils"; // Import cn utility
+import SnowfallEffect from "./components/effects/SnowfallEffect"; // Import animation component
 
 const blippo = localFont({
   src: "/fonts/blippo-blk-bt.ttf",
@@ -108,10 +111,22 @@ export default async function RootLayout({
   const currentCountry = countries.find((c) => c.slug === country && c.active);
   const lang = currentCountry?.languageCode || "en"; // Default to 'en' if country/lang not found
 
+  // Get active theme based on country slug
+  const activeTheme = getActiveTheme(country); // country slug is available in params
+  const themeClass = activeTheme?.themeClass || ""; // Get the theme class or empty string
+
   return (
     // Set lang attribute dynamically
     <html lang={lang} suppressHydrationWarning>
-      <body className={`${blippo.variable} ${baumans.variable} antialiased`}>
+      {/* Apply theme class along with font variables */}
+      <body
+        className={cn(
+          blippo.variable,
+          baumans.variable,
+          "antialiased",
+          themeClass // Add the dynamic theme class here
+        )}
+      >
         <ApolloWrapper>
           <ThemeProvider
             attribute="class"
@@ -129,6 +144,9 @@ export default async function RootLayout({
             {/* Closing tag */}
           </ThemeProvider>
         </ApolloWrapper>
+        {/* Conditionally render animation based on active theme */}
+        {activeTheme?.animation === "snowfall" && <SnowfallEffect />}
+        {/* Add other animation components here later */}
       </body>
     </html>
   );
