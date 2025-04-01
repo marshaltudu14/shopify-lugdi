@@ -3,15 +3,13 @@ import ClientWishlistPage from "./ClientWishlistPage";
 import { Metadata } from "next";
 import { countries } from "@/lib/countries";
 
-interface WishlistPageParams {
-  params: { country: string };
-}
-
 // Generate metadata dynamically based on the country context
 export async function generateMetadata({
   params,
-}: WishlistPageParams): Promise<Metadata> {
-  const { country } = params;
+}: {
+  params: Promise<{ country: string }>;
+}): Promise<Metadata> {
+  const { country } = await params;
   const currentCountry = countries.find((c) => c.slug === country && c.active);
   const countryName = currentCountry?.name || "Global";
   const siteTitle = `Wishlist`;
@@ -27,8 +25,13 @@ export async function generateMetadata({
   };
 }
 
-export default function WishlistPage({ params }: WishlistPageParams) {
+export default async function WishlistPage({
+  params,
+}: {
+  params: Promise<{ country: string }>;
+}) {
   // This server component simply renders the client component
   // The client component will handle fetching and displaying wishlist items
-  return <ClientWishlistPage countryCode={params.country.toUpperCase()} />;
+  const { country } = await params;
+  return <ClientWishlistPage countryCode={country.toUpperCase()} />;
 }
