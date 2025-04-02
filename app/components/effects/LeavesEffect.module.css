@@ -1,0 +1,62 @@
+.leavesContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none; /* Allow clicks to pass through */
+  z-index: 9999; /* Ensure it's on top */
+}
+
+.leaf {
+  position: absolute;
+  top: -20px; /* Start above the screen */
+  left: var(--leaf-start-x);
+  width: 15px; /* Base width */
+  height: 10px; /* Base height */
+  border-radius: 5px 15px; /* Simple leaf shape */
+  opacity: 0.8;
+  transform-origin: center center;
+  transform: rotate(var(--leaf-rotation)) scale(var(--leaf-scale));
+
+  /* Apply animations */
+  animation: fall var(--leaf-duration) linear infinite var(--leaf-delay),
+    sway var(--leaf-sway-duration) ease-in-out infinite alternate
+      var(--leaf-delay);
+}
+
+/* Example Leaf Colors - Can be tied to theme variables later */
+.leaf1 {
+  background-color: oklch(0.6 0.15 130); /* Greenish */
+}
+.leaf2 {
+  background-color: oklch(0.7 0.18 80); /* Yellowish */
+}
+.leaf3 {
+  background-color: oklch(0.55 0.16 45); /* Reddish/Brownish */
+}
+
+/* Falling Animation */
+@keyframes fall {
+  0% {
+    top: -20px;
+    opacity: 0.8;
+  }
+  100% {
+    top: 105vh; /* Fall below the screen */
+    opacity: 0.2;
+  }
+}
+
+/* Swaying Animation */
+@keyframes sway {
+  0% {
+    transform: translateX(0) rotate(var(--leaf-rotation))
+      scale(var(--leaf-scale));
+  }
+  100% {
+    transform: translateX(var(--leaf-sway-intensity))
+      rotate(calc(var(--leaf-rotation) + 20deg)) scale(var(--leaf-scale));
+  }
+}

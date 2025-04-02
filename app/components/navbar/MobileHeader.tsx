@@ -20,6 +20,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { getCookie } from "@/utils/CookieUtils";
 import LugdiUtils from "@/utils/LugdiUtils";
 import { useRouter } from "next/navigation";
+import { useContext } from "react"; // Import useContext
+import { ThemeContext } from "@/app/components/ThemeApplicator"; // Import ThemeContext
+import { cn } from "@/lib/utils"; // Import cn utility
+// Removed Image and useTheme imports
 
 interface MobileHeaderProps {
   menuItems: MenuItem[];
@@ -28,6 +32,7 @@ interface MobileHeaderProps {
   selectedCountrySlug: string;
   handleCountryChange: (slug: string, name: string) => void;
   countries: Country[];
+  // Removed logoDecorationClass prop type
 }
 
 export default function MobileHeader({
@@ -39,6 +44,7 @@ export default function MobileHeader({
   countries,
 }: MobileHeaderProps) {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const { logoDecorationClass } = useContext(ThemeContext); // Consume context
 
   const router = useRouter();
 
@@ -76,8 +82,14 @@ export default function MobileHeader({
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.5 }}
                     >
-                      <Link href="/" className="flex items-center">
-                        <h1>lugdi</h1>
+                      {/* Apply decoration class from context */}
+                      <Link
+                        href="/"
+                        className={cn("flex items-center", logoDecorationClass)}
+                      >
+                        {/* Reverted to simple text logo, added class */}
+                        <h1 className="logo-text relative">lugdi</h1>{" "}
+                        {/* Added relative */}
                         <span className="ml-1 text-xs font-light uppercase tracking-widest text-neutral-500">
                           {getCookie(LugdiUtils.location_name_country_cookie)}
                         </span>
@@ -166,8 +178,14 @@ export default function MobileHeader({
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <Link href="/" className="flex items-center">
-              <h1>lugdi</h1>
+            {/* Apply decoration class from context */}
+            <Link
+              href="/"
+              className={cn("flex items-center", logoDecorationClass)}
+            >
+              {/* Reverted to simple text logo, added class */}
+              <h1 className="logo-text relative">lugdi</h1>{" "}
+              {/* Added relative */}
               <span className="ml-1 text-xs font-light uppercase tracking-widest text-neutral-500">
                 {getCookie(LugdiUtils.location_name_country_cookie)}
               </span>

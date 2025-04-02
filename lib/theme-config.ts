@@ -11,7 +11,7 @@ export interface ThemeEntry {
   excludeCountries?: string[]; // Optional: Array of country slugs to exclude
   // targetHemisphere?: "north" | "south"; // Optional: For seasons - Not currently used in logic
   themeClass: string; // CSS class to apply (e.g., "theme-diwali")
-  headerMessage?: string; // Optional: Message for the header banner
+  // headerMessage removed
   bannerAsset?: string; // Optional: Path to a specific banner image
   animation?:
     | "snowfall"
@@ -20,8 +20,9 @@ export interface ThemeEntry {
     | "diyas"
     | "flag"
     | "sunrays"
-    | "rain"; // Added sunrays & rain
-  // Add other theme-specific properties as needed
+    | "rain";
+  // Removed logoAsset props
+  logoDecorationClass?: string | null; // Optional class for logo decoration
 }
 
 // Define the structure for the overall configuration
@@ -292,10 +293,32 @@ export const themeConfig: ThemeConfig = {
       endDate: "2025-10-25", // Example date - PLEASE VERIFY FOR 2025
       targetCountries: ["in"],
       themeClass: "theme-diwali",
-      headerMessage:
-        "🪔 Happy Diwali! Festive Offers Inside! Use code DIWALI15 for 15% off! 🪔",
+      // headerMessage removed
       bannerAsset: "/banners/diwali_banner.webp", // Example path
       animation: "diyas", // Example animation type
+      logoDecorationClass: "logo-decorate-diya",
+    },
+    {
+      id: "holi-2026", // Added Holi
+      type: "festival",
+      name: "Holi",
+      startDate: "2026-03-14", // Placeholder Date - Verify!
+      endDate: "2026-03-15", // Placeholder Date - Verify!
+      targetCountries: ["in"],
+      themeClass: "theme-holi",
+      animation: undefined, // Changed null to undefined
+      logoDecorationClass: "logo-decorate-holi",
+    },
+    {
+      id: "eid-al-fitr-2026", // Added Eid
+      type: "festival",
+      name: "Eid al-Fitr",
+      startDate: "2026-03-21", // Placeholder Date - Verify!
+      endDate: "2026-03-23", // Placeholder Date - Verify!
+      targetCountries: ["in"], // Add more countries if applicable
+      themeClass: "theme-eid",
+      animation: undefined, // Changed null to undefined
+      logoDecorationClass: "logo-decorate-eid",
     },
     {
       id: "christmas-2025",
@@ -306,11 +329,45 @@ export const themeConfig: ThemeConfig = {
       targetCountries: "global", // Apply globally by default
       // excludeCountries: [], // Can exclude specific countries if needed
       themeClass: "theme-christmas",
-      headerMessage: "🎄 Merry Christmas! Festive Deals Inside! 🎄",
+      // headerMessage removed
       bannerAsset: "/banners/christmas_banner.webp", // Example path
       animation: "snowfall", // Example animation type
+      logoDecorationClass: "logo-decorate-snowflake",
+    },
+    {
+      id: "new-year-2026", // Added New Year
+      type: "festival",
+      name: "New Year",
+      startDate: "2025-12-31",
+      endDate: "2026-01-01",
+      targetCountries: "global",
+      themeClass: "theme-new-year",
+      animation: "fireworks", // Needs component
+      logoDecorationClass: "logo-decorate-firework",
+    },
+    {
+      id: "valentine-2026", // Added Valentine's
+      type: "festival",
+      name: "Valentine's Day",
+      startDate: "2026-02-10",
+      endDate: "2026-02-14",
+      targetCountries: "global",
+      themeClass: "theme-valentine",
+      animation: undefined, // Changed null to undefined
+      logoDecorationClass: "logo-decorate-heart",
     },
     // --- National Days ---
+    {
+      id: "india-republic-day-2026", // Added Republic Day
+      type: "national_day",
+      name: "India Republic Day",
+      startDate: "2026-01-26",
+      endDate: "2026-01-26",
+      targetCountries: ["in"],
+      themeClass: "theme-india-republic",
+      animation: "flag", // Needs component
+      logoDecorationClass: "logo-decorate-flag-in",
+    },
     {
       id: "india-independence-2025",
       type: "national_day",
@@ -319,9 +376,10 @@ export const themeConfig: ThemeConfig = {
       endDate: "2025-08-15",
       targetCountries: ["in"],
       themeClass: "theme-india-independence",
-      headerMessage: "🇮🇳 Happy Independence Day! Special Offers Inside! 🇮🇳",
+      // headerMessage removed
       bannerAsset: "/banners/india_independence_banner.webp", // Example path
       animation: "flag", // Example animation type
+      logoDecorationClass: "logo-decorate-flag-in", // Added decoration class
     },
     // --- Seasons ---
     // Northern Hemisphere Spring / Southern Hemisphere Autumn (Mar 1 - May 31)
@@ -333,8 +391,9 @@ export const themeConfig: ThemeConfig = {
       endDate: "2025-05-31",
       targetCountries: northernHemisphereCountries,
       themeClass: "theme-spring",
-      headerMessage: "🌱 Spring Styles Have Sprung! 🌱",
+      // headerMessage removed
       animation: "leaves", // Example: gentle green leaves?
+      logoDecorationClass: "logo-decorate-leaf", // Added decoration class
     },
     {
       id: "march-may-south-autumn",
@@ -344,8 +403,9 @@ export const themeConfig: ThemeConfig = {
       endDate: "2025-05-31",
       targetCountries: southernHemisphereCountries,
       themeClass: "theme-autumn",
-      headerMessage: "🍂 Cozy Up with Autumn Arrivals 🍂",
+      // headerMessage removed
       animation: "leaves",
+      logoDecorationClass: "logo-decorate-leaf", // Added decoration class
     },
     // Northern Hemisphere Summer / Southern Hemisphere Winter (Jun 1 - Aug 31)
     {
@@ -356,8 +416,9 @@ export const themeConfig: ThemeConfig = {
       endDate: "2025-08-31",
       targetCountries: northernHemisphereCountries,
       themeClass: "theme-summer",
-      headerMessage: "☀️ Summer Styles Have Arrived! ☀️",
+      // headerMessage removed
       animation: "sunrays",
+      logoDecorationClass: "logo-decorate-sun", // Added decoration class
     },
     {
       id: "june-aug-south-winter",
@@ -367,8 +428,9 @@ export const themeConfig: ThemeConfig = {
       endDate: "2025-08-31",
       targetCountries: southernHemisphereCountries,
       themeClass: "theme-winter",
-      headerMessage: "❄️ Stay Warm with Our Winter Collection! ❄️",
+      // headerMessage removed
       animation: "snowfall",
+      logoDecorationClass: "logo-decorate-snowflake", // Added decoration class
     },
     // Northern Hemisphere Autumn / Southern Hemisphere Spring (Sep 1 - Nov 30)
     {
@@ -379,8 +441,9 @@ export const themeConfig: ThemeConfig = {
       endDate: "2025-11-30",
       targetCountries: northernHemisphereCountries,
       themeClass: "theme-autumn",
-      headerMessage: "🍁 Fall Into Style! New Arrivals Here! 🍁",
+      // headerMessage removed
       animation: "leaves",
+      logoDecorationClass: "logo-decorate-leaf", // Added decoration class
     },
     {
       id: "sep-nov-south-spring",
@@ -390,8 +453,9 @@ export const themeConfig: ThemeConfig = {
       endDate: "2025-11-30",
       targetCountries: southernHemisphereCountries,
       themeClass: "theme-spring",
-      headerMessage: "🌸 Spring is Here! Shop Fresh Looks! 🌸",
+      // headerMessage removed
       animation: "leaves", // Example: gentle green leaves?
+      logoDecorationClass: "logo-decorate-leaf", // Added decoration class
     },
     // Northern Hemisphere Winter / Southern Hemisphere Summer (Dec 1 - Feb 28/29)
     {
@@ -402,8 +466,9 @@ export const themeConfig: ThemeConfig = {
       endDate: "2026-02-29", // Account for leap year potentially
       targetCountries: northernHemisphereCountries,
       themeClass: "theme-winter",
-      headerMessage: "❄️ Winter Warmers Are Here! ❄️",
+      // headerMessage removed
       animation: "snowfall",
+      logoDecorationClass: "logo-decorate-snowflake", // Added decoration class
     },
     {
       id: "dec-feb-south-summer",
@@ -413,8 +478,9 @@ export const themeConfig: ThemeConfig = {
       endDate: "2026-02-29", // Account for leap year potentially
       targetCountries: southernHemisphereCountries,
       themeClass: "theme-summer",
-      headerMessage: "☀️ Soak Up the Sun with Summer Styles! ☀️",
+      // headerMessage removed
       animation: "sunrays",
+      logoDecorationClass: "logo-decorate-sun", // Added decoration class
     },
     // Remember to verify festival dates annually.
   ],

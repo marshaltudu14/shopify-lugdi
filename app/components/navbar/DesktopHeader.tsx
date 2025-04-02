@@ -17,6 +17,10 @@ import {
 import { getCookie } from "@/utils/CookieUtils";
 import LugdiUtils from "@/utils/LugdiUtils";
 import { useRouter } from "next/navigation";
+import { useContext } from "react"; // Import useContext
+import { ThemeContext } from "@/app/components/ThemeApplicator"; // Import ThemeContext
+import { cn } from "@/lib/utils"; // Re-import cn utility
+// Removed Image and useTheme imports
 import { useCart } from "@/app/[country]/cart/CartContext";
 import { useWishlist } from "@/lib/contexts/WishlistContext"; // Added Wishlist hook
 
@@ -27,6 +31,7 @@ interface DesktopHeaderProps {
   selectedCountrySlug: string;
   handleCountryChange: (slug: string, name: string) => void;
   countries: Country[];
+  // Removed logoDecorationClass prop type
 }
 
 export default function DesktopHeader({
@@ -39,6 +44,7 @@ export default function DesktopHeader({
 }: DesktopHeaderProps) {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { logoDecorationClass } = useContext(ThemeContext); // Consume context
 
   const { cart } = useCart();
   const { wishlistedVariantIds } = useWishlist(); // Use wishlist hook
@@ -58,8 +64,14 @@ export default function DesktopHeader({
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <Link href="/" className="flex items-center">
-                <h1>lugdi</h1>
+              {/* Apply decoration class from context */}
+              <Link
+                href="/"
+                className={cn("flex items-center", logoDecorationClass)}
+              >
+                {/* Reverted to simple text logo, added class */}
+                <h1 className="logo-text relative">lugdi</h1>{" "}
+                {/* Added relative for pseudo-elements */}
                 <span className="ml-1 text-xs font-light uppercase tracking-widest text-neutral-500">
                   {getCookie(LugdiUtils.location_name_country_cookie)}
                 </span>

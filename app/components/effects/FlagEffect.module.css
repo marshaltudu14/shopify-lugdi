@@ -1,0 +1,27 @@
+.flagContainer {
+  position: fixed;
+  top: 10px; /* Position near the top */
+  right: 10px; /* Position near the right */
+  /* Adjust position as needed */
+  width: auto;
+  height: auto;
+  pointer-events: none;
+  z-index: 9996; /* Adjust z-index as needed */
+}
+
+.flag {
+  /* Apply a subtle animation */
+  animation: gentleSway 4s ease-in-out infinite alternate;
+  transform-origin: bottom left; /* Pivot point for sway */
+}
+
+@keyframes gentleSway {
+  0% {
+    transform: rotateZ(-2deg);
+  }
+  100% {
+    transform: rotateZ(2deg);
+  }
+}
+
+/* Add more complex wave animations here if desired later */

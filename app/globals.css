@@ -74,169 +74,137 @@ select {
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* Gold Theme - Light Mode */
+/* Default Theme - Light Mode (Black & White) */
 :root {
   /* Base Colors */
-  --background: oklch(0.99 0.005 85); /* Very light, slightly warm off-white */
-  --foreground: oklch(0.2 0.02 85); /* Dark brown/black, slightly warm */
-  --card: oklch(0.99 0.005 85);
-  --card-foreground: oklch(0.2 0.02 85);
-  --popover: oklch(0.99 0.005 85);
-  --popover-foreground: oklch(0.2 0.02 85);
+  --background: oklch(1 0 0); /* White */
+  --foreground: oklch(0 0 0); /* Black */
+  --card: oklch(1 0 0); /* White */
+  --card-foreground: oklch(0 0 0); /* Black */
+  --popover: oklch(1 0 0); /* White */
+  --popover-foreground: oklch(0 0 0); /* Black */
 
-  /* Primary (Gold) */
-  --primary-base: oklch(0.769 0.188 85.05); /* Gold (Yellow-500) */
-  --primary-light: oklch(0.85 0.15 85); /* Lighter Gold */
-  --primary-dark: oklch(0.7 0.2 85); /* Darker Gold */
-  --primary: var(--primary-base); /* Use base for solid color */
-  --primary-foreground: oklch(0.2 0.02 85); /* Dark text on gold */
-  --gradient-gold-primary: linear-gradient(
-    145deg,
-    var(--primary-light),
-    var(--primary-base),
-    var(--primary-dark)
-  ); /* Gold Gradient */
+  /* Primary (Black) */
+  --primary: oklch(0 0 0); /* Black */
+  --primary-foreground: oklch(1 0 0); /* White */
 
-  /* Secondary */
-  --secondary: oklch(0.95 0.05 85); /* Light gold/cream */
-  --secondary-foreground: oklch(0.5 0.1 85); /* Medium-dark gold text */
-  --muted: oklch(0.96 0.03 85); /* Slightly darker cream */
-  --muted-foreground: oklch(0.55 0.05 85); /* Muted dark text */
-  --accent: oklch(0.9 0.1 85); /* Brighter accent gold */
-  --accent-foreground: oklch(0.3 0.05 85); /* Darker text on accent */
-  /* Destructive */
+  /* Secondary (Grays) */
+  --secondary: oklch(0.96 0 0); /* Light Gray */
+  --secondary-foreground: oklch(0.1 0 0); /* Dark Gray */
+  --muted: oklch(0.96 0 0); /* Light Gray */
+  --muted-foreground: oklch(0.4 0 0); /* Medium Gray */
+  --accent: oklch(0.96 0 0); /* Light Gray */
+  --accent-foreground: oklch(0.1 0 0); /* Dark Gray */
+
+  /* Destructive (Keep Red) */
   --destructive: oklch(0.577 0.245 27.325); /* Original red */
   --destructive-foreground: oklch(0.985 0 0); /* Light text on destructive */
 
   /* Other UI Elements */
-  --border: oklch(0.9 0.08 85); /* Light gold border */
-  --input: oklch(0.92 0.06 85); /* Slightly darker input background */
-  --ring-color: oklch(0.769 0.188 85.05); /* Gold for ring */
-  --ring: var(--ring-color); /* Use variable for consistency */
+  --border: oklch(0.9 0 0); /* Light Gray Border */
+  --input: oklch(0.9 0 0); /* Light Gray Input */
+  --ring-color: oklch(0 0 0); /* Black for ring */
+  --ring: var(--ring-color);
 
-  /* Shadows */
-  --shadow-color-gold-base: oklch(
-    0.7 0.15 85
-  ); /* Base color for gold shadows */
-  --shadow-sm: 0 1px 2px 0 oklch(0.2 0.02 85 / 0.05); /* Default subtle shadow */
-  --shadow: 0 1px 3px 0 oklch(0.2 0.02 85 / 0.1),
-    0 1px 2px -1px oklch(0.2 0.02 85 / 0.1); /* Default shadow */
-  --shadow-md: 0 4px 6px -1px oklch(0.2 0.02 85 / 0.1),
-    0 2px 4px -2px oklch(0.2 0.02 85 / 0.1); /* Default medium shadow */
-  --shadow-lg: 0 10px 15px -3px oklch(0.2 0.02 85 / 0.1),
-    0 4px 6px -4px oklch(0.2 0.02 85 / 0.1); /* Default large shadow */
-  --shadow-xl: 0 20px 25px -5px oklch(0.2 0.02 85 / 0.1),
-    0 8px 10px -6px oklch(0.2 0.02 85 / 0.1); /* Default extra large shadow */
-  --shadow-2xl: 0 25px 50px -12px oklch(0.2 0.02 85 / 0.25); /* Default 2xl shadow */
-  --shadow-inner: inset 0 2px 4px 0 oklch(0.2 0.02 85 / 0.05); /* Default inner shadow */
-  /* Gold Shadows */
-  --shadow-gold-md: 0 4px 6px -1px oklch(from var(--shadow-color-gold-base) l a
-          b / 0.2),
-    0 2px 4px -2px oklch(from var(--shadow-color-gold-base) l a b / 0.15);
-  --shadow-gold-lg: 0 10px 15px -3px oklch(from var(--shadow-color-gold-base) l
-          a b / 0.2),
-    0 4px 6px -4px oklch(from var(--shadow-color-gold-base) l a b / 0.15);
+  /* Shadows (Neutral) */
+  --shadow-sm: 0 1px 2px 0 oklch(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 oklch(0 0 0 / 0.1), 0 1px 2px -1px oklch(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px oklch(0 0 0 / 0.1),
+    0 2px 4px -2px oklch(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px oklch(0 0 0 / 0.1),
+    0 4px 6px -4px oklch(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px oklch(0 0 0 / 0.1),
+    0 8px 10px -6px oklch(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px oklch(0 0 0 / 0.25);
+  --shadow-inner: inset 0 2px 4px 0 oklch(0 0 0 / 0.05);
+  /* Remove Gold Shadows */
+  --shadow-gold-md: var(--shadow-md); /* Fallback to default */
+  --shadow-gold-lg: var(--shadow-lg); /* Fallback to default */
 
-  /* Chart Colors */
-  --chart-1: var(--primary-base); /* Gold */
-  --chart-2: var(--primary-light); /* Lighter Gold */
-  --chart-3: var(--primary-dark); /* Darker Gold */
-  --chart-4: oklch(0.95 0.05 85); /* Light gold/cream */
-  --chart-5: oklch(0.5 0.1 85); /* Medium-dark gold */
+  /* Chart Colors (Grayscale) */
+  --chart-1: oklch(0.2 0 0); /* Dark Gray */
+  --chart-2: oklch(0.4 0 0); /* Medium Gray */
+  --chart-3: oklch(0.6 0 0); /* Gray */
+  --chart-4: oklch(0.8 0 0); /* Light Gray */
+  --chart-5: oklch(0.9 0 0); /* Very Light Gray */
 
   /* Radius */
   --radius: 0.625rem; /* Keep existing radius */
 
-  /* Sidebar variables - adjust if sidebar exists and needs specific theming */
-  --sidebar: oklch(0.98 0.01 85);
-  --sidebar-foreground: oklch(0.2 0.02 85);
-  --sidebar-primary: var(--primary-base);
-  --sidebar-primary-foreground: oklch(0.2 0.02 85);
-  --sidebar-accent: oklch(0.9 0.1 85);
-  --sidebar-accent-foreground: oklch(0.3 0.05 85);
-  --sidebar-border: oklch(0.9 0.08 85);
-  --sidebar-ring: var(--ring-color);
+  /* Sidebar variables (Black & White) */
+  --sidebar: oklch(0.98 0 0); /* Very Light Gray */
+  --sidebar-foreground: oklch(0 0 0); /* Black */
+  --sidebar-primary: oklch(0 0 0); /* Black */
+  --sidebar-primary-foreground: oklch(1 0 0); /* White */
+  --sidebar-accent: oklch(0.9 0 0); /* Light Gray */
+  --sidebar-accent-foreground: oklch(0 0 0); /* Black */
+  --sidebar-border: oklch(0.9 0 0); /* Light Gray */
+  --sidebar-ring: var(--ring-color); /* Black */
 }
 
-/* Gold Theme - Dark Mode */
+/* Default Theme - Dark Mode (Black & White) */
 .dark {
   /* Base Colors */
-  --background: oklch(0.15 0.015 85); /* Very dark brown/black, slightly warm */
-  --foreground: oklch(0.97 0.01 85); /* Light cream/off-white, slightly warm */
-  --card: oklch(0.18 0.02 85); /* Slightly lighter dark card */
-  --card-foreground: oklch(0.97 0.01 85);
-  --popover: oklch(0.15 0.015 85);
-  --popover-foreground: oklch(0.97 0.01 85);
+  --background: oklch(0 0 0); /* Black */
+  --foreground: oklch(1 0 0); /* White */
+  --card: oklch(0.1 0 0); /* Dark Gray */
+  --card-foreground: oklch(1 0 0); /* White */
+  --popover: oklch(0 0 0); /* Black */
+  --popover-foreground: oklch(1 0 0); /* White */
 
-  /* Primary (Gold) */
-  --primary-base: oklch(0.769 0.188 85.05); /* Gold (Yellow-500) */
-  --primary-light: oklch(0.85 0.15 85); /* Lighter Gold */
-  --primary-dark: oklch(0.7 0.2 85); /* Darker Gold */
-  --primary: var(--primary-base); /* Use base for solid color */
-  --primary-foreground: oklch(0.25 0.03 85); /* Dark text on gold */
-  --gradient-gold-primary: linear-gradient(
-    145deg,
-    var(--primary-light),
-    var(--primary-base),
-    var(--primary-dark)
-  ); /* Gold Gradient */
+  /* Primary (White) */
+  --primary: oklch(1 0 0); /* White */
+  --primary-foreground: oklch(0 0 0); /* Black */
 
-  /* Secondary */
-  --secondary: oklch(0.3 0.05 85); /* Muted dark gold/brown */
-  --secondary-foreground: oklch(0.9 0.1 85); /* Lighter gold text */
-  --muted: oklch(0.25 0.03 85); /* Darker muted background */
-  --muted-foreground: oklch(0.7 0.05 85); /* Muted light text */
-  --accent: oklch(0.4 0.08 85); /* Darker accent gold/brown */
-  --accent-foreground: oklch(0.95 0.05 85); /* Lighter text on accent */
+  /* Secondary (Grays) */
+  --secondary: oklch(0.15 0 0); /* Dark Gray */
+  --secondary-foreground: oklch(0.9 0 0); /* Light Gray */
+  --muted: oklch(0.15 0 0); /* Dark Gray */
+  --muted-foreground: oklch(0.6 0 0); /* Medium Gray */
+  --accent: oklch(0.15 0 0); /* Dark Gray */
+  --accent-foreground: oklch(0.9 0 0); /* Light Gray */
 
-  /* Destructive */
+  /* Destructive (Keep Red) */
   --destructive: oklch(0.637 0.237 25.331); /* Original dark red */
   --destructive-foreground: oklch(0.985 0 0); /* Light text on destructive */
 
   /* Other UI Elements */
-  --border: oklch(0.3 0.05 85); /* Muted dark gold/brown border */
-  --input: oklch(0.25 0.03 85); /* Dark input background */
-  --ring-color: oklch(0.769 0.188 85.05); /* Gold for ring */
-  --ring: var(--ring-color); /* Use variable for consistency */
+  --border: oklch(0.2 0 0); /* Medium Dark Gray Border */
+  --input: oklch(0.2 0 0); /* Medium Dark Gray Input */
+  --ring-color: oklch(1 0 0); /* White for ring */
+  --ring: var(--ring-color);
 
-  /* Shadows */
-  --shadow-color-gold-base: oklch(
-    0.8 0.16 85
-  ); /* Base color for gold shadows (lighter for dark mode) */
-  --shadow-sm: 0 1px 2px 0 oklch(0 0 0 / 0.05); /* Default subtle shadow */
-  --shadow: 0 1px 3px 0 oklch(0 0 0 / 0.1), 0 1px 2px -1px oklch(0 0 0 / 0.1); /* Default shadow */
+  /* Shadows (Neutral - Already using black) */
+  --shadow-sm: 0 1px 2px 0 oklch(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 oklch(0 0 0 / 0.1), 0 1px 2px -1px oklch(0 0 0 / 0.1);
   --shadow-md: 0 4px 6px -1px oklch(0 0 0 / 0.1),
-    0 2px 4px -2px oklch(0 0 0 / 0.1); /* Default medium shadow */
+    0 2px 4px -2px oklch(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px oklch(0 0 0 / 0.1),
-    0 4px 6px -4px oklch(0 0 0 / 0.1); /* Default large shadow */
+    0 4px 6px -4px oklch(0 0 0 / 0.1);
   --shadow-xl: 0 20px 25px -5px oklch(0 0 0 / 0.1),
-    0 8px 10px -6px oklch(0 0 0 / 0.1); /* Default extra large shadow */
-  --shadow-2xl: 0 25px 50px -12px oklch(0 0 0 / 0.25); /* Default 2xl shadow */
-  --shadow-inner: inset 0 2px 4px 0 oklch(0 0 0 / 0.05); /* Default inner shadow */
-  /* Gold Shadows */
-  --shadow-gold-md: 0 4px 8px -1px oklch(from var(--shadow-color-gold-base) l a
-          b / 0.25),
-    0 2px 6px -2px oklch(from var(--shadow-color-gold-base) l a b / 0.2);
-  --shadow-gold-lg: 0 10px 20px -3px oklch(from var(--shadow-color-gold-base) l
-          a b / 0.25),
-    0 4px 8px -4px oklch(from var(--shadow-color-gold-base) l a b / 0.2);
+    0 8px 10px -6px oklch(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px oklch(0 0 0 / 0.25);
+  --shadow-inner: inset 0 2px 4px 0 oklch(0 0 0 / 0.05);
+  /* Remove Gold Shadows */
+  --shadow-gold-md: var(--shadow-md); /* Fallback to default */
+  --shadow-gold-lg: var(--shadow-lg); /* Fallback to default */
 
-  /* Chart Colors */
-  --chart-1: var(--primary-base); /* Gold */
-  --chart-2: var(--primary-light); /* Lighter Gold */
-  --chart-3: var(--primary-dark); /* Darker Gold */
-  --chart-4: oklch(0.95 0.05 85); /* Light gold/cream */
-  --chart-5: oklch(0.5 0.1 85); /* Medium-dark gold */
+  /* Chart Colors (Grayscale) */
+  --chart-1: oklch(0.8 0 0); /* Light Gray */
+  --chart-2: oklch(0.7 0 0); /* Gray */
+  --chart-3: oklch(0.6 0 0); /* Medium Gray */
+  --chart-4: oklch(0.4 0 0); /* Dark Gray */
+  --chart-5: oklch(0.2 0 0); /* Very Dark Gray */
 
-  /* Sidebar variables - adjust if sidebar exists and needs specific theming */
-  --sidebar: oklch(0.2 0.02 85);
-  --sidebar-foreground: oklch(0.97 0.01 85);
-  --sidebar-primary: var(--primary-base);
-  --sidebar-primary-foreground: oklch(0.25 0.03 85);
-  --sidebar-accent: oklch(0.4 0.08 85);
-  --sidebar-accent-foreground: oklch(0.95 0.05 85);
-  --sidebar-border: oklch(0.3 0.05 85);
-  --sidebar-ring: var(--ring-color);
+  /* Sidebar variables (Black & White) */
+  --sidebar: oklch(0.05 0 0); /* Very Dark Gray */
+  --sidebar-foreground: oklch(1 0 0); /* White */
+  --sidebar-primary: oklch(1 0 0); /* White */
+  --sidebar-primary-foreground: oklch(0 0 0); /* Black */
+  --sidebar-accent: oklch(0.2 0 0); /* Medium Dark Gray */
+  --sidebar-accent-foreground: oklch(1 0 0); /* White */
+  --sidebar-border: oklch(0.2 0 0); /* Medium Dark Gray */
+  --sidebar-ring: var(--ring-color); /* White */
 }
 
 @layer base {
@@ -262,7 +230,8 @@ select {
     background-image: url('/path/to/diwali-pattern.svg');
   } */
 }
-.dark.theme-diwali {
+html.dark body.theme-diwali {
+  /* Adjusted selector */
   --primary: oklch(0.75 0.22 55); /* Brighter Orange/Saffron for dark mode */
   --primary-foreground: oklch(0.15 0.02 85); /* Darker text */
 }
@@ -277,7 +246,8 @@ select {
   /* Example: Change border color */
   /* --border: oklch(0.8 0.1 85); */ /* Gold border */
 }
-.dark.theme-christmas {
+html.dark body.theme-christmas {
+  /* Adjusted selector */
   --primary: oklch(0.65 0.28 18); /* Slightly brighter red */
   --primary-foreground: oklch(0.98 0.01 85);
   --secondary: oklch(0.55 0.18 145); /* Slightly darker green */
@@ -285,3 +255,494 @@ select {
 }
 
 /* Add more theme overrides here... */
+/* --- New Year --- */
+.theme-new-year {
+  --primary: oklch(0.85 0.1 85); /* Gold */
+  --primary-foreground: oklch(0.1 0.01 85); /* Dark text */
+  --secondary: oklch(0.95 0.01 0 / 0.8); /* Semi-transparent Silver/Gray */
+  --secondary-foreground: oklch(0.1 0 0);
+  --accent: oklch(0.9 0.05 85); /* Lighter Gold */
+  --accent-foreground: oklch(0.1 0.01 85);
+  --border: oklch(0.9 0.05 85);
+  /* Add other vars as needed */
+}
+html.dark body.theme-new-year {
+  --primary: oklch(0.9 0.12 85); /* Brighter Gold */
+  --primary-foreground: oklch(0.1 0.01 85);
+  --secondary: oklch(0.4 0.01 0 / 0.8); /* Darker Gray */
+  --secondary-foreground: oklch(0.95 0 0);
+  --accent: oklch(0.95 0.1 85); /* Brightest Gold */
+  --accent-foreground: oklch(0.1 0.01 85);
+  --border: oklch(0.5 0.02 85);
+  /* Add other vars as needed */
+}
+
+/* --- Valentine's Day --- */
+.theme-valentine {
+  --primary: oklch(0.65 0.25 15); /* Red */
+  --primary-foreground: oklch(1 0 0); /* White */
+  --secondary: oklch(0.9 0.1 350); /* Pink */
+  --secondary-foreground: oklch(0.5 0.1 10); /* Darker Red/Pink */
+  --accent: oklch(0.95 0.05 350); /* Lighter Pink */
+  --accent-foreground: oklch(0.5 0.1 10);
+  --border: oklch(0.9 0.08 355);
+  /* Add other vars as needed */
+}
+html.dark body.theme-valentine {
+  --primary: oklch(0.7 0.28 18); /* Brighter Red */
+  --primary-foreground: oklch(0.98 0.01 350); /* Light Pink */
+  --secondary: oklch(0.5 0.15 340); /* Deeper Pink */
+  --secondary-foreground: oklch(0.98 0.01 350);
+  --accent: oklch(0.8 0.1 350); /* Medium Pink */
+  --accent-foreground: oklch(0.1 0.02 350);
+  --border: oklch(0.4 0.1 350);
+  /* Add other vars as needed */
+}
+
+/* --- India Republic Day --- */
+.theme-india-republic {
+  --primary: oklch(0.7 0.2 50); /* Saffron */
+  --primary-foreground: oklch(0.1 0.02 50); /* Dark text */
+  --secondary: oklch(0.6 0.15 140); /* Green */
+  --secondary-foreground: oklch(0.98 0.01 140); /* Light text */
+  --accent: oklch(0.5 0.15 250); /* Blue (Chakra) */
+  --accent-foreground: oklch(1 0 0); /* White */
+  --border: oklch(0.8 0.1 50);
+  /* Add other vars as needed */
+}
+html.dark body.theme-india-republic {
+  --primary: oklch(0.75 0.22 55); /* Brighter Saffron */
+  --primary-foreground: oklch(0.1 0.02 55);
+  --secondary: oklch(0.55 0.18 145); /* Darker Green */
+  --secondary-foreground: oklch(0.98 0.01 145);
+  --accent: oklch(0.55 0.18 255); /* Brighter Blue */
+  --accent-foreground: oklch(0.98 0.01 250);
+  --border: oklch(0.4 0.08 50);
+  /* Add other vars as needed */
+}
+
+/* --- Holi --- */
+.theme-holi {
+  --primary: oklch(0.7 0.25 300); /* Magenta */
+  --primary-foreground: oklch(1 0 0); /* White */
+  --secondary: oklch(0.8 0.2 200); /* Cyan */
+  --secondary-foreground: oklch(0.1 0.02 200); /* Dark Cyan */
+  --accent: oklch(0.9 0.2 90); /* Yellow */
+  --accent-foreground: oklch(0.2 0.05 90); /* Dark Yellow */
+  --border: oklch(0.8 0.15 300);
+  /* Add other vars as needed */
+}
+html.dark body.theme-holi {
+  --primary: oklch(0.75 0.28 305); /* Brighter Magenta */
+  --primary-foreground: oklch(0.98 0.01 300); /* Light text */
+  --secondary: oklch(0.75 0.22 205); /* Brighter Cyan */
+  --secondary-foreground: oklch(0.1 0.02 205);
+  --accent: oklch(0.95 0.22 95); /* Brighter Yellow */
+  --accent-foreground: oklch(0.15 0.04 95);
+  --border: oklch(0.5 0.18 300);
+  /* Add other vars as needed */
+}
+
+/* --- Eid --- */
+.theme-eid {
+  --primary: oklch(0.6 0.15 140); /* Green */
+  --primary-foreground: oklch(0.98 0.01 140); /* Light text */
+  --secondary: oklch(0.85 0.1 85); /* Gold */
+  --secondary-foreground: oklch(0.2 0.02 85); /* Dark text */
+  --accent: oklch(0.95 0.05 140); /* Light Green */
+  --accent-foreground: oklch(0.1 0.01 140);
+  --border: oklch(0.8 0.08 140);
+  /* Add other vars as needed */
+}
+html.dark body.theme-eid {
+  --primary: oklch(0.65 0.18 145); /* Brighter Green */
+  --primary-foreground: oklch(0.98 0.01 145);
+  --secondary: oklch(0.9 0.12 85); /* Brighter Gold */
+  --secondary-foreground: oklch(0.15 0.02 85);
+  --accent: oklch(0.7 0.1 145); /* Medium Green */
+  --accent-foreground: oklch(0.98 0.01 145);
+  --border: oklch(0.4 0.06 140);
+  /* Add other vars as needed */
+}
+
+/* ========================================== */
+/* Seasonal Theme Overrides                   */
+/* ========================================== */
+
+/* --- Spring --- */
+.theme-spring {
+  --primary: oklch(0.75 0.15 140); /* Light Green */
+  --primary-foreground: oklch(0.1 0.02 140); /* Dark Green Text */
+  --secondary: oklch(0.9 0.08 30); /* Pale Pink/Peach */
+  --secondary-foreground: oklch(0.4 0.05 30); /* Muted Pink Text */
+  --accent: oklch(0.95 0.1 90); /* Soft Yellow */
+  --accent-foreground: oklch(0.3 0.05 90); /* Dark Yellow Text */
+  --background: oklch(0.99 0.005 120); /* Very light off-white */
+  --foreground: oklch(0.3 0.03 140); /* Soft dark green/grey */
+  --card: oklch(0.995 0.003 120); /* Slightly different off-white card */
+  --card-foreground: var(--foreground);
+  --border: oklch(0.85 0.05 130); /* Light pastel green border */
+}
+html.dark body.theme-spring {
+  /* Adjusted selector */
+  --primary: oklch(0.7 0.18 145); /* Brighter Green */
+  --primary-foreground: oklch(0.98 0.01 140); /* Very Light Green Text */
+  --secondary: oklch(0.5 0.1 340); /* Muted Pink/Purple */
+  --secondary-foreground: oklch(0.95 0.05 340); /* Light Pink Text */
+  --accent: oklch(0.9 0.12 90); /* Brighter Soft Yellow */
+  --accent-foreground: oklch(0.2 0.03 90); /* Dark Yellow Text */
+  --background: oklch(0.2 0.02 140); /* Dark muted green */
+  --foreground: oklch(0.95 0.05 130); /* Light pastel green */
+  --card: oklch(0.25 0.025 140); /* Slightly lighter dark card */
+  --card-foreground: var(--foreground);
+  --border: oklch(0.4 0.05 140); /* Muted green border */
+}
+
+/* --- Summer --- */
+.theme-summer {
+  --primary: oklch(0.65 0.2 230); /* Bright Blue */
+  --primary-foreground: oklch(1 0 0); /* White Text */
+  --secondary: oklch(0.9 0.1 80); /* Sandy Yellow/Beige */
+  --secondary-foreground: oklch(0.3 0.05 80); /* Dark Sand Text */
+  --accent: oklch(0.7 0.2 40); /* Coral/Orange */
+  --accent-foreground: oklch(0.1 0.03 40); /* Dark Coral Text */
+  --background: oklch(0.99 0.005 70); /* Light, slightly warm white */
+  --foreground: oklch(0.25 0.05 240); /* Deep blue/grey */
+  --card: oklch(1 0 0); /* White card */
+  --card-foreground: var(--foreground);
+  --border: oklch(0.8 0.08 220); /* Light blue border */
+}
+html.dark body.theme-summer {
+  /* Adjusted selector */
+  --primary: oklch(0.6 0.22 235); /* Vibrant Blue */
+  --primary-foreground: oklch(0.98 0.01 230); /* Very Light Blue Text */
+  --secondary: oklch(0.4 0.1 75); /* Warm Sand/Brown */
+  --secondary-foreground: oklch(0.95 0.08 80); /* Light sandy yellow */
+  --accent: oklch(0.75 0.25 45); /* Bright Orange */
+  --accent-foreground: oklch(0.98 0.02 45); /* Light Orange Text */
+  --background: oklch(0.15 0.03 240); /* Deep navy blue */
+  --foreground: oklch(0.95 0.08 80); /* Light sandy yellow */
+  --card: oklch(0.2 0.04 240); /* Slightly lighter navy card */
+  --card-foreground: var(--foreground);
+  --border: oklch(0.3 0.06 240); /* Muted navy border */
+}
+
+/* --- Autumn --- */
+.theme-autumn {
+  --primary: oklch(0.65 0.18 45); /* Burnt Orange/Rust */
+  --primary-foreground: oklch(0.98 0.01 60); /* Cream Text */
+  --secondary: oklch(0.6 0.1 120); /* Olive Green */
+  --secondary-foreground: oklch(0.1 0.02 120); /* Dark Olive Text */
+  --accent: oklch(0.5 0.15 20); /* Deep Red/Maroon */
+  --accent-foreground: oklch(0.95 0.05 30); /* Light Red Text */
+  --background: oklch(0.98 0.01 70); /* Creamy off-white */
+  --foreground: oklch(0.25 0.04 50); /* Dark brown */
+  --card: oklch(0.99 0.008 70); /* Slightly different cream card */
+  --card-foreground: var(--foreground);
+  --border: oklch(0.8 0.06 60); /* Muted orange border */
+}
+html.dark body.theme-autumn {
+  /* Adjusted selector */
+  --primary: oklch(0.6 0.2 50); /* Rich Orange/Brown */
+  --primary-foreground: oklch(0.95 0.05 75); /* Light beige/gold */
+  --secondary: oklch(0.4 0.08 110); /* Dark Olive */
+  --secondary-foreground: oklch(0.9 0.04 100); /* Light Olive Text */
+  --accent: oklch(0.45 0.18 15); /* Rich Burgundy */
+  --accent-foreground: oklch(0.92 0.06 25); /* Light Burgundy Text */
+  --background: oklch(0.2 0.03 50); /* Dark warm brown */
+  --foreground: oklch(0.9 0.05 75); /* Light beige/gold */
+  --card: oklch(0.25 0.035 50); /* Slightly lighter dark brown card */
+  --card-foreground: var(--foreground);
+  --border: oklch(0.35 0.05 50); /* Muted brown border */
+}
+
+/* --- Winter --- */
+.theme-winter {
+  --primary: oklch(0.8 0.08 240); /* Icy Blue */
+  --primary-foreground: oklch(0.1 0.02 240); /* Dark Blue Text */
+  --secondary: oklch(0.85 0 0); /* Cool Grey */
+  --secondary-foreground: oklch(0.15 0 0); /* Dark Grey Text */
+  --accent: oklch(0.92 0 0); /* Silver/Light Grey */
+  --accent-foreground: oklch(0.2 0 0); /* Dark Grey Text */
+  --background: oklch(1 0 0); /* Crisp white */
+  --foreground: oklch(0.2 0 0); /* Deep charcoal grey */
+  --card: oklch(0.98 0.002 240); /* Very light cool grey card */
+  --card-foreground: var(--foreground);
+  --border: oklch(0.88 0.02 240); /* Light icy blue border */
+}
+html.dark body.theme-winter {
+  /* Adjusted selector */
+  --primary: oklch(0.4 0.15 250); /* Deep Blue */
+  --primary-foreground: oklch(0.95 0.02 250); /* Light Blue Text */
+  --secondary: oklch(0.3 0.02 250); /* Dark Slate Grey */
+  --secondary-foreground: oklch(0.85 0.01 250); /* Light Grey Text */
+  --accent: oklch(0.75 0.1 220); /* Bright Icy Blue/Cyan */
+  --accent-foreground: oklch(0.05 0.01 220); /* Very Dark Blue Text */
+  --background: oklch(0.1 0.01 250); /* Very dark blue/black */
+  --foreground: oklch(0.9 0 0); /* Light silver/grey */
+  --card: oklch(0.15 0.015 250); /* Slightly lighter dark blue card */
+  --card-foreground: var(--foreground);
+  --border: oklch(0.25 0.03 250); /* Muted dark blue border */
+}
+
+/* ========================================== */
+/* Logo Text & Decoration Styling             */
+/* ========================================== */
+
+/* Base styles for decoration pseudo-elements */
+/* Ensure logo text itself is relative for positioning */
+.logo-text {
+  position: relative;
+}
+.logo-text::before,
+.logo-text::after {
+  content: "";
+  display: inline-block;
+  width: 0.8em; /* Adjust size as needed */
+  height: 0.8em; /* Adjust size as needed */
+  margin-inline: 0.3em; /* Space around icon */
+  vertical-align: middle; /* Align with text */
+  background-color: var(--primary); /* Default color using theme primary */
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  background-size: contain; /* For background-image fallback */
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* --- Theme Specific Logo Styles --- */
+
+/* Spring / Autumn (Leaf) */
+body.theme-spring .logo-text,
+body.theme-autumn .logo-text {
+  color: var(--primary);
+}
+html.dark body.theme-spring .logo-text, /* Dark mode color */
+html.dark body.theme-autumn .logo-text {
+  color: var(--primary);
+}
+body.theme-spring .logo-decorate-leaf .logo-text::before,
+body.theme-autumn .logo-decorate-leaf .logo-text::before,
+html.dark body.theme-spring .logo-decorate-leaf .logo-text::before, /* Dark mode icon color */
+html.dark body.theme-autumn .logo-decorate-leaf .logo-text::before {
+  mask-image: url("/icons/leaf-svgrepo-com.svg");
+  background-color: var(--primary); /* Use theme primary color */
+}
+body.theme-spring .logo-decorate-leaf .logo-text::after,
+body.theme-autumn .logo-decorate-leaf .logo-text::after {
+  content: none;
+}
+
+/* Summer (Sun) */
+body.theme-summer .logo-text {
+  color: var(--primary);
+}
+html.dark body.theme-summer .logo-text {
+  /* Dark mode color */
+  color: var(--primary);
+}
+body.theme-summer .logo-decorate-sun .logo-text::before,
+html.dark body.theme-summer .logo-decorate-sun .logo-text::before {
+  /* Dark mode icon color */
+  mask-image: url("/icons/sun-svgrepo-com.svg");
+  background-color: var(--primary);
+}
+body.theme-summer .logo-decorate-sun .logo-text::after {
+  content: none;
+}
+
+/* Winter / Christmas (Snowflake) */
+body.theme-winter .logo-text,
+body.theme-christmas .logo-text {
+  color: var(--primary);
+}
+html.dark body.theme-winter .logo-text, /* Dark mode color */
+html.dark body.theme-christmas .logo-text {
+  color: var(--primary);
+}
+body.theme-winter .logo-decorate-snowflake .logo-text::before,
+body.theme-christmas .logo-decorate-snowflake .logo-text::before,
+html.dark body.theme-winter .logo-decorate-snowflake .logo-text::before, /* Dark mode icon color */
+html.dark body.theme-christmas .logo-decorate-snowflake .logo-text::before {
+  mask-image: url("/icons/snowflake-svgrepo-com.svg");
+  background-color: var(--primary);
+}
+body.theme-winter .logo-decorate-snowflake .logo-text::after,
+body.theme-christmas .logo-decorate-snowflake .logo-text::after {
+  content: none;
+}
+
+/* Diwali (Diya) */
+body.theme-diwali .logo-text {
+  color: var(--primary);
+}
+html.dark body.theme-diwali .logo-text {
+  /* Dark mode color */
+  color: var(--primary);
+}
+body.theme-diwali .logo-decorate-diya .logo-text::before,
+html.dark body.theme-diwali .logo-decorate-diya .logo-text::before {
+  /* Dark mode icon color */
+  mask-image: url("/icons/diwali-svgrepo-com.svg");
+  background-color: var(--primary);
+}
+body.theme-diwali .logo-decorate-diya .logo-text::after {
+  content: none;
+}
+
+/* New Year (Firework) */
+body.theme-new-year .logo-text {
+  color: var(--primary);
+}
+html.dark body.theme-new-year .logo-text {
+  /* Dark mode color */
+  color: var(--primary);
+}
+body.theme-new-year .logo-decorate-firework .logo-text::before,
+html.dark body.theme-new-year .logo-decorate-firework .logo-text::before {
+  /* Dark mode icon color */
+  mask-image: url("/icons/firework-rocket-svgrepo-com.svg");
+  background-color: var(--primary);
+}
+body.theme-new-year .logo-decorate-firework .logo-text::after {
+  content: none;
+}
+
+/* Valentine's Day (Heart) */
+body.theme-valentine .logo-text {
+  color: var(--primary);
+}
+html.dark body.theme-valentine .logo-text {
+  /* Dark mode color */
+  color: var(--primary);
+}
+body.theme-valentine .logo-decorate-heart .logo-text::before,
+html.dark body.theme-valentine .logo-decorate-heart .logo-text::before {
+  /* Dark mode icon color */
+  mask-image: url("/icons/heart-svgrepo-com.svg");
+  background-color: var(--primary);
+}
+body.theme-valentine .logo-decorate-heart .logo-text::after {
+  content: none;
+}
+
+/* India Republic Day (Flag) - Same as Independence */
+body.theme-india-republic .logo-text {
+  color: var(--primary);
+}
+html.dark body.theme-india-republic .logo-text {
+  /* Dark mode color */
+  color: var(--primary);
+}
+body.theme-india-republic .logo-decorate-flag-in .logo-text::before,
+html.dark body.theme-india-republic .logo-decorate-flag-in .logo-text::before {
+  /* Dark mode icon */
+  mask-image: none;
+  background-color: transparent;
+  background-image: url("/icons/india-flag-icon.svg");
+  width: 1.2em;
+  height: 0.9em;
+}
+body.theme-india-republic .logo-decorate-flag-in .logo-text::after {
+  content: none;
+}
+
+/* India Independence (Flag) - Special handling */
+body.theme-india-independence .logo-text {
+  color: var(--primary); /* Or choose a specific color like orange/green? */
+}
+html.dark body.theme-india-independence .logo-text {
+  /* Dark mode color */
+  color: var(--primary);
+}
+body.theme-india-independence .logo-decorate-flag-in .logo-text::before,
+html.dark
+  body.theme-india-independence
+  .logo-decorate-flag-in
+  .logo-text::before {
+  /* Dark mode icon */
+  mask-image: none; /* Disable mask */
+  background-color: transparent; /* Disable background color */
+  background-image: url("/icons/india-flag-icon.svg"); /* Use background image */
+  /* Adjust size/position if needed */
+  width: 1.2em;
+  height: 0.9em;
+}
+body.theme-india-independence .logo-decorate-flag-in .logo-text::after {
+  content: none;
+}
+
+/* ========================================== */
+/* Holi (Splash) */
+body.theme-holi .logo-text {
+  color: var(--primary);
+}
+html.dark body.theme-holi .logo-text {
+  /* Dark mode color */
+  color: var(--primary);
+}
+body.theme-holi .logo-decorate-holi .logo-text::before,
+html.dark body.theme-holi .logo-decorate-holi .logo-text::before {
+  /* Dark mode icon color */
+  mask-image: url("/icons/water-splash-svgrepo-com.svg");
+  background-color: var(--primary);
+}
+body.theme-holi .logo-decorate-holi .logo-text::after {
+  content: none;
+}
+
+/* Eid (Moon) */
+body.theme-eid .logo-text {
+  color: var(--primary);
+}
+html.dark body.theme-eid .logo-text {
+  /* Dark mode color */
+  color: var(--primary);
+}
+body.theme-eid .logo-decorate-eid .logo-text::before,
+html.dark body.theme-eid .logo-decorate-eid .logo-text::before {
+  /* Dark mode icon color */
+  mask-image: url("/icons/moon-svgrepo-com.svg");
+  background-color: var(--primary);
+}
+body.theme-eid .logo-decorate-eid .logo-text::after {
+  content: none;
+}
+
+/* ========================================== */
+/* Coupon Notice Styling                      */
+/* ========================================== */
+/* Default style applied via theme variables in :root/.dark */
+.coupon-notice {
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+}
+
+/* Theme-specific overrides for coupon notice */
+body.theme-diwali .coupon-notice,
+html.dark body.theme-diwali .coupon-notice {
+  /* Dark mode */
+  background: oklch(0.7 0.2 50); /* Example: Match Diwali primary */
+  color: oklch(0.98 0.01 85);
+}
+body.theme-christmas .coupon-notice,
+html.dark body.theme-christmas .coupon-notice {
+  /* Dark mode */
+  background: oklch(0.6 0.25 15); /* Example: Match Christmas primary */
+  color: oklch(0.98 0.01 85);
+}
+body.theme-india-independence .coupon-notice,
+html.dark body.theme-india-independence .coupon-notice {
+  /* Dark mode */
+  /* Example: Tri-color gradient? Or just one color? */
+  background: linear-gradient(
+    to right,
+    oklch(0.7 0.2 50),
+    white,
+    oklch(0.6 0.15 140)
+  );
+  color: black; /* Adjust for readability */
+  text-shadow: 0 0 2px white; /* Add shadow for readability on gradient */
+}
+/* Add more overrides if desired */

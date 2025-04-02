@@ -6,12 +6,13 @@ import Header from "./components/navbar/Header";
 import localFont from "next/font/local";
 import Footer from "./components/navbar/Footer";
 import { Toaster } from "@/components/ui/sonner";
+// Removed headers import
 import { countries } from "@/lib/countries";
 import { Metadata } from "next";
 import { WishlistProvider } from "@/lib/contexts/WishlistContext";
-import { getActiveTheme } from "@/lib/theme-utils"; // Import theme logic
+import ThemeApplicator from "@/app/components/ThemeApplicator"; // Import ThemeApplicator
 import { cn } from "@/lib/utils"; // Import cn utility
-import SnowfallEffect from "./components/effects/SnowfallEffect"; // Import animation component
+// Removed getActiveTheme and animation component imports
 
 const blippo = localFont({
   src: "/fonts/blippo-blk-bt.ttf",
@@ -26,7 +27,7 @@ const baumans = localFont({
 });
 
 interface RootLayoutParams {
-  params: { country: string };
+  params: Promise<{ country: string }>;
 }
 
 export async function generateMetadata({
@@ -101,32 +102,22 @@ export async function generateMetadata({
 
 export default async function RootLayout({
   children,
-  params,
+  params, // Added params back
 }: Readonly<{
   children: React.ReactNode;
-  params: { country: string };
+  params: { country: string }; // Use simple type now
 }>) {
-  const { country } = await params;
-  // Find country data to get language code
+  // Keep lang logic for html attribute
+  const { country } = params;
   const currentCountry = countries.find((c) => c.slug === country && c.active);
-  const lang = currentCountry?.languageCode || "en"; // Default to 'en' if country/lang not found
+  const lang = currentCountry?.languageCode || "en";
 
-  // Get active theme based on country slug
-  const activeTheme = getActiveTheme(country); // country slug is available in params
-  const themeClass = activeTheme?.themeClass || ""; // Get the theme class or empty string
+  // Removed server-side theme logic
 
   return (
-    // Set lang attribute dynamically
     <html lang={lang} suppressHydrationWarning>
-      {/* Apply theme class along with font variables */}
-      <body
-        className={cn(
-          blippo.variable,
-          baumans.variable,
-          "antialiased",
-          themeClass // Add the dynamic theme class here
-        )}
-      >
+      {/* Removed themeClass from body */}
+      <body className={cn(blippo.variable, baumans.variable, "antialiased")}>
         <ApolloWrapper>
           <ThemeProvider
             attribute="class"
@@ -134,19 +125,19 @@ export default async function RootLayout({
             enableSystem={true}
           >
             <WishlistProvider>
-              {" "}
-              {/* Added WishlistProvider wrapper */}
-              <Header />
-              <main>{children}</main>
-              <Toaster />
-              <Footer />
+              <ThemeApplicator>
+                {" "}
+                {/* Wrap content with ThemeApplicator */}
+                {/* Removed Header/Footer props */}
+                <Header />
+                <main>{children}</main>
+                <Toaster />
+                <Footer />
+              </ThemeApplicator>
             </WishlistProvider>{" "}
-            {/* Closing tag */}
           </ThemeProvider>
         </ApolloWrapper>
-        {/* Conditionally render animation based on active theme */}
-        {activeTheme?.animation === "snowfall" && <SnowfallEffect />}
-        {/* Add other animation components here later */}
+        {/* Animation rendering is now handled inside ThemeApplicator */}
       </body>
     </html>
   );
