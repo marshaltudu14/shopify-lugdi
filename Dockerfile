@@ -19,9 +19,6 @@ ENV NEXT_TELEMETRY_DISABLED 1
 # Build the Next.js application
 RUN npm run build
 
-# Prune development dependencies
-RUN npm prune --production
-
 # Stage 2: Production image using standalone output
 FROM node:22-alpine AS runner
 WORKDIR /app
