@@ -1,3 +1,5 @@
+# Docker for Google Cloud Run
+
 # Stage 1: Install dependencies and build the application
 FROM node:22-alpine AS builder
 # Set working directory
