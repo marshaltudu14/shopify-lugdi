@@ -54,6 +54,8 @@ export default async function CountryHomePage({
   let menCollectionsMenu: GetCollectionsByMenuResponse | null = null;
   let womenCollectionsMenu: GetCollectionsByMenuResponse | null = null;
   let newArrivals: ProductsData | null = null;
+  let mensCollectionProducts: ProductsData | null = null; // Add state for men's products
+  let womensCollectionProducts: ProductsData | null = null; // Add state for women's products
 
   try {
     const client = initializeApollo();
@@ -81,17 +83,48 @@ export default async function CountryHomePage({
         reverse: true,
         country: isoCountryCode,
       },
+      // fetchPolicy: "network-only", // Remove fetch policy from New Arrivals
+    });
+
+    // Fetch Men's Collection Products
+    const { data: mensProductsData } = await client.query<ProductsData>({
+      query: GET_PRODUCTS,
+      variables: {
+        first: 8, // Fetch 8 products for the section
+        query: "collection_handle:mens-collection", // Filter by handle
+        sortKey: "CREATED_AT",
+        reverse: true,
+        country: isoCountryCode,
+      },
+      fetchPolicy: "network-only", // Add fetch policy
+    });
+
+    // Fetch Women's Collection Products
+    const { data: womensProductsData } = await client.query<ProductsData>({
+      query: GET_PRODUCTS,
+      variables: {
+        first: 8, // Fetch 8 products for the section
+        query: "collection_handle:womens-collection", // Filter by handle
+        sortKey: "CREATED_AT",
+        reverse: true,
+        country: isoCountryCode,
+      },
+      fetchPolicy: "network-only", // Add fetch policy to Women's Collection
     });
 
     // Assign fetched menu data
     menCollectionsMenu = menMenuData;
     womenCollectionsMenu = womenMenuData;
     newArrivals = newArrivalsData;
+    mensCollectionProducts = mensProductsData; // Assign men's products
+    womensCollectionProducts = womensProductsData; // Assign women's products
   } catch (error) {
     // Update catch block assignments
     menCollectionsMenu = null;
     womenCollectionsMenu = null;
     newArrivals = null;
+    mensCollectionProducts = null; // Nullify on error
+    womensCollectionProducts = null; // Nullify on error
     console.error("Error fetching homepage data:", error); // Updated error message
   }
 
@@ -114,6 +147,8 @@ export default async function CountryHomePage({
       menCollectionsMenu={menCollectionsMenu}
       womenCollectionsMenu={womenCollectionsMenu}
       newArrivalsProducts={newArrivals}
+      mensCollectionProducts={mensCollectionProducts} // Pass men's products
+      womensCollectionProducts={womensCollectionProducts} // Pass women's products
     />
   );
 }

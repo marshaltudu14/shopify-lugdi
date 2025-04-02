@@ -98,9 +98,8 @@ export default function Header(/* Removed props */) {
           <div className="coupon-notice text-center text-xs sm:text-sm font-medium py-1.5 px-4 shadow-md">
             {/* Removed activeTheme logic, always show default offer for India */}
             <>
-              🎉 Welcome Offer! Use code{" "}
-              <span className="font-bold tracking-wider">LUGDIINDIA100</span>{" "}
-              for ₹100 off your first order in India! 🎉
+              🎉 Get 100 INR off your first order over 1000 INR! Use code{" "}
+              <span className="font-bold tracking-wider">LUGDIINDIA100</span> 🎉
             </>
           </div>
         )}{" "}

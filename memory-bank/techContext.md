@@ -29,7 +29,7 @@
 - `framer-motion`: Animations
 - `js-cookie`: Client-side cookie management
 - `lucide-react`: Icon library
-- `next-themes`: Theme management (light/dark mode)
+- `next-themes`: Theme management (light/dark mode) - Note: Custom seasonal/festival theme system removed.
 - `sonner`: Toast notifications
 - `zod`: Schema validation
 

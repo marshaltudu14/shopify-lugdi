@@ -24,6 +24,8 @@ interface CountryPageClientProps {
   menCollectionsMenu: GetCollectionsByMenuResponse | null;
   womenCollectionsMenu: GetCollectionsByMenuResponse | null;
   newArrivalsProducts: ProductsData | null;
+  mensCollectionProducts: ProductsData | null; // Add prop for men's collection products
+  womensCollectionProducts: ProductsData | null; // Add prop for women's collection products
   // themeClass prop is no longer needed here, will get from context
 }
 
@@ -34,6 +36,8 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
   menCollectionsMenu,
   womenCollectionsMenu,
   newArrivalsProducts,
+  mensCollectionProducts, // Destructure new prop
+  womensCollectionProducts, // Destructure new prop
   // themeClass removed from props
 }) => {
   // Removed theme context usage
@@ -70,6 +74,12 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
   // Keep new arrivals logic
   const newArrivals =
     newArrivalsProducts?.products?.edges?.map((edge) => edge.node) || [];
+
+  // Extract products from the new props
+  const mensProducts =
+    mensCollectionProducts?.products?.edges?.map((edge) => edge.node) || [];
+  const womensProducts =
+    womensCollectionProducts?.products?.edges?.map((edge) => edge.node) || [];
 
   // Note: The featured product sections ("Curated For Him", "Designed For Her")
   // are currently using different data sources (GET_COLLECTION_PRODUCTS).
@@ -137,10 +147,9 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
         </div>
       </section>
 
-      {/* Featured Products - For Him (Keep existing logic for now) */}
-      {/* This section uses data from GET_COLLECTION_PRODUCTS, not the menu */}
+      {/* Featured Products - For Him */}
       <section className="py-16 relative z-10">
-        {newArrivals.length > 0 && ( // Placeholder condition, adjust if needed
+        {mensProducts.length > 0 && ( // Use mensProducts data
           <div className="container mx-auto px-4 space-y-8">
             <div className="relative">
               <motion.div
@@ -189,10 +198,10 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
 
             <ScrollArea className="w-full whitespace-nowrap">
               <div className="flex w-max space-x-6 pb-4">
-                {/* Map over newArrivals or adjust as needed for featured products */}
-                {newArrivals.slice(0, 6).map((product, index) => (
+                {/* Map over mensProducts */}
+                {mensProducts.map((product, index) => (
                   <motion.div
-                    key={`men-feat-${product.id}`} // Use a distinct key prefix
+                    key={`men-feat-${product.id}`}
                     initial={{ opacity: 0, x: 50 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -217,10 +226,9 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
         )}
       </section>
 
-      {/* Featured Products - For Her (Keep existing logic for now) */}
-      {/* This section uses data from GET_COLLECTION_PRODUCTS, not the menu */}
+      {/* Featured Products - For Her */}
       <section className="py-16 bg-background relative z-10">
-        {newArrivals.length > 0 && ( // Placeholder condition, adjust if needed
+        {womensProducts.length > 0 && ( // Use womensProducts data
           <div className="container mx-auto px-4 space-y-8">
             <div className="relative">
               <motion.div
@@ -270,10 +278,10 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
 
             <ScrollArea className="w-full whitespace-nowrap">
               <div className="flex w-max space-x-6 pb-4">
-                {/* Map over newArrivals or adjust as needed for featured products */}
-                {newArrivals.slice(6, 12).map((product, index) => (
+                {/* Map over womensProducts */}
+                {womensProducts.map((product, index) => (
                   <motion.div
-                    key={`women-feat-${product.id}`} // Use a distinct key prefix
+                    key={`women-feat-${product.id}`}
                     initial={{ opacity: 0, x: 50 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
