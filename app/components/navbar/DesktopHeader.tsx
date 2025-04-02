@@ -17,9 +17,8 @@ import {
 import { getCookie } from "@/utils/CookieUtils";
 import LugdiUtils from "@/utils/LugdiUtils";
 import { useRouter } from "next/navigation";
-import { useContext } from "react"; // Import useContext
-import { ThemeContext } from "@/app/components/ThemeApplicator"; // Import ThemeContext
-import { cn } from "@/lib/utils"; // Re-import cn utility
+// Removed useContext and ThemeContext imports
+// Removed cn import
 // Removed Image and useTheme imports
 import { useCart } from "@/app/[country]/cart/CartContext";
 import { useWishlist } from "@/lib/contexts/WishlistContext"; // Added Wishlist hook
@@ -44,7 +43,7 @@ export default function DesktopHeader({
 }: DesktopHeaderProps) {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { logoDecorationClass } = useContext(ThemeContext); // Consume context
+  // Removed unused logoDecorationClass from context
 
   const { cart } = useCart();
   const { wishlistedVariantIds } = useWishlist(); // Use wishlist hook
@@ -65,12 +64,13 @@ export default function DesktopHeader({
               transition={{ duration: 0.5 }}
             >
               {/* Apply decoration class from context */}
-              <Link
-                href="/"
-                className={cn("flex items-center", logoDecorationClass)}
-              >
+              <Link href="/" className="flex items-center">
                 {/* Reverted to simple text logo, added class */}
-                <h1 className="logo-text relative">lugdi</h1>{" "}
+                {/* Removed logoDecorationClass from cn() */}
+                {/* Added gradient classes */}
+                <h1 className="logo-text relative bg-gradient-to-r from-[--gradient-start] to-[--gradient-end] text-transparent bg-clip-text">
+                  lugdi
+                </h1>{" "}
                 {/* Added relative for pseudo-elements */}
                 <span className="ml-1 text-xs font-light uppercase tracking-widest text-neutral-500">
                   {getCookie(LugdiUtils.location_name_country_cookie)}

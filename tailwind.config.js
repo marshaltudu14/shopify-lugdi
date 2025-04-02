@@ -19,22 +19,14 @@ const config = {
     "theme-summer",
     "theme-autumn",
     "theme-winter",
-    // Decoration classes
-    "logo-decorate-diya",
-    "logo-decorate-snowflake",
-    "logo-decorate-flag-in",
-    "logo-decorate-leaf",
-    "logo-decorate-sun",
+    // Removed Decoration classes
     // Added new festival themes/decorations
     "theme-new-year",
     "theme-valentine",
     "theme-india-republic",
     "theme-holi",
     "theme-eid",
-    "logo-decorate-firework",
-    "logo-decorate-heart",
-    "logo-decorate-holi",
-    "logo-decorate-eid",
+    // Removed Decoration classes
   ],
   prefix: "", // Optional prefix for Tailwind classes
   theme: {

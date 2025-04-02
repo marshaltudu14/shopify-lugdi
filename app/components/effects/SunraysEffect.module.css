@@ -6,7 +6,7 @@
   height: 100%;
   overflow: hidden;
   pointer-events: none; /* Allow clicks to pass through */
-  z-index: 9998; /* Below leaves/snow, but above content */
+  z-index: -1; /* Position behind content */
 }
 
 .sunray {

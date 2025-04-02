@@ -6,7 +6,7 @@
   width: auto;
   height: auto;
   pointer-events: none;
-  z-index: 9996; /* Adjust z-index as needed */
+  z-index: -1; /* Position behind content */
 }
 
 .flag {

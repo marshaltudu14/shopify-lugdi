@@ -13,6 +13,7 @@ const LeavesEffect: React.FC = () => {
     const swayIntensity = Math.random() * 15 + 10; // Random sway intensity (10-25px)
     const rotation = Math.random() * 360; // Random initial rotation
     const scale = Math.random() * 0.5 + 0.5; // Random scale (0.5 - 1.0)
+    const depth = Math.random(); // Random depth value (0-1)
 
     // Add different leaf styles (optional, can use :nth-child in CSS too)
     const leafType = Math.floor(Math.random() * 3) + 1; // Example: 3 leaf types
@@ -30,6 +31,7 @@ const LeavesEffect: React.FC = () => {
             "--leaf-sway-intensity": `${swayIntensity}px`,
             "--leaf-rotation": `${rotation}deg`,
             "--leaf-scale": scale,
+            "--leaf-depth": depth, // Pass depth as CSS variable
           } as React.CSSProperties // Type assertion for custom properties
         }
       />

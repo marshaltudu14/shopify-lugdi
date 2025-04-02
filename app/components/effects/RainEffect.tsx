@@ -11,6 +11,7 @@ const RainEffect: React.FC = () => {
     const startX = Math.random() * 100; // Random horizontal start position (vw)
     const scaleY = Math.random() * 0.5 + 1; // Random vertical scale (1 - 1.5) for streak length
     const opacity = Math.random() * 0.3 + 0.4; // Random opacity (0.4 - 0.7)
+    const depth = Math.random(); // Random depth value (0-1)
 
     return (
       <div
@@ -23,6 +24,7 @@ const RainEffect: React.FC = () => {
             "--drop-delay": `${delay}s`,
             "--drop-scale-y": scaleY,
             "--drop-opacity": opacity,
+            "--drop-depth": depth, // Pass depth as CSS variable
           } as React.CSSProperties // Type assertion for custom properties
         }
       />

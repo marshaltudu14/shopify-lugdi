@@ -130,7 +130,8 @@ export default async function RootLayout({
                 {/* Wrap content with ThemeApplicator */}
                 {/* Removed Header/Footer props */}
                 <Header />
-                <main>{children}</main>
+                {/* Added relative class for stacking context */}
+                <main className="relative">{children}</main>
                 <Toaster />
                 <Footer />
               </ThemeApplicator>

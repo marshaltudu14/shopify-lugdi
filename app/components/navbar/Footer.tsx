@@ -9,16 +9,14 @@ import LugdiUtils from "@/utils/LugdiUtils";
 import { useQuery } from "@apollo/client";
 import { GET_MENU } from "@/lib/queries/menu";
 import { MenuItem } from "@/lib/types/menu";
-import { useContext } from "react"; // Import useContext
-import { ThemeContext } from "@/app/components/ThemeApplicator"; // Import ThemeContext
-import { cn } from "@/lib/utils"; // Import cn utility
+// Removed useContext, ThemeContext, cn imports
 // Removed Image and useTheme imports
 
 // Removed FooterProps interface
 
 const Footer = () => {
   // Removed props from signature
-  const { logoDecorationClass } = useContext(ThemeContext); // Consume context
+  // Removed logoDecorationClass from context
   // TODO: Implement proper loading and error states
   const { data: policiesData } = useQuery(GET_MENU, {
     variables: { handle: "policies" },
@@ -76,12 +74,12 @@ const Footer = () => {
     <footer className="w-full bg-gradient-to-b from-background via-secondary/20 to-background dark:from-background dark:via-secondary/10 dark:to-background pt-16 border-t border-border mb-16 md:mb-0 pb-8">
       {/* Added mb-16 md:mb-0 and restored pb-8 */}
       <div className="container mx-auto px-4 md:px-6 flex flex-col items-center">
-        {/* Centered Logo - Apply decoration class from context */}
-        <div className={cn("mb-8", logoDecorationClass)}>
+        {/* Centered Logo */}
+        {/* Removed logoDecorationClass from cn() */}
+        <div className="mb-8">
           {/* Reverted to simple text logo, added class */}
-          <h1 className="logo-text relative text-4xl text-center md:text-5xl text-foreground">
-            {" "}
-            {/* Added relative */}
+          {/* Added gradient classes */}
+          <h1 className="logo-text relative text-4xl text-center md:text-5xl bg-gradient-to-r from-[--gradient-start] to-[--gradient-end] text-transparent bg-clip-text">
             lugdi
           </h1>
         </div>

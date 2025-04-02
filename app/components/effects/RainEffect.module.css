@@ -6,7 +6,7 @@
   height: 100%;
   overflow: hidden;
   pointer-events: none; /* Allow clicks to pass through */
-  z-index: 9999; /* Ensure it's on top */
+  z-index: -1; /* Position behind content */
 }
 
 .raindrop {
@@ -22,20 +22,27 @@
   );
   opacity: var(--drop-opacity);
   transform-origin: bottom center;
-  transform: scaleY(var(--drop-scale-y)); /* Control streak length */
+  /* Add slant and control streak length */
+  transform: scaleY(var(--drop-scale-y)) skewX(-3deg);
+  filter: blur(
+    calc(var(--drop-depth) * 1px)
+  ); /* Apply depth blur (less intense for rain) */
 
   /* Apply animation */
   animation: fall var(--drop-duration) linear infinite var(--drop-delay);
+  will-change: transform, opacity; /* Optimize animation */
 }
 
 /* Falling Animation */
 @keyframes fall {
   0% {
-    transform: translateY(0vh) scaleY(var(--drop-scale-y));
+    /* Maintain slant */
+    transform: translateY(0vh) scaleY(var(--drop-scale-y)) skewX(-3deg);
     opacity: var(--drop-opacity);
   }
   100% {
-    transform: translateY(105vh) scaleY(var(--drop-scale-y)); /* Fall below screen */
+    /* Maintain slant */
+    transform: translateY(105vh) scaleY(var(--drop-scale-y)) skewX(-3deg); /* Fall below screen */
     opacity: calc(var(--drop-opacity) * 0.5); /* Fade slightly */
   }
 }

@@ -8,7 +8,7 @@
   height: 100%;
   pointer-events: none; /* Allow clicks to pass through */
   overflow: hidden;
-  z-index: 9999; /* Ensure it's on top, adjust as needed */
+  z-index: -1; /* Position behind content */
 }
 
 .snowflake {
@@ -17,26 +17,42 @@
   left: var(--flake-left); /* Use CSS variable for horizontal position */
   width: var(--flake-size); /* Use CSS variable for size */
   height: var(--flake-size); /* Use CSS variable for size */
-  background: white;
+  background: oklch(0.98 0.01 240); /* Very light cool grey */
+  box-shadow: 0 0 2px 0px oklch(0.7 0.01 240 / 0.5); /* Subtle shadow for definition */
   border-radius: 50%;
   opacity: var(--flake-opacity); /* Use CSS variable for opacity */
-  animation: snowfall var(--flake-duration) linear var(--flake-delay) infinite; /* Use CSS variables */
-  will-change: transform; /* Optimize animation */
+  filter: blur(calc(var(--flake-depth) * 1.5px)); /* Apply depth blur */
+  animation: snowfall var(--flake-duration) linear var(--flake-delay) infinite,
+    rotateSnowflake calc(var(--flake-duration) * 2) linear var(--flake-delay)
+      infinite; /* Add rotation */
+  will-change: transform, opacity; /* Optimize animation */
+}
+
+/* Define rotation animation */
+@keyframes rotateSnowflake {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Define the falling animation */
 @keyframes snowfall {
   0% {
-    transform: translateY(0) translateX(0);
+    transform: translateY(0) translateX(0); /* Keep rotation separate */
     opacity: var(--flake-opacity);
   }
   50% {
-    /* Add slight horizontal drift */
-    transform: translateY(50vh) translateX(10px);
+    /* Add more varied horizontal drift */
+    transform: translateY(50vh)
+      translateX(calc(var(--flake-depth) * 30px - 15px)); /* Drift based on depth */
     opacity: calc(var(--flake-opacity) * 0.8); /* Fade slightly */
   }
   100% {
-    transform: translateY(105vh) translateX(-10px); /* Fall below screen, drift back */
+    transform: translateY(105vh)
+      translateX(calc(var(--flake-depth) * -30px + 15px)); /* Fall below screen, drift back */
     opacity: 0; /* Fade out completely */
   }
 }
