@@ -163,7 +163,7 @@ export default function ClientProductPage({
                       alt={edge.node.altText || product.title}
                       width={1024}
                       height={1024}
-                      className="w-full h-full object-cover"
+                      className="w-full aspect-[2/3] object-cover" // Changed h-full to aspect-[2/3]
                     />
                   </button>
                 </CarouselItem>
@@ -285,6 +285,7 @@ export default function ClientProductPage({
                             variant={isSelected ? "default" : "outline"}
                             disabled={!isAvailable}
                             className={`relative flex items-center justify-center rounded-md px-4 py-2 cursor-pointer border-2 ${
+                              // Already has cursor-pointer
                               isSelected ? "border-primary" : "border-border"
                             } ${
                               !isAvailable
@@ -328,7 +329,7 @@ export default function ClientProductPage({
                     <Button
                       variant="outline"
                       size="icon"
-                      className="cursor-pointer rounded-md" // Added rounded-md
+                      className="cursor-pointer rounded-md" // Already has cursor-pointer
                       onClick={() =>
                         setQuantity((prev) => Math.max(prev - 1, 1))
                       }
@@ -348,7 +349,7 @@ export default function ClientProductPage({
                     <Button
                       variant="outline"
                       size="icon"
-                      className="cursor-pointer rounded-md" // Added rounded-md
+                      className="cursor-pointer rounded-md" // Already has cursor-pointer
                       onClick={() =>
                         setQuantity((prev) => Math.min(prev + 1, 10))
                       }
@@ -373,8 +374,7 @@ export default function ClientProductPage({
                       {" "}
                       {/* Use block for full width */}
                       <Button className="w-full rounded-md py-3 text-lg font-medium transition-all flex items-center justify-center gap-2 cursor-pointer">
-                        {" "}
-                        {/* Adjusted padding */}
+                        {/* Already has cursor-pointer */}
                         <ArrowRight className="w-5 h-5" />
                         <span>Go to Cart</span>
                       </Button>
@@ -387,8 +387,8 @@ export default function ClientProductPage({
                         selectedVariant.quantityAvailable < quantity ||
                         isAdding
                       }
-                      className="w-full rounded-md py-6 flex items-center justify-center gap-2 text-lg font-medium cursor-pointer" // Changed flex-grow to w-full
-                      glowVariant="vip-gold" // Add the glow effect here
+                      className="w-full rounded-md py-6 flex items-center justify-center gap-2 text-lg font-medium cursor-pointer" // Already has cursor-pointer
+                      // glowVariant="vip-gold" // Removed glow effect
                     >
                       {isAdding ? (
                         <Loader2 className="w-5 h-5 animate-spin" />

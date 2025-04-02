@@ -9,6 +9,7 @@ import {
   GET_COLLECTIONS_BY_MENU,
   GetCollectionsByMenuResponse,
 } from "@/lib/queries/menu"; // Import new query and type
+// Removed getActiveTheme import
 
 // Homepage Metadata
 export async function generateMetadata({
@@ -96,13 +97,20 @@ export default async function CountryHomePage({
 
   const country: Country | null =
     countries.find((c) => c.slug === countrySlug) || null;
-  const bannerData: Banner[] = banners[countrySlug] || [];
+
+  // Removed activeTheme logic
+  // const activeTheme = getActiveTheme(countrySlug);
+  // Always use default country banners now
+  const finalBanners: Banner[] = banners[countrySlug] || [];
+  // Removed theme banner override logic
 
   return (
     // Update props passed to client component
+    // Update props passed to client component
     <CountryPageClient
       country={country}
-      banners={bannerData}
+      banners={finalBanners} // Pass potentially themed banners
+      // themeClass prop removed, client gets it from context
       menCollectionsMenu={menCollectionsMenu}
       womenCollectionsMenu={womenCollectionsMenu}
       newArrivalsProducts={newArrivals}

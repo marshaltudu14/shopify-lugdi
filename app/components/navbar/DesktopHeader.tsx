@@ -67,8 +67,8 @@ export default function DesktopHeader({
               <Link href="/" className="flex items-center">
                 {/* Reverted to simple text logo, added class */}
                 {/* Removed logoDecorationClass from cn() */}
-                {/* Added gradient classes */}
-                <h1 className="logo-text relative bg-gradient-to-r from-[--gradient-start] to-[--gradient-end] text-transparent bg-clip-text">
+                {/* Removed gradient classes, applied text-foreground */}
+                <h1 className="logo-text relative text-foreground">
                   lugdi
                 </h1>{" "}
                 {/* Added relative for pseudo-elements */}

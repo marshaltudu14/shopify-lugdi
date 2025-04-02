@@ -15,6 +15,7 @@ import { getCookie, setCookie } from "@/utils/CookieUtils";
 import LugdiUtils from "@/utils/LugdiUtils";
 import { Skeleton } from "@/components/ui/skeleton";
 import MobileBottomNav from "./MobileBottomNav";
+// Removed getActiveTheme and themeConfig imports
 
 // Removed HeaderProps interface
 
@@ -81,6 +82,9 @@ export default function Header(/* Removed props */) {
       url: item.url.replace(domain, ""),
     })) || [];
 
+  // Removed activeTheme logic
+  // const activeTheme = getActiveTheme(selectedCountrySlug, themeConfig);
+
   return (
     <>
       <div
@@ -89,15 +93,18 @@ export default function Header(/* Removed props */) {
           showHeader ? "translate-y-0" : "-translate-y-full"
         )}
       >
-        {/* Always show India Launch Offer Banner if country is India */}
+        {/* Show India Launch Offer Banner if country is India */}
         {selectedCountrySlug === "in" && (
           <div className="coupon-notice text-center text-xs sm:text-sm font-medium py-1.5 px-4 shadow-md">
-            {" "}
-            {/* Added class, removed gradient */} 🎉 Welcome Offer! Use code{" "}
-            <span className="font-bold tracking-wider">LUGDIINDIA100</span> for
-            ₹100 off your first order in India! 🎉
+            {/* Removed activeTheme logic, always show default offer for India */}
+            <>
+              🎉 Welcome Offer! Use code{" "}
+              <span className="font-bold tracking-wider">LUGDIINDIA100</span>{" "}
+              for ₹100 off your first order in India! 🎉
+            </>
           </div>
-        )}
+        )}{" "}
+        {/* Moved closing parenthesis here */}
         <Suspense fallback={<Skeleton className="h-16 w-full" />}>
           <DesktopHeader
             menuItems={menuItems}

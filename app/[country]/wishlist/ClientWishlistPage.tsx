@@ -6,10 +6,10 @@ import { useQuery } from "@apollo/client";
 import { GET_WISHLIST_ITEMS_DETAILS } from "@/lib/queries/wishlist";
 import { ProductVariant } from "@/lib/types/product"; // Assuming ProductVariant type is suitable
 import { Loader2, Trash2, HeartCrack } from "lucide-react";
-import Image from "next/image";
+// Removed unused Image import
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { getCurrencySymbol } from "@/lib/countries";
+// Removed unused getCurrencySymbol import
 // Removed unused 'cn' import
 import {
   Tooltip,
@@ -18,6 +18,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { AnimatedSection } from "@/app/components/FramerMotion"; // Removed unused 'itemVariants'
+import ProductCard from "@/app/components/ProductCard"; // Import ProductCard
+import { CollectionProductNode } from "@/lib/types/collection"; // Import CollectionProductNode type
 
 interface ClientWishlistPageProps {
   countryCode: string; // Receive country code for the query context
@@ -55,7 +57,7 @@ export default function ClientWishlistPage({
     return (
       <AnimatedSection
         delay={0.1}
-        className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4"
+        className="flex flex-col items-center justify-center min-h-screen text-center px-4"
       >
         <HeartCrack
           className="w-16 h-16 text-muted-foreground mb-4"
@@ -74,7 +76,7 @@ export default function ClientWishlistPage({
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="w-12 h-12 animate-spin text-primary" />
       </div>
     );
@@ -82,7 +84,7 @@ export default function ClientWishlistPage({
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh] text-center text-red-600 px-4">
+      <div className="flex items-center justify-center min-h-screen text-center text-red-600 px-4">
         <p>Error loading wishlist items: {error.message}</p>
       </div>
     );
@@ -93,7 +95,7 @@ export default function ClientWishlistPage({
     return (
       <AnimatedSection
         delay={0.1}
-        className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4"
+        className="flex flex-col items-center justify-center min-h-screen text-center px-4"
       >
         <HeartCrack
           className="w-16 h-16 text-muted-foreground mb-4"
@@ -113,71 +115,66 @@ export default function ClientWishlistPage({
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8 text-center">My Wishlist</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {wishlistItems.map((item) => {
-          const currencySymbol = getCurrencySymbol(item.price.currencyCode);
-          const imageUrl = item.image?.url || item.product.featuredImage?.url; // Fallback to product image
-          const altText =
-            item.image?.altText ||
-            item.product.featuredImage?.altText ||
-            item.product.title;
+          // Removed unused variables: currencySymbol, imageUrl, altText
+
+          // Adapt ProductVariant data to CollectionProductNode structure for ProductCard
+          const productForCard: CollectionProductNode = {
+            // Removed __typename as it's not in the interface
+            id: item.product.id, // Use product ID
+            title: item.product.title,
+            handle: item.product.handle,
+            featuredImage: item.image || item.product.featuredImage || null, // Prioritize variant image, fallback to null
+            priceRange: {
+              minVariantPrice: item.price,
+            },
+            compareAtPriceRange: {
+              minVariantPrice: item.compareAtPrice || {
+                amount: "0",
+                currencyCode: item.price.currencyCode,
+              }, // Provide default if null
+            },
+            availableForSale: item.availableForSale,
+            totalInventory: item.quantityAvailable, // Map quantityAvailable
+            variants: {
+              // Provide minimal variant info needed by ProductCard's WishlistButton
+              edges: [{ node: { id: item.id } }],
+            },
+            // Add other fields if ProductCard requires them, potentially with default values
+            // e.g., descriptionHtml: item.product.descriptionHtml || "",
+            // options: item.product.options || [],
+            // seo: item.product.seo || { title: "", description: "" },
+            // tags: item.product.tags || [],
+            // updatedAt: item.product.updatedAt || "",
+          };
 
           return (
             <AnimatedSection
               key={item.id}
-              className="border rounded-lg p-4 flex flex-col justify-between relative group"
+              className="relative group" // Removed border, padding, flex, min-h-screen
             >
-              <Link
-                href={`/products/${item.product.handle}?variant=${item.id}`}
-                className="block mb-4"
-              >
-                <div className="aspect-square overflow-hidden rounded-md mb-4 relative bg-muted">
-                  {imageUrl ? (
-                    <Image
-                      src={imageUrl}
-                      alt={altText}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                      No Image
-                    </div>
-                  )}
-                </div>
-                <h3 className="font-semibold text-lg truncate">
-                  {item.product.title}
-                </h3>
-                <p className="text-sm text-muted-foreground truncate">
-                  {item.title}
-                </p>
-                <div className="flex items-baseline gap-2 mt-2">
-                  <span className="font-medium text-primary">
-                    {currencySymbol}
-                    {Number(item.price.amount).toFixed(2)}
-                  </span>
-                  {item.compareAtPrice?.amount &&
-                    Number(item.compareAtPrice.amount) >
-                      Number(item.price.amount) && (
-                      <span className="text-sm line-through text-muted-foreground">
-                        {currencySymbol}
-                        {Number(item.compareAtPrice.amount).toFixed(2)}
-                      </span>
-                    )}
-                </div>
-              </Link>
-              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              {/* Render ProductCard */}
+              <ProductCard product={productForCard} />
+
+              {/* Keep the Remove Button, positioned absolutely */}
+              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                {" "}
+                {/* Added z-10 */}
                 <TooltipProvider delayDuration={100}>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
                         variant="destructive"
                         size="icon"
-                        className="rounded-full h-8 w-8"
-                        onClick={() => removeFromWishlist(item.id)}
+                        className="rounded-full h-8 w-8 cursor-pointer" // Added cursor-pointer
+                        onClick={(e) => {
+                          e.preventDefault(); // Prevent link navigation if card is wrapped in Link
+                          e.stopPropagation();
+                          removeFromWishlist(item.id);
+                        }}
                         aria-label="Remove from wishlist"
                       >
                         <Trash2 className="h-4 w-4" />

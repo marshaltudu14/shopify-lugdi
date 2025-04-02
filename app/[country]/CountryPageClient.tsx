@@ -11,9 +11,11 @@ import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { GetCollectionsByMenuResponse } from "@/lib/queries/menu"; // Import the new type
 import { MenuItemWithCollection } from "@/lib/types/menu"; // Import the menu item type
-import { useRef } from "react";
+import { useRef } from "react"; // Removed unused useContext import
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { ProductsData } from "@/lib/types/products";
+import { cn } from "@/lib/utils"; // Import cn utility
+// Removed ThemeContext import
 
 interface CountryPageClientProps {
   country: Country | null;
@@ -22,6 +24,7 @@ interface CountryPageClientProps {
   menCollectionsMenu: GetCollectionsByMenuResponse | null;
   womenCollectionsMenu: GetCollectionsByMenuResponse | null;
   newArrivalsProducts: ProductsData | null;
+  // themeClass prop is no longer needed here, will get from context
 }
 
 const CountryPageClient: React.FC<CountryPageClientProps> = ({
@@ -31,7 +34,10 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
   menCollectionsMenu,
   womenCollectionsMenu,
   newArrivalsProducts,
+  // themeClass removed from props
 }) => {
+  // Removed theme context usage
+  // const { currentThemeClass } = useContext(ThemeContext);
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -71,8 +77,12 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
   // We might need to adjust the featured sections later if they should also use menu data.
 
   return (
+    // Removed themeClass application from main container
     <div
-      className="min-h-screen bg-background overflow-hidden"
+      className={cn(
+        "min-h-screen overflow-hidden bg-background" // Added bg-background
+        // currentThemeClass // Removed theme class application
+      )}
       ref={containerRef}
     >
       {/* Parallax Banner Carousel */}
@@ -129,7 +139,7 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
 
       {/* Featured Products - For Him (Keep existing logic for now) */}
       {/* This section uses data from GET_COLLECTION_PRODUCTS, not the menu */}
-      <section className="py-16 bg-background relative z-10">
+      <section className="py-16 relative z-10">
         {newArrivals.length > 0 && ( // Placeholder condition, adjust if needed
           <div className="container mx-auto px-4 space-y-8">
             <div className="relative">
@@ -221,7 +231,8 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
                 className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4"
               >
                 <div>
-                  <span className="text-sm font-medium text-pink-600 bg-pink-600/10 px-3 py-1 rounded-full">
+                  {/* Changed pink to primary theme color */}
+                  <span className="text-sm font-medium text-primary bg-primary/10 px-3 py-1 rounded-full">
                     Featured Collection
                   </span>
                   <h2 className="text-3xl font-bold tracking-tight mt-2">

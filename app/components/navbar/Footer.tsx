@@ -78,8 +78,8 @@ const Footer = () => {
         {/* Removed logoDecorationClass from cn() */}
         <div className="mb-8">
           {/* Reverted to simple text logo, added class */}
-          {/* Added gradient classes */}
-          <h1 className="logo-text relative text-4xl text-center md:text-5xl bg-gradient-to-r from-[--gradient-start] to-[--gradient-end] text-transparent bg-clip-text">
+          {/* Removed gradient classes, applied text-foreground */}
+          <h1 className="logo-text relative text-4xl text-center md:text-5xl text-foreground">
             lugdi
           </h1>
         </div>

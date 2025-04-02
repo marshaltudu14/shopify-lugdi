@@ -10,7 +10,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { countries } from "@/lib/countries";
 import { Metadata } from "next";
 import { WishlistProvider } from "@/lib/contexts/WishlistContext";
-import ThemeApplicator from "@/app/components/ThemeApplicator"; // Import ThemeApplicator
+// Removed ThemeApplicator import
 import { cn } from "@/lib/utils"; // Import cn utility
 // Removed getActiveTheme and animation component imports
 
@@ -125,16 +125,14 @@ export default async function RootLayout({
             enableSystem={true}
           >
             <WishlistProvider>
-              <ThemeApplicator>
-                {" "}
-                {/* Wrap content with ThemeApplicator */}
-                {/* Removed Header/Footer props */}
-                <Header />
-                {/* Added relative class for stacking context */}
-                <main className="relative">{children}</main>
-                <Toaster />
-                <Footer />
-              </ThemeApplicator>
+              {/* Removed ThemeApplicator wrapper */}
+              {/* Removed Header/Footer props */}
+              <Header />
+              {/* Added relative class for stacking context */}
+              <main className="relative">{children}</main>
+              <Toaster />
+              <Footer />
+              {/* Removed ThemeApplicator wrapper */}
             </WishlistProvider>{" "}
           </ThemeProvider>
         </ApolloWrapper>

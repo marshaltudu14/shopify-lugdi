@@ -249,7 +249,7 @@ export default function ClientCartPage() {
               className="w-full mt-3 font-medium cursor-pointer"
               onClick={handleCheckout}
               disabled={isSubmitting || hasOutOfStockItems}
-              glowVariant="vip-gold" // Add glow to mobile checkout button
+              // glowVariant="vip-gold" // Removed glow from mobile checkout button
             >
               {isSubmitting ? (
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -526,7 +526,7 @@ export default function ClientCartPage() {
                                   item.quantity <= 1 ||
                                   isOutOfStock
                                 }
-                                className="w-8 h-8 flex items-center justify-center cursor-pointer text-foreground bg-secondary dark:bg-secondary/50 rounded-l-md hover:bg-secondary/80 dark:hover:bg-secondary/70 disabled:opacity-50 border border-border" // Use themed colors
+                                className="w-8 h-8 flex items-center justify-center cursor-pointer text-foreground bg-secondary dark:bg-secondary/50 rounded-l-md hover:bg-secondary/80 dark:hover:bg-secondary/70 disabled:opacity-50 border border-border" // Already has cursor-pointer
                               >
                                 -
                               </Button>
@@ -554,7 +554,7 @@ export default function ClientCartPage() {
                                       LugdiUtils.maxProductQuantityUserCanAdd // Max limit of 10
                                     )
                                 }
-                                className="w-8 h-8 flex items-center justify-center cursor-pointer text-foreground bg-secondary dark:bg-secondary/50 rounded-r-md hover:bg-secondary/80 dark:hover:bg-secondary/70 disabled:opacity-50 border border-border" // Use themed colors
+                                className="w-8 h-8 flex items-center justify-center cursor-pointer text-foreground bg-secondary dark:bg-secondary/50 rounded-r-md hover:bg-secondary/80 dark:hover:bg-secondary/70 disabled:opacity-50 border border-border" // Already has cursor-pointer
                               >
                                 +
                               </Button>
@@ -569,7 +569,7 @@ export default function ClientCartPage() {
                               onClick={() =>
                                 item.lineId && handleRemoveItem(item.lineId)
                               }
-                              className="cursor-pointer text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-500 flex items-center"
+                              className="cursor-pointer text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-500 flex items-center" // Already has cursor-pointer
                               disabled={
                                 item.lineId
                                   ? loadingItems.includes(item.lineId)
@@ -679,7 +679,7 @@ export default function ClientCartPage() {
                   <Button
                     onClick={applyDiscountCode}
                     disabled={isApplyingDiscount || !discountCodeInput.trim()}
-                    className="shrink-0 cursor-pointer"
+                    className="shrink-0 cursor-pointer" // Already has cursor-pointer
                   >
                     {isApplyingDiscount ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -755,7 +755,7 @@ export default function ClientCartPage() {
                 className="cursor-pointer w-full h-12 text-lg font-medium transition-all duration-300 relative overflow-hidden group"
                 onClick={handleCheckout}
                 disabled={isSubmitting || hasOutOfStockItems}
-                glowVariant="vip-gold" // Add glow to desktop checkout button
+                // glowVariant="vip-gold" // Removed glow from desktop checkout button
               >
                 {isSubmitting ? (
                   <Loader2 className="w-5 h-5 animate-spin mr-2" />

@@ -8,7 +8,7 @@ import { GlowingEffect } from "@/components/ui/glowing-effect";
 
 import { cn } from "@/lib/utils";
 import { getCurrencySymbol } from "@/lib/countries";
-import { useTheme } from "next-themes";
+// Removed useTheme import
 import { Sparkles, AlertCircle } from "lucide-react"; // Removed Heart import
 import { CollectionProductNode } from "@/lib/types/collection";
 import WishlistButton from "./WishlistButton"; // Added import
@@ -56,8 +56,7 @@ const discountBadgeVariants = {
 };
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === "dark";
+  // Removed unused useTheme hook and isDark variable
 
   const imageUrl = product?.featuredImage?.url;
   const altText =
@@ -93,29 +92,28 @@ export default function ProductCard({ product }: ProductCardProps) {
   const getStockIndicator = () => {
     if (isOutOfStock) return null;
 
+    // Use theme variables for styling
     if (isCriticalStock) {
       return {
         message: `Last ${quantityAvailable} remaining`,
-        icon: <AlertCircle className="w-4 h-4 mr-1" />,
-        bgClass: isDark
-          ? "bg-gradient-to-r from-rose-900/60 via-rose-800/60 to-rose-900/60"
-          : "bg-gradient-to-r from-rose-50 via-rose-100 to-rose-50",
-        textClass: isDark ? "text-rose-100" : "text-rose-800",
-        borderClass: isDark ? "border-rose-700" : "border-rose-200",
-        pulseClass: isDark ? "bg-rose-700" : "bg-rose-500",
+        icon: (
+          <AlertCircle className="w-4 h-4 mr-1 text-destructive-foreground" />
+        ), // Use destructive foreground for icon
+        bgClass: "bg-destructive/80", // Use destructive background with opacity
+        textClass: "text-destructive-foreground", // Use destructive foreground text
+        borderClass: "border-destructive", // Use destructive border
+        pulseClass: "bg-destructive", // Use destructive for pulse
       };
     }
 
     if (isLowStock) {
       return {
         message: `Limited stock • ${quantityAvailable} left`,
-        icon: <Sparkles className="w-3.5 h-3.5 mr-1" />,
-        bgClass: isDark
-          ? "bg-gradient-to-r from-amber-900/60 via-amber-800/60 to-amber-900/60"
-          : "bg-gradient-to-r from-amber-50 via-amber-100 to-amber-50",
-        textClass: isDark ? "text-amber-100" : "text-amber-800",
-        borderClass: isDark ? "border-amber-700" : "border-amber-200",
-        pulseClass: isDark ? "bg-amber-600" : "bg-amber-500",
+        icon: <Sparkles className="w-3.5 h-3.5 mr-1 text-accent-foreground" />, // Use accent foreground for icon
+        bgClass: "bg-accent/80", // Use accent background with opacity
+        textClass: "text-accent-foreground", // Use accent foreground text
+        borderClass: "border-accent", // Use accent border
+        pulseClass: "bg-accent", // Use accent for pulse
       };
     }
 
@@ -146,7 +144,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             disabled={false}
             proximity={64}
             inactiveZone={0.01}
-            variant="vip-gold"
+            // variant="vip-gold" // Removed gold variant
           />
           <div className="relative w-full overflow-hidden rounded-xl border">
             <motion.div className="relative w-full overflow-hidden rounded-t-xl">
@@ -158,7 +156,8 @@ export default function ProductCard({ product }: ProductCardProps) {
                       width={500}
                       height={500}
                       alt={altText}
-                      className={`w-full h-[250px] md:h-[300px] lg:h-[350px] object-cover transition-transform duration-300 ease-in-out group-hover:scale-105 ${
+                      className={`w-full aspect-[2/3] object-cover transition-transform duration-300 ease-in-out group-hover:scale-105 ${
+                        // Changed height classes to aspect-[2/3]
                         isOutOfStock &&
                         "filter grayscale opacity-70 transition-all duration-500"
                       }`}
@@ -166,17 +165,18 @@ export default function ProductCard({ product }: ProductCardProps) {
                   </motion.div>
                 </div>
               ) : (
-                <Skeleton className="w-full h-[250px] md:h-[300px] lg:h-[350px] rounded-t-xl" />
+                <Skeleton className="w-full aspect-[2/3] rounded-t-xl" /> // Changed height classes to aspect-[2/3]
               )}
 
               {/* Wishlist Button Removed From Here */}
 
               {isOutOfStock && (
                 <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-black/70 to-black/40">
+                  {/* Use theme variables for background and text */}
                   <div
                     className={cn(
                       "px-6 py-2 backdrop-blur-sm rounded-full",
-                      "dark:bg-gray-900/80 dark:text-gray-100 bg-white/80 text-gray-900"
+                      "bg-background/80 text-foreground" // Use theme variables
                     )}
                   >
                     <span className="font-medium tracking-wide uppercase text-sm">
@@ -235,14 +235,15 @@ export default function ProductCard({ product }: ProductCardProps) {
                     whileHover="hover"
                     className={cn(
                       "absolute top-4 right-4 px-3 py-1.5 rounded-lg font-bold text-sm shadow-lg",
-                      "bg-gradient-to-br from-yellow-500 via-red-500 to-yellow-500",
-                      "text-white border border-white/20",
-                      "transform-gpu backdrop-blur-sm"
+                      "bg-destructive", // Use destructive background
+                      "text-destructive-foreground border border-destructive-foreground/20", // Use destructive foreground text
+                      "transform-gpu" // Removed backdrop-blur as it might not be needed with solid color
                     )}
-                    style={{
+                    // Removed gradient animation style
+                    /* style={{
                       backgroundSize: "200% 200%",
                       animation: "gradientShift 4s ease infinite",
-                    }}
+                    }} */
                   >
                     <div className="flex flex-col items-center justify-center">
                       <span className="text-xs font-medium">SAVE</span>

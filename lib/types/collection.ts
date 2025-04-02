@@ -11,7 +11,7 @@ export interface CollectionProductNode {
   compareAtPriceRange: {
     minVariantPrice: Price;
   };
-  featuredImage: ImageNode;
+  featuredImage?: ImageNode | null; // Made optional/nullable
   totalInventory: number;
   // Added variants field to hold the first variant's ID
   variants: {

@@ -84,8 +84,8 @@ export default function MobileHeader({
                       <Link href="/" className="flex items-center">
                         {/* Removed logoDecorationClass from cn() */}
                         {/* Reverted to simple text logo, added class */}
-                        {/* Added gradient classes */}
-                        <h1 className="logo-text relative bg-gradient-to-r from-[--gradient-start] to-[--gradient-end] text-transparent bg-clip-text">
+                        {/* Removed gradient classes, applied text-foreground */}
+                        <h1 className="logo-text relative text-foreground">
                           lugdi
                         </h1>{" "}
                         {/* Added relative */}
@@ -181,10 +181,8 @@ export default function MobileHeader({
             <Link href="/" className="flex items-center">
               {/* Removed logoDecorationClass from cn() */}
               {/* Reverted to simple text logo, added class */}
-              {/* Added gradient classes */}
-              <h1 className="logo-text relative bg-gradient-to-r from-[--gradient-start] to-[--gradient-end] text-transparent bg-clip-text">
-                lugdi
-              </h1>{" "}
+              {/* Removed gradient classes, applied text-foreground */}
+              <h1 className="logo-text relative text-foreground">lugdi</h1>{" "}
               {/* Added relative */}
               <span className="ml-1 text-xs font-light uppercase tracking-widest text-neutral-500">
                 {getCookie(LugdiUtils.location_name_country_cookie)}
