@@ -2,8 +2,11 @@ import { banners, countries, Country, Banner } from "@/lib/countries";
 import React from "react";
 import CountryPageClient from "./CountryPageClient";
 import { initializeApollo } from "@/lib/apollo/apollo-client";
-import { ProductsData } from "@/lib/types/products";
-import { GET_PRODUCTS } from "@/lib/queries/products";
+// Remove ProductsData and GET_PRODUCTS imports if no longer needed elsewhere after verification
+// import { ProductsData } from "@/lib/types/products";
+// import { GET_PRODUCTS } from "@/lib/queries/products";
+import { GET_COLLECTION_PRODUCTS } from "@/lib/queries/collection"; // Import collection products query
+import { CollectionData, CollectionProductNode } from "@/lib/types/collection"; // Use correct type CollectionData and Node
 import { Metadata } from "next";
 import {
   GET_COLLECTIONS_BY_MENU,
@@ -28,13 +31,15 @@ export async function generateMetadata({
   const description = `Explore Lugdi in ${countryName}. Discover unique graphic t-shirts, modern streetwear, and fashion accessories inspired by culture and art. Shop the latest arrivals.`;
 
   return {
-    title: title,
+    title: {
+      absolute: title // Use absolute to explicitly ignore layout template
+    },
     description: description,
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
-      title: title,
+      title: title, // OG title can remain the simple string
       description: description,
       url: canonicalUrl,
     },
@@ -50,12 +55,12 @@ export default async function CountryHomePage({
 
   const isoCountryCode = countrySlug ? countrySlug.toUpperCase() : "IN";
 
-  // Update variable declarations for menu data
+  // Update variable declarations for menu data and product data
   let menCollectionsMenu: GetCollectionsByMenuResponse | null = null;
   let womenCollectionsMenu: GetCollectionsByMenuResponse | null = null;
-  let newArrivals: ProductsData | null = null;
-  let mensCollectionProducts: ProductsData | null = null; // Add state for men's products
-  let womensCollectionProducts: ProductsData | null = null; // Add state for women's products
+  let newArrivalsProducts: CollectionProductNode[] = []; // Use correct type
+  let mensProducts: CollectionProductNode[] = []; // Use correct type
+  let womensProducts: CollectionProductNode[] = []; // Use correct type
 
   try {
     const client = initializeApollo();
@@ -74,57 +79,59 @@ export default async function CountryHomePage({
         variables: { handle: "women-collections" },
       });
 
-    // Fetch new arrivals (unchanged)
-    const { data: newArrivalsData } = await client.query<ProductsData>({
-      query: GET_PRODUCTS,
-      variables: {
-        first: 12,
-        sortKey: "CREATED_AT",
-        reverse: true,
-        country: isoCountryCode,
-      },
-      // fetchPolicy: "network-only", // Remove fetch policy from New Arrivals
-    });
+      // Fetch New Arrivals using GET_COLLECTION_PRODUCTS
+      const { data: newArrivalsCollectionData } = await client.query<CollectionData>({
+        query: GET_COLLECTION_PRODUCTS,
+        variables: {
+          handle: "new-arrivals", // Use the new-arrivals handle
+          first: 12,
+          sortKey: "CREATED", // Use valid sort key for New Arrivals
+          reverse: true, // Keep reverse true for newest first
+          country: isoCountryCode,
+        },
+        fetchPolicy: "network-only", // Consider if needed
+      });
 
-    // Fetch Men's Collection Products
-    const { data: mensProductsData } = await client.query<ProductsData>({
-      query: GET_PRODUCTS,
-      variables: {
-        first: 8, // Fetch 8 products for the section
-        query: "collection_handle:mens-collection", // Filter by handle
-        sortKey: "CREATED_AT",
-        reverse: true,
-        country: isoCountryCode,
-      },
-      fetchPolicy: "network-only", // Add fetch policy
-    });
+      // Fetch Men's Collection Products using GET_COLLECTION_PRODUCTS
+      const { data: mensCollectionData } = await client.query<CollectionData>({ // Use correct type CollectionData
+        query: GET_COLLECTION_PRODUCTS, // Use the correct query
+        variables: {
+          handle: "mens-collection", // Pass handle
+          first: 12, // Fetch 12 products
+          sortKey: "BEST_SELLING", // Use BEST_SELLING for Men's
+          reverse: false, // Best selling usually doesn't need reverse
+          country: isoCountryCode,
+        },
+        fetchPolicy: "network-only",
+      }); // Add missing closing parenthesis
 
-    // Fetch Women's Collection Products
-    const { data: womensProductsData } = await client.query<ProductsData>({
-      query: GET_PRODUCTS,
-      variables: {
-        first: 8, // Fetch 8 products for the section
-        query: "collection_handle:womens-collection", // Filter by handle
-        sortKey: "CREATED_AT",
-        reverse: true,
-        country: isoCountryCode,
-      },
-      fetchPolicy: "network-only", // Add fetch policy to Women's Collection
-    });
+      // Fetch Women's Collection Products using GET_COLLECTION_PRODUCTS
+      const { data: womensCollectionData } = await client.query<CollectionData>({ // Use correct type CollectionData
+        query: GET_COLLECTION_PRODUCTS, // Use the correct query
+        variables: {
+          handle: "womens-collection", // Pass handle
+          first: 12, // Fetch 12 products
+          sortKey: "BEST_SELLING", // Use BEST_SELLING for Women's
+          reverse: false, // Best selling usually doesn't need reverse
+          country: isoCountryCode,
+        },
+        fetchPolicy: "network-only",
+      });
 
-    // Assign fetched menu data
-    menCollectionsMenu = menMenuData;
-    womenCollectionsMenu = womenMenuData;
-    newArrivals = newArrivalsData;
-    mensCollectionProducts = mensProductsData; // Assign men's products
-    womensCollectionProducts = womensProductsData; // Assign women's products
-  } catch (error) {
-    // Update catch block assignments
-    menCollectionsMenu = null;
+      // Assign fetched menu data and extracted product data
+      menCollectionsMenu = menMenuData;
+      womenCollectionsMenu = womenMenuData;
+      // Extract product nodes directly for all three sections
+      newArrivalsProducts = newArrivalsCollectionData?.collection?.products?.edges?.map(edge => edge.node) || [];
+      mensProducts = mensCollectionData?.collection?.products?.edges?.map(edge => edge.node) || [];
+      womensProducts = womensCollectionData?.collection?.products?.edges?.map(edge => edge.node) || [];
+    } catch (error) {
+      // Update catch block assignments
+      menCollectionsMenu = null;
     womenCollectionsMenu = null;
-    newArrivals = null;
-    mensCollectionProducts = null; // Nullify on error
-    womensCollectionProducts = null; // Nullify on error
+    newArrivalsProducts = []; // Nullify on error
+    mensProducts = []; // Nullify on error
+    womensProducts = []; // Nullify on error
     console.error("Error fetching homepage data:", error); // Updated error message
   }
 
@@ -146,9 +153,9 @@ export default async function CountryHomePage({
       // themeClass prop removed, client gets it from context
       menCollectionsMenu={menCollectionsMenu}
       womenCollectionsMenu={womenCollectionsMenu}
-      newArrivalsProducts={newArrivals}
-      mensCollectionProducts={mensCollectionProducts} // Pass men's products
-      womensCollectionProducts={womensCollectionProducts} // Pass women's products
+      newArrivalsProducts={newArrivalsProducts} // Pass array of nodes
+      mensProducts={mensProducts} // Pass array of nodes
+      womensProducts={womensProducts} // Pass array of nodes
     />
   );
 }

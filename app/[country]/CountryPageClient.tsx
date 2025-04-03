@@ -13,7 +13,8 @@ import { GetCollectionsByMenuResponse } from "@/lib/queries/menu"; // Import the
 import { MenuItemWithCollection } from "@/lib/types/menu"; // Import the menu item type
 import { useRef } from "react"; // Removed unused useContext import
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { ProductsData } from "@/lib/types/products";
+// import { ProductsData } from "@/lib/types/products"; // Removed unused import
+import { CollectionProductNode } from "@/lib/types/collection"; // Import CollectionProductNode
 import { cn } from "@/lib/utils"; // Import cn utility
 // Removed ThemeContext import
 
@@ -23,9 +24,9 @@ interface CountryPageClientProps {
   // Update props to use menu data
   menCollectionsMenu: GetCollectionsByMenuResponse | null;
   womenCollectionsMenu: GetCollectionsByMenuResponse | null;
-  newArrivalsProducts: ProductsData | null;
-  mensCollectionProducts: ProductsData | null; // Add prop for men's collection products
-  womensCollectionProducts: ProductsData | null; // Add prop for women's collection products
+  newArrivalsProducts: CollectionProductNode[]; // Change type to match passed data
+  mensProducts: CollectionProductNode[]; // Change prop name and type
+  womensProducts: CollectionProductNode[]; // Change prop name and type
   // themeClass prop is no longer needed here, will get from context
 }
 
@@ -36,8 +37,8 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
   menCollectionsMenu,
   womenCollectionsMenu,
   newArrivalsProducts,
-  mensCollectionProducts, // Destructure new prop
-  womensCollectionProducts, // Destructure new prop
+  mensProducts, // Destructure new prop name
+  womensProducts, // Destructure new prop name
   // themeClass removed from props
 }) => {
   // Removed theme context usage
@@ -71,15 +72,16 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
         item.resource?.__typename === "Collection" && !!item.resource.handle
     ) || [];
 
-  // Keep new arrivals logic
-  const newArrivals =
-    newArrivalsProducts?.products?.edges?.map((edge) => edge.node) || [];
+  // New arrivals products are now passed directly as CollectionProductNode[]
+  // const newArrivals = ... // No longer needed, use prop directly
 
-  // Extract products from the new props
-  const mensProducts =
-    mensCollectionProducts?.products?.edges?.map((edge) => edge.node) || [];
-  const womensProducts =
-    womensCollectionProducts?.products?.edges?.map((edge) => edge.node) || [];
+  // Products are now directly passed as arrays of nodes
+  // const mensProducts = ... // No longer needed, use prop directly
+  // const womensProducts = ... // No longer needed, use prop directly
+
+  // --- Remove Logging Here ---
+  // console.log("Mens Products Data:", mensProducts);
+  // console.log("Womens Products Data:", womensProducts);
 
   // Note: The featured product sections ("Curated For Him", "Designed For Her")
   // are currently using different data sources (GET_COLLECTION_PRODUCTS).
@@ -121,7 +123,8 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
 
           <ScrollArea className="w-full whitespace-nowrap">
             <div className="flex w-max space-x-6 pb-4">
-              {newArrivals.map((product, index) => (
+              {/* Map directly over newArrivalsProducts prop */}
+              {newArrivalsProducts.map((product, index) => (
                 <motion.div
                   key={`new-${product.id}`}
                   initial={{ opacity: 0, x: 50 }}
@@ -279,7 +282,7 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
             <ScrollArea className="w-full whitespace-nowrap">
               <div className="flex w-max space-x-6 pb-4">
                 {/* Map over womensProducts */}
-                {womensProducts.map((product, index) => (
+                {/* Removed hardcoded URL */}                {womensProducts.map((product, index) => (
                   <motion.div
                     key={`women-feat-${product.id}`}
                     initial={{ opacity: 0, x: 50 }}
