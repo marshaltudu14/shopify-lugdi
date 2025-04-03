@@ -19,7 +19,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 # Build the Next.js application
 RUN npm run build
 
-# Stage 2: Production image using standalone output
+# Stage 2: Production image using standard output
 FROM node:22-alpine AS runner
 WORKDIR /app
 
@@ -33,9 +33,12 @@ ENV PORT 8080
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
+# Copy package files and install production dependencies
+COPY --from=builder /app/package.json /app/package-lock.json* ./
+RUN npm install --production --legacy-peer-deps
+
 # Copy necessary files from the builder stage
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
 # Change ownership of the app directory
@@ -45,4 +48,4 @@ USER nextjs
 EXPOSE 8080
 
 # Command to run the application
-CMD ["node", "server.js"]
+CMD ["npx", "next", "start"]
