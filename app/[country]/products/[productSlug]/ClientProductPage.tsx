@@ -161,9 +161,9 @@ export default function ClientProductPage({
                     <Image
                       src={edge.node.url}
                       alt={edge.node.altText || product.title}
-                      width={1024}
-                      height={1024}
-                      className="w-full aspect-[2/3] object-cover" // Changed h-full to aspect-[2/3]
+                      fill={true} // Use fill instead of width/height
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Example sizes, adjust as needed
+                      className="object-cover" // Keep object-cover, remove w-full and aspect ratio here
                     />
                   </button>
                 </CarouselItem>

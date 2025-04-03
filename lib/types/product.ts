@@ -101,11 +101,18 @@ export interface ProductRecommendation {
   featuredImage: ImageNode;
   compareAtPriceRange: PriceRange;
   priceRange: PriceRange;
-  // Added variants field to hold the first variant's ID
+  options: {
+    id: string;
+    name: string;
+    values: string[];
+  }[];
+  // Updated variants field for filtering
   variants: {
     edges: {
       node: {
         id: string;
+        availableForSale: boolean;
+        selectedOptions: SelectedOption[];
       };
     }[];
   };

@@ -13,11 +13,23 @@ export interface CollectionProductNode {
   };
   featuredImage?: ImageNode | null; // Made optional/nullable
   totalInventory: number;
-  // Added variants field to hold the first variant's ID
+  options: {
+    // Added options field
+    id: string;
+    name: string;
+    values: string[];
+  }[];
+  // Updated variants field for filtering
   variants: {
     edges: {
       node: {
         id: string;
+        availableForSale: boolean; // Added availableForSale
+        selectedOptions: {
+          // Added selectedOptions
+          name: string;
+          value: string;
+        }[];
       };
     }[];
   };

@@ -22,6 +22,11 @@ export const BasicProductFragment = gql`
     handle
     availableForSale
     totalInventory
+    options {
+      id
+      name
+      values
+    }
     featuredImage {
       ...ImageFragment
     }
@@ -35,11 +40,17 @@ export const BasicProductFragment = gql`
         ...MoneyFragment
       }
     }
-    # Fetch the ID of the first variant for wishlist functionality
-    variants(first: 1) {
+    # Fetch details for variants to enable filtering
+    variants(first: 10) {
+      # Fetch up to 10 variants for filtering options
       edges {
         node {
           id
+          availableForSale
+          selectedOptions {
+            name
+            value
+          }
         }
       }
     }
