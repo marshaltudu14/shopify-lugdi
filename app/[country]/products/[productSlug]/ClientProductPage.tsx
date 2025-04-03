@@ -6,10 +6,8 @@ import {
   itemVariants,
 } from "@/app/components/FramerMotion";
 import { Button } from "@/components/ui/button";
-import {
-  GetSingleProductRecommendationResponse,
-  GetSingleProductResponse,
-} from "@/lib/types/product";
+import { GetSingleProductResponse } from "@/lib/types/product";
+import { ProductsData } from "@/lib/types/products"; // Import ProductsData
 import Link from "next/link";
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
@@ -44,13 +42,13 @@ import { useWishlist } from "@/lib/contexts/WishlistContext"; // Keep wishlist h
 
 export default function ClientProductPage({
   productData,
-  recommendationsData,
+  relatedProductsData, // Changed prop name
 }: {
-  productData: GetSingleProductResponse;
-  recommendationsData: GetSingleProductRecommendationResponse;
+  productData: GetSingleProductResponse | null; // Allow null for safety
+  relatedProductsData: ProductsData | null; // Changed prop name and type
 }) {
   const product = productData?.product;
-  const recommendations = recommendationsData?.productRecommendations;
+  // Removed recommendations variable, use relatedProductsData directly
 
   const [quantity, setQuantity] = useState<number>(1);
   const [selectedOptions, setSelectedOptions] = useState<
@@ -62,7 +60,8 @@ export default function ClientProductPage({
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
   useEffect(() => {
-    if (product?.options?.length > 0) {
+    // Add check for product before accessing options
+    if (product && product.options?.length > 0) {
       const initialOptions = product.options.reduce(
         (acc, option) => ({
           ...acc,
@@ -74,7 +73,8 @@ export default function ClientProductPage({
     }
   }, [product]);
 
-  const selectedVariant = product?.variants?.edges?.find((edge) =>
+  // Add check for product before accessing variants
+  const selectedVariant = product && product.variants?.edges?.find((edge) =>
     edge.node.selectedOptions.every(
       (opt) => selectedOptions[opt.name] === opt.value
     )
@@ -149,7 +149,7 @@ export default function ClientProductPage({
           <Carousel images={product.images.edges.map((e) => e.node)}>
             <CarouselContent>
               {product.images.edges.map((edge, index) => (
-                <CarouselItem key={index}>
+                <CarouselItem key={index} className="aspect-[2/3]"> {/* Changed aspect ratio */}
                   <button
                     type="button"
                     className="relative w-full h-full rounded-lg overflow-hidden cursor-zoom-in block"
@@ -256,7 +256,8 @@ export default function ClientProductPage({
               </div>
             )}
             <Separator />
-            {product.options?.length > 0 && product.variants?.edges?.length > 1
+            {/* Add check for product before accessing options/variants */}
+            {product && product.options?.length > 0 && product.variants?.edges?.length > 1
               ? product.options.map((option) => (
                   <div key={option.id} className="space-y-2">
                     <label className="font-medium text-lg">{option.name}</label>
@@ -267,7 +268,8 @@ export default function ClientProductPage({
                         const hasSwatch =
                           !!value.swatch?.color ||
                           !!value.swatch?.image?.previewImage.url;
-                        const variantForOption = product.variants.edges.find(
+                        // Add check for product before accessing variants
+                        const variantForOption = product && product.variants.edges.find(
                           (edge) =>
                             edge.node.selectedOptions.some(
                               (opt) =>
@@ -434,7 +436,8 @@ export default function ClientProductPage({
                       </p>
                     </div>
                   )}
-                {product.descriptionHtml && (
+                {/* Add check for product before accessing descriptionHtml */}
+                {product && product.descriptionHtml && (
                   <div className="mt-8 pt-6 border-t">
                     {" "}
                     {/* Added top margin, padding, and border */}
@@ -455,7 +458,8 @@ export default function ClientProductPage({
           </div>
         </div>
       </div>
-      {recommendations?.length > 0 && (
+      {/* Conditionally render based on relatedProductsData (more robust check) */}
+      {relatedProductsData && relatedProductsData.products && relatedProductsData.products.edges && relatedProductsData.products.edges.length > 0 && (
         <div className="mt-16 pt-10 border-t">
           {" "}
           {/* Increased top margin, added padding and border */}
@@ -465,9 +469,11 @@ export default function ClientProductPage({
             You Might Also Like
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {recommendations.map((rec) => (
-              <div key={rec.id}>
-                <ProductCard product={rec} />
+            {/* Map over relatedProductsData, ensuring it's not null */}
+            {relatedProductsData?.products?.edges?.map((edge) => (
+              <div key={edge.node.id}>
+                {/* Pass edge.node which matches BasicProductFragment structure */}
+                <ProductCard product={edge.node} />
               </div>
             ))}
           </div>

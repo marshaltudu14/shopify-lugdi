@@ -68,6 +68,7 @@ export interface ProductByHandle {
   description: string;
   descriptionHtml: string;
   handle: string;
+  productType: string; // Added productType
   totalInventory: number;
   tags: string[];
   images: {

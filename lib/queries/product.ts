@@ -11,6 +11,7 @@ export const GET_SINGLE_PRODUCT = gql`
       description
       descriptionHtml
       handle
+      productType # Added productType
       totalInventory
       tags
       images(first: 20) {

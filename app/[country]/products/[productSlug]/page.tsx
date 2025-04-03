@@ -1,16 +1,12 @@
 import { initializeApollo } from "@/lib/apollo/apollo-client";
-import {
-  GET_SINGLE_PRODUCT,
-  GET_SINGLE_PRODUCT_RECOMMENDATION,
-} from "@/lib/queries/product";
+import { GET_SINGLE_PRODUCT } from "@/lib/queries/product";
+import { GET_PRODUCTS } from "@/lib/queries/products"; // Import GET_PRODUCTS
 import { Metadata } from "next";
 import { convertSlugToTitle } from "@/utils/SlugToTitle";
 import { notFound } from "next/navigation";
 import { countries } from "@/lib/countries";
-import {
-  GetSingleProductRecommendationResponse,
-  GetSingleProductResponse,
-} from "@/lib/types/product";
+import { GetSingleProductResponse } from "@/lib/types/product";
+import { ProductsData } from "@/lib/types/products"; // Use ProductsData instead
 import ClientProductPage from "./ClientProductPage";
 
 export async function generateMetadata({
@@ -94,8 +90,8 @@ export default async function ProductPage({
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lugdi.store";
 
-  let productData: GetSingleProductResponse | null;
-  let productRecommendation: GetSingleProductRecommendationResponse | null;
+  let productData: GetSingleProductResponse | null = null;
+  let relatedProductsData: ProductsData | null = null; // Use ProductsData type
 
   try {
     const client = initializeApollo();
@@ -108,20 +104,50 @@ export default async function ProductPage({
           country: isoCountryCode,
         },
       });
-
-    const { data: productRecommendationRes } =
-      await client.query<GetSingleProductRecommendationResponse>({
-        query: GET_SINGLE_PRODUCT_RECOMMENDATION,
-        variables: {
-          productHandle: productSlug,
-          country: isoCountryCode,
-        },
-      });
-
     productData = productDataRes;
-    productRecommendation = productRecommendationRes;
+
+    // Fetch related products by type if productType exists
+    const productType = productData?.product?.productType;
+    const currentProductHandle = productData?.product?.handle; // Use handle to exclude current product
+
+    if (productType && currentProductHandle) {
+      try {
+        const { data: relatedProductsRes } =
+          await client.query<ProductsData>({ // Use ProductsData type
+            query: GET_PRODUCTS,
+            variables: {
+              first: 13, // Fetch 13 initially to account for potential self-inclusion
+              query: `product_type:'${productType}'`, // Remove handle filter from query
+              sortKey: "RELEVANCE", // Sort by relevance
+              reverse: false,
+              country: isoCountryCode,
+            },
+          });
+
+        // Filter out the current product from the results manually
+        if (relatedProductsRes?.products?.edges && currentProductHandle) {
+          const filteredEdges = relatedProductsRes.products.edges.filter(
+            (edge) => edge.node.handle !== currentProductHandle
+          );
+          // Take the first 12 after filtering
+          relatedProductsData = {
+            ...relatedProductsRes,
+            products: {
+              ...relatedProductsRes.products,
+              edges: filteredEdges.slice(0, 12),
+            },
+          };
+        } else {
+          relatedProductsData = relatedProductsRes; // Assign original if filtering wasn't possible
+        }
+      } catch (relatedError) {
+        console.error("Error fetching related products:", relatedError);
+        // Continue without related products if this fetch fails
+        relatedProductsData = null;
+      }
+    }
   } catch (error) {
-    console.error("Error fetching product data:", error);
+    console.error("Error fetching main product data:", error);
     return notFound();
   }
 
@@ -187,16 +213,17 @@ export default async function ProductPage({
         name: `Lugdi ${countryName || "Global"}`,
       },
     },
+    // Update JSON-LD based on relatedProductsData
     isRelatedTo:
-      productRecommendation?.productRecommendations?.map((rec) => ({
+      relatedProductsData?.products?.edges?.map((edge) => ({
         "@type": "Product",
-        name: rec.title,
-        url: `${siteUrl}/${countrySlugParam}/products/${rec.handle}`,
-        image: rec.featuredImage?.url,
+        name: edge.node.title,
+        url: `${siteUrl}/${countrySlugParam}/products/${edge.node.handle}`,
+        image: edge.node.featuredImage?.url,
         offers: {
           "@type": "Offer",
-          price: Number(rec.priceRange.minVariantPrice.amount),
-          priceCurrency: rec.priceRange.minVariantPrice.currencyCode,
+          price: Number(edge.node.priceRange.minVariantPrice.amount),
+          priceCurrency: edge.node.priceRange.minVariantPrice.currencyCode,
         },
       })) || [],
   };
@@ -209,7 +236,7 @@ export default async function ProductPage({
       />
       <ClientProductPage
         productData={productData}
-        recommendationsData={productRecommendation}
+        relatedProductsData={relatedProductsData} // Pass relatedProductsData instead
       />
     </>
   );
