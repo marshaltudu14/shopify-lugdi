@@ -239,17 +239,6 @@ select {
 /* The default light/dark mode styles will now apply consistently. */
 
 /* ========================================== */
-/* Coupon Notice Styling                      */
-/* ========================================== */
-/* Updated default style to use primary colors for better visibility */
-.coupon-notice {
-  background: var(--primary); /* Black in light, White in dark */
-  color: var(--primary-foreground); /* White in light, Black in dark */
-}
-
-/* Theme-specific overrides for coupon notice removed */
-
-/* ========================================== */
 /* Scrollbar Base Styling                     */
 /* ========================================== */
 

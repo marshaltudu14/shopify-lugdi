@@ -95,12 +95,12 @@ export default function Header(/* Removed props */) {
       >
         {/* Show India Launch Offer Banner if country is India */}
         {selectedCountrySlug === "in" && (
-          <div className="coupon-notice text-center text-xs sm:text-sm font-medium py-1.5 px-4 shadow-md">
-            {/* Removed activeTheme logic, always show default offer for India */}
-            <>
-              🎉 Get 100 INR off your first order over 1000 INR! Use code{" "}
-              <span className="font-bold tracking-wider">LUGDIINDIA100</span> 🎉
-            </>
+          <div className="coupon-notice text-center text-xs sm:text-sm font-medium py-1.5 px-4 shadow-md bg-yellow-100 text-yellow-900 dark:bg-yellow-800 dark:text-yellow-100">
+        {/* Removed activeTheme logic, always show default offer for India */}
+        <>
+          🎉 Get ₹100 off your first order over ₹1000! Use code{" "}
+          <span className="font-bold tracking-wider">LUGDIINDIA100</span> 🎉
+        </>
           </div>
         )}{" "}
         {/* Moved closing parenthesis here */}
