@@ -8,33 +8,24 @@ import LugdiUtils from "@/utils/LugdiUtils";
 import SortSelect from "@/app/components/SortSelect";
 import { GET_COLLECTION_PRODUCTS } from "@/lib/queries/collection";
 import { getSortConfig, SortOption } from "@/lib/SortConfig";
-import { Frown, Loader2, SlidersHorizontal } from "lucide-react";
+import { Frown, Loader2 } from "lucide-react"; // Removed SlidersHorizontal
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"; // Import Sheet components
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"; // Re-add Collapsible imports
+// Removed Sheet and Collapsible imports as they are now in CollectionFilters
 import {
   AnimatedSection,
   buttonHoverVariants,
   itemVariants,
 } from "@/app/components/FramerMotion";
-import ProductCard from "@/app/components/ProductCard";
-import ProductFilters, {
+// Removed ProductCard import as it's now in ProductGrid
+// Removed unused ProductFilters import
+import {
   AvailableFilters,
   ActiveFilters,
-} from "@/app/components/ProductFilters"; // Import the filter component and types
-import { CollectionData } from "@/lib/types/collection";
-// Removed unused import: import { ProductRecommendation } from "@/lib/types/product";
+} from "@/app/components/ProductFilters"; // Keep type imports if needed
+import { CollectionData, CollectionProductNode } from "@/lib/types/collection"; // Added CollectionProductNode for type safety
+import CollectionFilters from "@/app/components/collection/CollectionFilters"; // Import new component
+import ProductGrid from "@/app/components/collection/ProductGrid"; // Import new component
 
 interface QueryVariables {
   handle: string;
@@ -58,6 +49,7 @@ export default function ClientCollectionPage({
 }: ClientCollectionPageProps) {
   const params = useParams();
   const [sortOption, setSortOption] = useState<SortOption>("relevance");
+  const [isSorting, setIsSorting] = useState(false); // State for sort-specific loading
   const [countryCode, setCountryCode] = useState(
     serverCountryCode.toUpperCase()
   );
@@ -138,15 +130,26 @@ export default function ClientCollectionPage({
   });
 
   const handleSortChange = (value: SortOption) => {
+    setIsSorting(true); // Start sorting loader
     setSortOption(value);
     const sortConfig = getSortConfig(value);
+    // Ensure refetch happens after state update
     refetch({
       ...variables,
       sortKey: sortConfig.sortKey,
       reverse: sortConfig.reverse,
-      after: null,
+      after: null, // Reset pagination on sort
     });
+    // No need to manually set isSorting to false here, useEffect will handle it
   };
+
+  // Effect to turn off sorting loader when loading finishes after a sort action
+  useEffect(() => {
+    if (isSorting && !loading) {
+      setIsSorting(false);
+    }
+    // Only run when isSorting or loading changes
+  }, [isSorting, loading]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -194,7 +197,7 @@ export default function ClientCollectionPage({
   }, [data, loading, fetchMore, variables]);
 
   const resolvedData = data || initialData;
-  const allProducts = useMemo(
+  const allProducts = useMemo<CollectionProductNode[]>( // Add explicit type
     () =>
       resolvedData?.collection?.products?.edges?.map((edge) => edge.node) || [],
     [resolvedData]
@@ -203,13 +206,18 @@ export default function ClientCollectionPage({
   // Calculate available filters from all products
   const availableFilters = useMemo<AvailableFilters>(() => {
     const filters: AvailableFilters = {};
+    // Ensure product.options exists before iterating
     allProducts.forEach((product) => {
       product.options?.forEach((option) => {
-        if (!filters[option.name]) {
+        // Ensure option.name exists and is valid before using as key
+        if (option.name && !filters[option.name]) {
           filters[option.name] = new Set<string>();
         }
         option.values.forEach((value) => {
-          filters[option.name].add(value);
+          // Ensure filters[option.name] exists before adding
+          if (filters[option.name]) {
+             filters[option.name].add(value);
+          }
         });
       });
     });
@@ -217,7 +225,7 @@ export default function ClientCollectionPage({
   }, [allProducts]);
 
   // Filter products based on active filters
-  const filteredProducts = useMemo(() => {
+  const filteredProducts = useMemo<CollectionProductNode[]>(() => { // Add explicit type
     if (Object.values(activeFilters).every((v) => v.length === 0)) {
       return allProducts; // No filters active, return all
     }
@@ -232,13 +240,17 @@ export default function ClientCollectionPage({
           const productOption = product.options?.find(
             (opt) => opt.name === optionName
           );
-          if (!productOption) return false; // Product doesn't have this filter option
+          // If the product doesn't even have the option category, it can't match
+          if (!productOption) return false;
 
           // Check if *any* variant of the product matches *one* of the selected values for this option
-          return product.variants.edges.some((variantEdge) => {
-            const variantOption = variantEdge.node.selectedOptions.find(
+          // Ensure variants and edges exist
+          return product.variants?.edges?.some((variantEdge) => {
+            // Ensure node and selectedOptions exist
+            const variantOption = variantEdge?.node?.selectedOptions?.find(
               (opt) => opt.name === optionName
             );
+            // Ensure variantOption exists and its value is in the selectedValues
             return (
               variantOption && selectedValues.includes(variantOption.value)
             );
@@ -340,67 +352,17 @@ export default function ClientCollectionPage({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 lg:gap-8">
-          {/* Filter Trigger Button (Desktop) and Mobile Filters */}
-          {hasAnyFetchedProducts &&
-            Object.keys(availableFilters).length > 0 && (
-              <div className="md:col-span-4 flex justify-end md:justify-start mb-4 md:mb-0">
-                {/* Desktop: Sheet Trigger */}
-                <Sheet>
-                  <SheetTrigger asChild>
-                    <Button variant="outline" className="hidden md:inline-flex">
-                      <SlidersHorizontal className="mr-2 h-4 w-4" />
-                      Filters
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent className="w-[300px] sm:w-[400px] overflow-y-auto">
-                    <SheetHeader>
-                      <SheetTitle>Filters</SheetTitle>
-                    </SheetHeader>
-                    <div className="py-4">
-                      <ProductFilters
-                        availableFilters={availableFilters}
-                        activeFilters={activeFilters}
-                        onFilterChange={handleFilterChange}
-                        onClearFilters={handleClearFilters}
-                      />
-                    </div>
-                  </SheetContent>
-                </Sheet>
+          {/* Render CollectionFilters Component */}
+          <CollectionFilters
+            availableFilters={availableFilters}
+            activeFilters={activeFilters}
+            onFilterChange={handleFilterChange}
+            onClearFilters={handleClearFilters}
+          />
 
-                {/* Mobile: Stacked Filters */}
-                <div className="block md:hidden w-full">
-                  <Collapsible>
-                    <CollapsibleTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start mb-2"
-                      >
-                        <SlidersHorizontal className="mr-2 h-4 w-4" />
-                        Filters (
-                        {Object.values(activeFilters).reduce(
-                          (count, values) => count + values.length,
-                          0
-                        )}
-                        )
-                      </Button>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <ProductFilters
-                        availableFilters={availableFilters}
-                        activeFilters={activeFilters}
-                        onFilterChange={handleFilterChange}
-                        onClearFilters={handleClearFilters}
-                      />
-                    </CollapsibleContent>
-                  </Collapsible>
-                </div>
-              </div>
-            )}
-
-          {/* Products Grid / No Products Message */}
+          {/* Products Grid / No Products Message Container */}
           <div className="md:col-span-4">
-            {" "}
-            {/* Always full width now */}
+            {/* Sort Select */}
             <div className="flex items-center justify-end mb-4">
               {hasProducts && ( // Only show sort if there are products *after* filtering
                 <SortSelect
@@ -409,78 +371,22 @@ export default function ClientCollectionPage({
                 />
               )}
             </div>
-            {hasProducts ? (
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 md:gap-4">
-                {filteredProducts.map((product) => (
-                  <div key={product.id}>
-                    <ProductCard product={product} />{" "}
-                    {/* Removed incorrect cast */}
-                  </div>
-                ))}
+
+            {/* Render ProductGrid Component or Sorting Loader */}
+            {isSorting ? (
+              <div className="flex items-center justify-center py-10 min-h-[300px]">
+                <Loader2 className="animate-spin h-8 w-8" />
               </div>
             ) : (
-              <div className="flex items-center justify-center py-10">
-                <AnimatedSection delay={0.2}>
-                  <div className="flex flex-col items-center justify-center py-10 px-4 text-center">
-                    <motion.div
-                      variants={itemVariants}
-                      className="flex flex-col items-center justify-center gap-4 max-w-2xl mx-auto"
-                    >
-                      <Frown className="w-12 h-12" />
-                      <h2 className="text-3xl md:text-4xl font-extrabold">
-                        No Products Found
-                      </h2>
-                    </motion.div>
-                    <motion.p
-                      variants={itemVariants}
-                      className="text-slate-700 dark:text-slate-300 md:text-lg mt-4"
-                    >
-                      {hasAnyFetchedProducts
-                        ? "No products match your current filters. Try adjusting or clearing them."
-                        : "Looks like we don't have products here yet. Try exploring other categories or check back later."}
-                    </motion.p>
-                    {hasAnyFetchedProducts && ( // Show clear filters button only if filters caused no products
-                      <motion.div
-                        variants={buttonHoverVariants}
-                        whileHover="hover"
-                        whileTap="tap"
-                        className="mt-6"
-                      >
-                        <Button
-                          onClick={handleClearFilters}
-                          className="px-4 py-2 cursor-pointer"
-                        >
-                          Clear Filters
-                        </Button>
-                      </motion.div>
-                    )}
-                    {!hasAnyFetchedProducts && ( // Show back home only if no products were ever fetched
-                      <Link href="/">
-                        <motion.div
-                          variants={buttonHoverVariants}
-                          whileHover="hover"
-                          whileTap="tap"
-                          className="mt-6"
-                        >
-                          <Button className="px-4 py-2 cursor-pointer">
-                            Back to Home
-                          </Button>
-                        </motion.div>
-                      </Link>
-                    )}
-                  </div>
-                </AnimatedSection>
-              </div>
-            )}
-            {/* Infinite Scroll Sentinel */}
-            {resolvedData?.collection?.products?.pageInfo?.hasNextPage && (
-              <div
-                ref={sentinelRef}
-                className="flex items-center justify-center mt-8"
-              >
-                <Loader2 className="animate-spin" />
-              </div>
-            )}
+              <ProductGrid
+                products={filteredProducts}
+                hasNextPage={resolvedData?.collection?.products?.pageInfo?.hasNextPage ?? false} // Corrected syntax
+                sentinelRef={sentinelRef}
+                isLoadingMore={loading} // Pass the loading state from useQuery
+                hasAnyFetchedProducts={hasAnyFetchedProducts}
+                onClearFilters={handleClearFilters} // Moved prop inside the component tag
+              />
+            )} {/* Added missing closing parenthesis for the ternary operator */}
           </div>
         </div>
       </div>
