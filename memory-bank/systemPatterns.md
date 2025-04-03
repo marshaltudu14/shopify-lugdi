@@ -27,7 +27,8 @@
 ## 3. Important Implementation Paths
 
 - **Product Display:** Fetching product data via GraphQL (likely using Server Components) and rendering using components like `ProductCard.tsx`.
-- **Collection Pages:** Similar to products, fetching collection data and associated products.
+- **Collection Pages:** Similar to products, fetching collection data and associated products. Product filtering functionality has been removed from these pages.
+- **Search Pages:** Fetching products based on a query term. Product filtering functionality has been removed from these pages.
 - **Cart Operations:** Client-side logic within `CartContext.tsx` interacting with Shopify's cart mutations via Apollo Client. State synchronized with encrypted `localStorage`.
 - **Country Selection/Routing:** Middleware (`middleware.ts`?) or logic within page/layout components likely handles redirection or context setting based on the URL's country segment. `CountriesCombobox.tsx` suggests a manual selection mechanism.
 

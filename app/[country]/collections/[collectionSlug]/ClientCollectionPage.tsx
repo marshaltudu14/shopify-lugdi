@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef, useCallback } from "react";
+import { useState, useMemo, useEffect, useRef } from "react"; // Removed useCallback
 import { useQuery } from "@apollo/client";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
@@ -8,23 +8,15 @@ import LugdiUtils from "@/utils/LugdiUtils";
 import SortSelect from "@/app/components/SortSelect";
 import { GET_COLLECTION_PRODUCTS } from "@/lib/queries/collection";
 import { getSortConfig, SortOption } from "@/lib/SortConfig";
-import { Frown, Loader2 } from "lucide-react"; // Removed SlidersHorizontal
+import { Frown, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-// Removed Sheet and Collapsible imports as they are now in CollectionFilters
 import {
   AnimatedSection,
   buttonHoverVariants,
   itemVariants,
 } from "@/app/components/FramerMotion";
-// Removed ProductCard import as it's now in ProductGrid
-// Removed unused ProductFilters import
-import {
-  AvailableFilters,
-  ActiveFilters,
-} from "@/app/components/ProductFilters"; // Keep type imports if needed
 import { CollectionData, CollectionProductNode } from "@/lib/types/collection"; // Added CollectionProductNode for type safety
-import CollectionFilters from "@/app/components/collection/CollectionFilters"; // Import new component
 import ProductGrid from "@/app/components/collection/ProductGrid"; // Import new component
 
 interface QueryVariables {
@@ -57,18 +49,6 @@ export default function ClientCollectionPage({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // State for active filters
-  const [activeFilters, setActiveFilters] = useState<ActiveFilters>(() => {
-    const initialFilters: ActiveFilters = {};
-    searchParams.forEach((value, key) => {
-      if (key !== "sort") {
-        // Assuming 'sort' might be another param
-        initialFilters[key] = value.split(",");
-      }
-    });
-    return initialFilters;
-  });
-
   // Update country code when params change
   useEffect(() => {
     const currentParamCountry = params?.country;
@@ -95,17 +75,15 @@ export default function ClientCollectionPage({
       if (key !== "sort") {
         // Keep other params like sort
         params.delete(key);
-      }
-    });
-    // Add current active filters
-    Object.entries(activeFilters).forEach(([key, values]) => {
-      if (values.length > 0) {
-        params.set(key, values.join(","));
-      }
-    });
+      } // Added missing closing brace
+    }); // Added missing closing parenthesis
+    // Removed adding active filters back to params
     // Use router.replace to avoid adding to history stack for filter changes
-    router.replace(`?${params.toString()}`, { scroll: false });
-  }, [activeFilters, searchParams, router]);
+    const currentQuery = params.toString();
+    if (currentQuery !== searchParams.toString()) { // Only replace if params actually changed
+       router.replace(`?${currentQuery}`, { scroll: false });
+    }
+  }, [searchParams, router]); // Removed activeFilters dependency
 
   const variables = useMemo<QueryVariables>(() => {
     const sortConfig = getSortConfig(sortOption);
@@ -203,84 +181,7 @@ export default function ClientCollectionPage({
     [resolvedData]
   );
 
-  // Calculate available filters from all products
-  const availableFilters = useMemo<AvailableFilters>(() => {
-    const filters: AvailableFilters = {};
-    // Ensure product.options exists before iterating
-    allProducts.forEach((product) => {
-      product.options?.forEach((option) => {
-        // Ensure option.name exists and is valid before using as key
-        if (option.name && !filters[option.name]) {
-          filters[option.name] = new Set<string>();
-        }
-        option.values.forEach((value) => {
-          // Ensure filters[option.name] exists before adding
-          if (filters[option.name]) {
-             filters[option.name].add(value);
-          }
-        });
-      });
-    });
-    return filters;
-  }, [allProducts]);
-
-  // Filter products based on active filters
-  const filteredProducts = useMemo<CollectionProductNode[]>(() => { // Add explicit type
-    if (Object.values(activeFilters).every((v) => v.length === 0)) {
-      return allProducts; // No filters active, return all
-    }
-
-    return allProducts.filter((product) => {
-      // Check if product matches ALL active filter categories (e.g., Color AND Size)
-      return Object.entries(activeFilters).every(
-        ([optionName, selectedValues]) => {
-          if (selectedValues.length === 0) return true; // Skip if no values selected for this option
-
-          // Check if the product has this option defined
-          const productOption = product.options?.find(
-            (opt) => opt.name === optionName
-          );
-          // If the product doesn't even have the option category, it can't match
-          if (!productOption) return false;
-
-          // Check if *any* variant of the product matches *one* of the selected values for this option
-          // Ensure variants and edges exist
-          return product.variants?.edges?.some((variantEdge) => {
-            // Ensure node and selectedOptions exist
-            const variantOption = variantEdge?.node?.selectedOptions?.find(
-              (opt) => opt.name === optionName
-            );
-            // Ensure variantOption exists and its value is in the selectedValues
-            return (
-              variantOption && selectedValues.includes(variantOption.value)
-            );
-          });
-        }
-      );
-    });
-  }, [allProducts, activeFilters]);
-
-  // Handlers for filter changes
-  const handleFilterChange = useCallback(
-    (optionName: string, value: string, checked: boolean) => {
-      setActiveFilters((prevFilters) => {
-        const currentValues = prevFilters[optionName] || [];
-        let newValues: string[];
-        if (checked) {
-          newValues = [...currentValues, value];
-        } else {
-          newValues = currentValues.filter((v) => v !== value);
-        }
-        // Return new object to trigger state update
-        return { ...prevFilters, [optionName]: newValues };
-      });
-    },
-    []
-  );
-
-  const handleClearFilters = useCallback(() => {
-    setActiveFilters({});
-  }, []);
+  // Removed filter calculation and state logic
 
   if (loading && !resolvedData)
     return (
@@ -336,9 +237,9 @@ export default function ClientCollectionPage({
       </div>
     );
 
-  // Use filteredProducts length for conditional rendering checks
-  const hasProducts = filteredProducts.length > 0;
-  const hasAnyFetchedProducts = allProducts.length > 0; // Check if any products were fetched initially
+  // Use allProducts length for conditional rendering checks
+  const hasProducts = allProducts.length > 0;
+  // Removed unused hasAnyFetchedProducts variable
 
   return (
     <div className="min-h-screen px-2 py-2 md:px-3 md:py-3 lg:px-5 lg:py-5">
@@ -347,24 +248,15 @@ export default function ClientCollectionPage({
           <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">
             {resolvedData?.collection?.title || "Collection"}
           </h1>
-          {/* Optional: Display active filters */}
-          {/* <p className="text-sm text-muted-foreground">Active Filters: {JSON.stringify(activeFilters)}</p> */}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 lg:gap-8">
-          {/* Render CollectionFilters Component */}
-          <CollectionFilters
-            availableFilters={availableFilters}
-            activeFilters={activeFilters}
-            onFilterChange={handleFilterChange}
-            onClearFilters={handleClearFilters}
-          />
-
+        {/* Removed outer grid, products now take full width */}
+        <div className="space-y-4">
           {/* Products Grid / No Products Message Container */}
-          <div className="md:col-span-4">
+          <div> {/* Removed md:col-span-4 */}
             {/* Sort Select */}
             <div className="flex items-center justify-end mb-4">
-              {hasProducts && ( // Only show sort if there are products *after* filtering
+              {hasProducts && ( // Only show sort if there are products
                 <SortSelect
                   value={sortOption}
                   onValueChange={handleSortChange}
@@ -379,14 +271,14 @@ export default function ClientCollectionPage({
               </div>
             ) : (
               <ProductGrid
-                products={filteredProducts}
-                hasNextPage={resolvedData?.collection?.products?.pageInfo?.hasNextPage ?? false} // Corrected syntax
+                products={allProducts} // Use allProducts directly
+                hasNextPage={resolvedData?.collection?.products?.pageInfo?.hasNextPage ?? false}
                 sentinelRef={sentinelRef}
-                isLoadingMore={loading} // Pass the loading state from useQuery
-                hasAnyFetchedProducts={hasAnyFetchedProducts}
-                onClearFilters={handleClearFilters} // Moved prop inside the component tag
+                isLoadingMore={loading}
+                // Removed hasAnyFetchedProducts prop
+                // Removed onClearFilters prop - will address in ProductGrid component later if needed
               />
-            )} {/* Added missing closing parenthesis for the ternary operator */}
+            )}
           </div>
         </div>
       </div>

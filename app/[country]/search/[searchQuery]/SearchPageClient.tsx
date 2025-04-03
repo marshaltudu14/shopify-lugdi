@@ -6,23 +6,12 @@ import { ProductsData } from "@/lib/types/products";
 import LugdiUtils from "@/utils/LugdiUtils";
 import { useQuery } from "@apollo/client";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useState, useMemo, useEffect, useRef, useCallback } from "react";
+import { useState, useMemo, useEffect, useRef } from "react"; // Removed useCallback
 import SortSelect from "@/app/components/SortSelect";
-import { Frown, Loader2, SlidersHorizontal } from "lucide-react"; // Added SlidersHorizontal
+import { Frown, Loader2 } from "lucide-react"; // Removed SlidersHorizontal
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"; // Added Sheet imports
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"; // Added Collapsible imports
+// Removed Sheet and Collapsible imports
 import {
   AnimatedSection,
   buttonHoverVariants,
@@ -30,10 +19,7 @@ import {
 } from "@/app/components/FramerMotion";
 import ProductCard from "@/app/components/ProductCard";
 import Link from "next/link";
-import ProductFilters, {
-  AvailableFilters,
-  ActiveFilters,
-} from "@/app/components/ProductFilters"; // Import the filter component and types
+// Removed ProductFilters import
 import { ProductRecommendation } from "@/lib/types/product"; // Import product type
 
 interface QueryVariables {
@@ -66,17 +52,7 @@ export default function SearchPageClient({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // State for active filters
-  const [activeFilters, setActiveFilters] = useState<ActiveFilters>(() => {
-    const initialFilters: ActiveFilters = {};
-    searchParams.forEach((value, key) => {
-      if (key !== "sort") {
-        // Assuming 'sort' might be another param
-        initialFilters[key] = value.split(",");
-      }
-    });
-    return initialFilters;
-  });
+  // Removed activeFilters state
 
   // Update search query when params change
   useEffect(() => {
@@ -119,15 +95,13 @@ export default function SearchPageClient({
         params.delete(key);
       }
     });
-    // Add current active filters
-    Object.entries(activeFilters).forEach(([key, values]) => {
-      if (values.length > 0) {
-        params.set(key, values.join(","));
-      }
-    });
+    // Removed adding active filters back to params
     // Use router.replace to avoid adding to history stack for filter changes
-    router.replace(`?${params.toString()}`, { scroll: false });
-  }, [activeFilters, searchParams, router]);
+    const currentQuery = params.toString();
+     if (currentQuery !== searchParams.toString()) { // Only replace if params actually changed
+       router.replace(`?${currentQuery}`, { scroll: false });
+    }
+  }, [searchParams, router]); // Removed activeFilters dependency
 
   const variables = useMemo<QueryVariables>(() => {
     const sortConfig = getSortConfig(sortOption);
@@ -210,75 +184,9 @@ export default function SearchPageClient({
     [resolvedData]
   );
 
-  // Calculate available filters from all products
-  const availableFilters = useMemo<AvailableFilters>(() => {
-    const filters: AvailableFilters = {};
-    allProducts.forEach((product) => {
-      product.options?.forEach((option) => {
-        if (!filters[option.name]) {
-          filters[option.name] = new Set<string>();
-        }
-        option.values.forEach((value) => {
-          filters[option.name].add(value);
-        });
-      });
-    });
-    return filters;
-  }, [allProducts]);
-
-  // Filter products based on active filters
-  const filteredProducts = useMemo(() => {
-    if (Object.values(activeFilters).every((v) => v.length === 0)) {
-      return allProducts; // No filters active, return all
-    }
-
-    return allProducts.filter((product) => {
-      // Check if product matches ALL active filter categories (e.g., Color AND Size)
-      return Object.entries(activeFilters).every(
-        ([optionName, selectedValues]) => {
-          if (selectedValues.length === 0) return true; // Skip if no values selected for this option
-
-          // Check if the product has this option defined
-          const productOption = product.options?.find(
-            (opt) => opt.name === optionName
-          );
-          if (!productOption) return false; // Product doesn't have this filter option
-
-          // Check if *any* variant of the product matches *one* of the selected values for this option
-          return product.variants.edges.some((variantEdge) => {
-            const variantOption = variantEdge.node.selectedOptions.find(
-              (opt) => opt.name === optionName
-            );
-            return (
-              variantOption && selectedValues.includes(variantOption.value)
-            );
-          });
-        }
-      );
-    });
-  }, [allProducts, activeFilters]);
-
-  // Handlers for filter changes
-  const handleFilterChange = useCallback(
-    (optionName: string, value: string, checked: boolean) => {
-      setActiveFilters((prevFilters) => {
-        const currentValues = prevFilters[optionName] || [];
-        let newValues: string[];
-        if (checked) {
-          newValues = [...currentValues, value];
-        } else {
-          newValues = currentValues.filter((v) => v !== value);
-        }
-        // Return new object to trigger state update
-        return { ...prevFilters, [optionName]: newValues };
-      });
-    },
-    []
-  );
-
-  const handleClearFilters = useCallback(() => {
-    setActiveFilters({});
-  }, []);
+  // Removed availableFilters calculation
+  // Removed filteredProducts calculation
+  // Removed handleFilterChange and handleClearFilters
 
   if (loading && !resolvedData)
     return (
@@ -334,9 +242,9 @@ export default function SearchPageClient({
       </div>
     );
 
-  // Use filteredProducts length for conditional rendering checks
-  const hasProducts = filteredProducts.length > 0;
-  const hasAnyFetchedProducts = allProducts.length > 0; // Check if any products were fetched initially
+  // Use allProducts length for conditional rendering checks
+  const hasProducts = allProducts.length > 0;
+  // Removed hasAnyFetchedProducts variable
 
   return (
     <div className="min-h-screen px-2 py-2 md:px-3 md:py-3 lg:px-5 lg:py-5">
@@ -345,74 +253,14 @@ export default function SearchPageClient({
           <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">
             Search Results for "{searchQuery}"
           </h1>
-          {/* Optional: Display active filters */}
-          {/* <p className="text-sm text-muted-foreground">Active Filters: {JSON.stringify(activeFilters)}</p> */}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 lg:gap-8">
-          {/* Filter Trigger Button (Desktop) and Mobile Filters */}
-          {hasAnyFetchedProducts &&
-            Object.keys(availableFilters).length > 0 && (
-              <div className="md:col-span-4 flex justify-end md:justify-start mb-4 md:mb-0">
-                {/* Desktop: Sheet Trigger */}
-                <Sheet>
-                  <SheetTrigger asChild>
-                    <Button variant="outline" className="hidden md:inline-flex">
-                      <SlidersHorizontal className="mr-2 h-4 w-4" />
-                      Filters
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent className="w-[300px] sm:w-[400px] overflow-y-auto">
-                    <SheetHeader>
-                      <SheetTitle>Filters</SheetTitle>
-                    </SheetHeader>
-                    <div className="py-4">
-                      <ProductFilters
-                        availableFilters={availableFilters}
-                        activeFilters={activeFilters}
-                        onFilterChange={handleFilterChange}
-                        onClearFilters={handleClearFilters}
-                      />
-                    </div>
-                  </SheetContent>
-                </Sheet>
-
-                {/* Mobile: Stacked Filters */}
-                <div className="block md:hidden w-full">
-                  <Collapsible>
-                    <CollapsibleTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start mb-2"
-                      >
-                        <SlidersHorizontal className="mr-2 h-4 w-4" />
-                        Filters (
-                        {Object.values(activeFilters).reduce(
-                          (count, values) => count + values.length,
-                          0
-                        )}
-                        )
-                      </Button>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <ProductFilters
-                        availableFilters={availableFilters}
-                        activeFilters={activeFilters}
-                        onFilterChange={handleFilterChange}
-                        onClearFilters={handleClearFilters}
-                      />
-                    </CollapsibleContent>
-                  </Collapsible>
-                </div>
-              </div>
-            )}
-
+        {/* Removed filter trigger buttons and layout adjustments */}
+        <div className="space-y-4"> {/* Simplified layout */}
           {/* Products Grid / No Products Message */}
-          <div className="md:col-span-4">
-            {" "}
-            {/* Always full width now */}
+          <div> {/* Removed md:col-span-4 */}
             <div className="flex items-center justify-end mb-4">
-              {hasProducts && ( // Only show sort if there are products *after* filtering
+              {hasProducts && ( // Only show sort if there are products
                 <SortSelect
                   value={sortOption}
                   onValueChange={handleSortChange}
@@ -421,10 +269,9 @@ export default function SearchPageClient({
             </div>
             {hasProducts ? (
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 md:gap-4">
-                {filteredProducts.map((product) => (
+                {allProducts.map((product) => ( // Use allProducts
                   <div key={product.id}>
-                    <ProductCard product={product as ProductRecommendation} />{" "}
-                    {/* Cast might be needed depending on exact type */}
+                    <ProductCard product={product as ProductRecommendation} />
                   </div>
                 ))}
               </div>
@@ -445,26 +292,13 @@ export default function SearchPageClient({
                       variants={itemVariants}
                       className="text-slate-700 dark:text-slate-300 md:text-lg mt-4"
                     >
-                      {hasAnyFetchedProducts
-                        ? "No products match your current filters. Try adjusting or clearing them."
-                        : `We couldn't find any products matching "${searchQuery}". Try different keywords or check back later.`}
+                      {/* Simplified message */}
+                      We couldn't find any products matching "{searchQuery}". Try
+                      different keywords or check back later.
                     </motion.p>
-                    {hasAnyFetchedProducts && ( // Show clear filters button only if filters caused no products
-                      <motion.div
-                        variants={buttonHoverVariants}
-                        whileHover="hover"
-                        whileTap="tap"
-                        className="mt-6"
-                      >
-                        <Button
-                          onClick={handleClearFilters}
-                          className="px-4 py-2 cursor-pointer"
-                        >
-                          Clear Filters
-                        </Button>
-                      </motion.div>
-                    )}
-                    {!hasAnyFetchedProducts && ( // Show back home only if no products were ever fetched
+                    {/* Removed Clear Filters button */}
+                    {/* Show back home if no products found */}
+                    {!hasProducts && (
                       <Link href="/">
                         <motion.div
                           variants={buttonHoverVariants}

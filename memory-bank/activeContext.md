@@ -2,10 +2,11 @@
 
 ## 1. Current Focus
 
-- Saving recent changes (theme system removal, styling updates, wishlist refactor) to the Memory Bank and Knowledge Graph.
+- Updating Memory Banks after removing product filter functionality.
 
 ## 2. Recent Changes
 
+- **Filter Logic Removal:** Removed product filtering functionality from Collection pages (`app/[country]/collections/[collectionSlug]/ClientCollectionPage.tsx`) and Search pages (`app/[country]/search/[searchQuery]/SearchPageClient.tsx`). This involved removing filter state, related effects, UI components (`CollectionFilters`, `ProductFilters`), and associated logic. Pages now display all fetched products directly, relying only on sorting and infinite scroll.
 - **Theme System Removal:** Removed the entire seasonal/festival theme system (`lib/theme-config.ts`, `lib/theme-utils.ts`, `app/components/ThemeApplicator.tsx`, `app/components/effects/`, related CSS). The application now relies solely on the default light/dark mode defined in `app/globals.css`.
 - **Styling Updates:**
   - Updated the top coupon bar (`.coupon-notice`) to use primary theme colors for better visibility.
@@ -16,7 +17,7 @@
 
 ## 3. Next Steps
 
-- Await further instructions or tasks from the user.
+- Await further instructions or tasks from the user. (Memory banks updated).
 
 ## 4. Active Decisions & Considerations
 
