@@ -18,8 +18,8 @@ interface ProductGridProps {
   hasNextPage: boolean;
   sentinelRef: React.RefObject<HTMLDivElement | null>; // Allow null for initial ref state
   isLoadingMore: boolean; // Renamed from 'loading' for clarity in this context
-  hasAnyFetchedProducts: boolean;
-  onClearFilters: () => void;
+  // Removed hasAnyFetchedProducts prop
+  // Removed onClearFilters prop
 }
 
 export default function ProductGrid({
@@ -27,8 +27,8 @@ export default function ProductGrid({
   hasNextPage,
   sentinelRef,
   isLoadingMore,
-  hasAnyFetchedProducts,
-  onClearFilters,
+  // Removed hasAnyFetchedProducts parameter
+  // Removed onClearFilters parameter
 }: ProductGridProps) {
   const hasProducts = products.length > 0;
 
@@ -60,26 +60,13 @@ export default function ProductGrid({
                 variants={itemVariants}
                 className="text-slate-700 dark:text-slate-300 md:text-lg mt-4"
               >
-                {hasAnyFetchedProducts
-                  ? "No products match your current filters. Try adjusting or clearing them."
-                  : "Looks like we don't have products here yet. Try exploring other categories or check back later."}
+                {/* Simplified message as filters are removed */}
+                Looks like we don't have products here yet. Try exploring other
+                categories or check back later.
               </motion.p>
-              {hasAnyFetchedProducts && ( // Show clear filters button only if filters caused no products
-                <motion.div
-                  variants={buttonHoverVariants}
-                  whileHover="hover"
-                  whileTap="tap"
-                  className="mt-6"
-                >
-                  <Button
-                    onClick={onClearFilters}
-                    className="px-4 py-2 cursor-pointer"
-                  >
-                    Clear Filters
-                  </Button>
-                </motion.div>
-              )}
-              {!hasAnyFetchedProducts && ( // Show back home only if no products were ever fetched
+              {/* Removed Clear Filters button logic */}
+              {/* Show back home if no products were found */}
+              {!hasProducts && (
                 <Link href="/">
                   <motion.div
                     variants={buttonHoverVariants}
