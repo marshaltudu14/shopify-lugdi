@@ -1,10 +1,7 @@
 # Docker for Google Cloud Run
 
 # Stage 1: Install dependencies and build the application
-FROM node:22-alpine AS builder
-
-# Install build dependencies for sharp/libvips on Alpine
-RUN apk add --no-cache vips-dev build-base python3
+FROM node:22.14.0 AS builder # Use specific local version
 
 # Set working directory
 WORKDIR /app
@@ -12,8 +9,7 @@ WORKDIR /app
 # Install dependencies based on the preferred package manager
 COPY package.json package-lock.json* ./
 # Use --legacy-peer-deps as indicated in previous deployment scripts
-# Force sharp to build from source using installed dependencies
-ENV npm_config_build_from_source=true
+# ENV npm_config_build_from_source=true # Removed this
 RUN npm install --legacy-peer-deps
 
 # Copy the rest of the source code
@@ -26,10 +22,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN npm run build
 
 # Stage 2: Production image using standard output
-FROM node:22-alpine AS runner
-
-# Install runtime dependencies for sharp/libvips on Alpine
-RUN apk add --no-cache vips
+FROM node:22.14.0-slim AS runner # Use specific local version (slim variant)
 
 WORKDIR /app
 
