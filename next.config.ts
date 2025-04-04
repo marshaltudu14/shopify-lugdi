@@ -2,6 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    // Disable Next.js Image Optimization (for testing Cloud Run issue)
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
