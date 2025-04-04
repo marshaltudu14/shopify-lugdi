@@ -139,9 +139,25 @@ export default function ClientWishlistPage({
             },
             availableForSale: item.availableForSale,
             totalInventory: item.quantityAvailable, // Map quantityAvailable
+            options: [], // Provide default empty array as item.product doesn't have options
             variants: {
-              // Provide minimal variant info needed by ProductCard's WishlistButton
-              edges: [{ node: { id: item.id } }],
+              // Adapt the variant structure to match CollectionProductNode['variants']['edges'][0]['node']
+              edges: [
+                {
+                  node: {
+                    id: item.id,
+                    availableForSale: item.availableForSale, // Add availableForSale
+                    selectedOptions: item.selectedOptions, // Add selectedOptions
+                    // Add other fields from ProductVariant if needed by CollectionProductNode variant type
+                    // price: item.price,
+                    // compareAtPrice: item.compareAtPrice,
+                    // quantityAvailable: item.quantityAvailable,
+                    // image: item.image,
+                    // title: item.title, // Variant title
+                    // product: { id: item.product.id, title: item.product.title, handle: item.product.handle } // Basic product info if needed
+                  },
+                },
+              ],
             },
             // Add other fields if ProductCard requires them, potentially with default values
             // e.g., descriptionHtml: item.product.descriptionHtml || "",
