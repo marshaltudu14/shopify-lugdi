@@ -159,7 +159,8 @@ export default function ClientProductPage({
                     }}
                   >
                     <Image
-                      src={edge.node.url}
+                      // Decode URL before passing to Image component
+                      src={edge.node.url ? decodeURIComponent(edge.node.url) : ''}
                       alt={edge.node.altText || product.title}
                       fill={true} // Use fill instead of width/height
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Example sizes, adjust as needed
@@ -177,7 +178,8 @@ export default function ClientProductPage({
             close={() => setLightboxOpen(false)}
             index={lightboxIndex}
             slides={product.images.edges.map((edge) => ({
-              src: edge.node.url,
+              // Decode URL for lightbox slides as well
+              src: edge.node.url ? decodeURIComponent(edge.node.url) : '',
               alt: edge.node.altText || product.title,
               width: 1024, // Use hardcoded width like the Image component
               height: 1024, // Use hardcoded height like the Image component
@@ -307,7 +309,8 @@ export default function ClientProductPage({
                             )}
                             {value.swatch?.image?.previewImage.url ? (
                               <Image
-                                src={value.swatch.image.previewImage.url}
+                                // Decode swatch image URL
+                                src={value.swatch.image.previewImage.url ? decodeURIComponent(value.swatch.image.previewImage.url) : ''}
                                 alt={value.swatch.image.alt || value.name}
                                 width={24}
                                 height={24}

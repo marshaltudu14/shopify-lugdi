@@ -58,7 +58,8 @@ const discountBadgeVariants = {
 export default function ProductCard({ product }: ProductCardProps) {
   // Removed unused useTheme hook and isDark variable
 
-  const imageUrl = product?.featuredImage?.url;
+  // Decode the URL before using it to prevent potential double encoding
+  const imageUrl = product?.featuredImage?.url ? decodeURIComponent(product.featuredImage.url) : undefined;
   const altText =
     product?.featuredImage?.altText ?? product?.title ?? "Product Image";
 
