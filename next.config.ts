@@ -7,10 +7,7 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "cdn.shopify.com",
       },
-      {
-        protocol: "http",
-        hostname: "localhost",
-      },
+      // Removed localhost entry for production
     ],
   },
 };

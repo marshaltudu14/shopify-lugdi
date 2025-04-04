@@ -138,7 +138,8 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
     }
 
     if (isCountryActive && isComingSoonPage) {
-      response = NextResponse.redirect(new URL("/", request.url));
+      // Redirect to the correct country homepage, not just '/'
+      response = NextResponse.redirect(new URL(`/${activeCountryCode.toLowerCase()}`, request.url));
       response.cookies.set(LugdiUtils.location_cookieName, activeCountryCode, {
         path: "/",
       });
