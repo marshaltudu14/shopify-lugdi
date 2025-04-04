@@ -1,7 +1,8 @@
 # Docker for Google Cloud Run
 
 # Stage 1: Install dependencies and build the application
-FROM node:22.14.0 AS builder # Use specific local version
+# Use specific local version
+FROM node:22.14.0 AS builder
 
 # Set working directory
 WORKDIR /app
@@ -22,7 +23,8 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN npm run build
 
 # Stage 2: Production image using standard output
-FROM node:22.14.0-slim AS runner # Use specific local version (slim variant)
+# Use specific local version (slim variant)
+FROM node:22.14.0-slim AS runner
 
 WORKDIR /app
 
