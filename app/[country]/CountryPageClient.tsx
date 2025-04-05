@@ -103,7 +103,7 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
       </motion.div>
 
       {/* New Arrivals */}
-      <section className="py-16 bg-background relative z-10">
+      <section className="py-12 bg-background relative z-10"> {/* Reduced padding */}
         <div className="container mx-auto px-4 space-y-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -131,7 +131,7 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   viewport={{ once: true, margin: "-100px" }}
-                  className="w-[280px] inline-block"
+                  className="w-[200px] md:w-[250px] lg:w-[300px] inline-block" // Reduced width
                 >
                   <ProductCard product={product} />
                 </motion.div>
@@ -151,7 +151,7 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
       </section>
 
       {/* Featured Products - For Him */}
-      <section className="py-16 relative z-10">
+      <section className="py-12 relative z-10"> {/* Reduced padding */}
         {mensProducts.length > 0 && ( // Use mensProducts data
           <div className="container mx-auto px-4 space-y-8">
             <div className="relative">
@@ -209,7 +209,7 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                     viewport={{ once: true, margin: "-100px" }}
-                    className="w-[280px] inline-block"
+                    className="w-[200px] md:w-[250px] lg:w-[300px] inline-block" // Reduced width
                   >
                     <ProductCard product={product} />
                   </motion.div>
@@ -230,7 +230,7 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
       </section>
 
       {/* Featured Products - For Her */}
-      <section className="py-16 bg-background relative z-10">
+      <section className="py-12 bg-background relative z-10"> {/* Reduced padding */}
         {womensProducts.length > 0 && ( // Use womensProducts data
           <div className="container mx-auto px-4 space-y-8">
             <div className="relative">
@@ -289,7 +289,7 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                     viewport={{ once: true, margin: "-100px" }}
-                    className="w-[280px] inline-block"
+                    className="w-[200px] md:w-[250px] lg:w-[300px] inline-block" // Reduced width
                   >
                     <ProductCard product={product} />
                   </motion.div>
@@ -310,7 +310,7 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
       </section>
 
       {/* Premium Category Showcase */}
-      <section className="py-24 relative overflow-hidden bg-gradient-to-b from-background via-background/80 to-background">
+      <section className="py-16 relative overflow-hidden bg-gradient-to-b from-background via-background/80 to-background"> {/* Reduced padding */}
         <div className="absolute inset-0 bg-grid-small-black/[0.04] dark:bg-grid-small-white/[0.03] z-0" />
         <div className="container mx-auto px-4 relative z-10">
           <motion.div

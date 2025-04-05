@@ -12,6 +12,18 @@ export const CART_FRAGMENT = gql`
       totalAmount {
         ...MoneyFragment
       }
+      totalTaxAmount { # Added totalTaxAmount
+        ...MoneyFragment
+      }
+      totalDutyAmount { # Added totalDutyAmount
+        ...MoneyFragment
+      }
+    }
+    # Added discountAllocations directly to Cart fragment
+    discountAllocations {
+      discountedAmount {
+        ...MoneyFragment
+      }
     }
     lines(first: 100) {
       edges {

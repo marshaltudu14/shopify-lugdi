@@ -46,6 +46,69 @@ function useCarousel() {
   return context;
 }
 
+// Define props for the standalone thumbnail component
+interface StandaloneThumbnailProps extends React.ComponentProps<"div"> {
+  // Removed api prop as it's not directly used here
+  orientation?: "horizontal" | "vertical";
+  images: ImageNode[];
+  selectedIndex: number;
+  scrollToIndex: (index: number) => void;
+}
+
+// Refactored Thumbnail logic into a reusable component
+const ThumbnailList: React.FC<StandaloneThumbnailProps> = ({
+  // Removed api from destructuring
+  orientation = "horizontal",
+  images,
+  selectedIndex,
+  scrollToIndex,
+  className,
+  ...props
+}) => {
+  if (!images || images.length <= 1) {
+    return null;
+  }
+
+  return (
+    <div
+      className={cn(
+        "flex items-center justify-center gap-3 mt-4", // Increased gap
+        orientation === "horizontal" ? "flex-row" : "flex-col",
+        className
+      )}
+      data-slot="carousel-thumbnails"
+      {...props}
+    >
+      {images.map((image, index) => (
+        <button
+          key={index}
+          className={cn(
+            "w-20 h-20 border border-transparent rounded-lg overflow-hidden focus:outline-none transition-all duration-300", // Increased size
+            selectedIndex === index
+              ? "border-[3px] border-primary shadow-md" // Changed border color to primary, adjusted shadow
+              : "border-border hover:border-[3px] hover:border-primary/50 hover:shadow-sm" // Adjusted border/hover states
+          )}
+          onClick={() => scrollToIndex(index)}
+          aria-label={`Go to slide ${index + 1}`}
+        >
+          {image.url ? (
+            <Image
+              src={image.url}
+              alt={image.altText || `Thumbnail for slide ${index + 1}`}
+              className="object-cover w-full h-full"
+              width={100}
+              height={100}
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-300" />
+          )}
+        </button>
+      ))}
+    </div>
+  );
+};
+
+
 function Carousel({
   orientation = "horizontal",
   opts,
@@ -237,12 +300,27 @@ function CarouselNext({
   );
 }
 
+// Define props type for CarouselThumbnail, allowing optional overrides
+interface CarouselThumbnailProps extends React.ComponentProps<"div"> {
+  api?: CarouselApi;
+  orientation?: "horizontal" | "vertical";
+  images?: ImageNode[];
+}
+
 function CarouselThumbnail({
   className,
+  api: apiProp, // Rename prop to avoid conflict
+  orientation: orientationProp,
+  images: imagesProp,
   ...props
-}: React.ComponentProps<"div">) {
-  const { api, orientation, images } = useCarousel();
+}: CarouselThumbnailProps) { // Use the defined props type
+  const context = useCarousel(); // Get context
   const [selectedIndex, setSelectedIndex] = React.useState(0);
+
+  // Prioritize props over context
+  const api = apiProp ?? context?.api;
+  const orientation = orientationProp ?? context?.orientation ?? "horizontal";
+  const images = imagesProp ?? context?.images ?? [];
 
   const onSelect = React.useCallback(() => {
     if (!api) return;
@@ -251,16 +329,14 @@ function CarouselThumbnail({
 
   React.useEffect(() => {
     if (!api) return;
-
     api.on("select", onSelect);
-    onSelect();
-
+    onSelect(); // Initial select
     return () => {
       api.off("select", onSelect);
     };
   }, [api, onSelect]);
 
-  const scrollToSlide = React.useCallback(
+  const scrollToIndex = React.useCallback(
     (index: number) => {
       if (api) {
         api.scrollTo(index);
@@ -269,48 +345,20 @@ function CarouselThumbnail({
     [api]
   );
 
-  if (!images || images.length <= 1) {
-    return null;
-  }
-
+  // Use the refactored ThumbnailList component
   return (
-    <div
-      className={cn(
-        "flex items-center justify-center gap-3 mt-4", // Increased gap
-        orientation === "horizontal" ? "flex-row" : "flex-col",
-        className
-      )}
-      data-slot="carousel-thumbnails"
+    <ThumbnailList
+      // api={api} // Remove api prop as ThumbnailList doesn't need it
+      orientation={orientation}
+      images={images}
+      selectedIndex={selectedIndex}
+      scrollToIndex={scrollToIndex}
+      className={className}
       {...props}
-    >
-      {images.map((image, index) => (
-        <button
-          key={index}
-          className={cn(
-            "w-20 h-20 border border-transparent rounded-lg overflow-hidden focus:outline-none transition-all duration-300", // Increased size
-            selectedIndex === index
-              ? "border-[3px] border-primary shadow-md" // Changed border color to primary, adjusted shadow
-              : "border-border hover:border-[3px] hover:border-primary/50 hover:shadow-sm" // Adjusted border/hover states
-          )}
-          onClick={() => scrollToSlide(index)}
-          aria-label={`Go to slide ${index + 1}`}
-        >
-          {image.url ? (
-            <Image
-              src={image.url}
-              alt={image.altText || `Thumbnail for slide ${index + 1}`}
-              className="object-cover w-full h-full"
-              width={100}
-              height={100}
-            />
-          ) : (
-            <div className="w-full h-full bg-gray-300" />
-          )}
-        </button>
-      ))}
-    </div>
+    />
   );
 }
+
 
 export {
   type CarouselApi,
@@ -320,4 +368,7 @@ export {
   CarouselPrevious,
   CarouselNext,
   CarouselThumbnail,
+  // Export the standalone list for external use if needed, though not strictly required by ClientProductPage
+  ThumbnailList,
+  type StandaloneThumbnailProps, // Export the type too
 };

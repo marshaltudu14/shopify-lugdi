@@ -16,15 +16,12 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselThumbnail,
-} from "@/components/ui/carousel";
 import Image from "next/image";
 import { getCurrencySymbol } from "@/lib/countries";
 import { Alert, AlertTitle } from "@/components/ui/alert"; // Re-added Alert and AlertTitle
+import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react"; // Import Embla hook and types
+import { ThumbnailList } from "@/components/ui/carousel"; // Import refactored ThumbnailList
+import { cn } from "@/lib/utils"; // Import cn utility
 import {
   AlertCircle,
   AlertTriangle,
@@ -58,6 +55,38 @@ export default function ClientProductPage({
   const { cart, addToCart } = useCart();
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  // Embla Carousel setup
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  // Define CarouselApi type locally from the hook's return type
+  type CarouselApi = UseEmblaCarouselType[1];
+
+  const onSelect = React.useCallback((api: CarouselApi) => {
+    if (!api) return;
+    setSelectedIndex(api.selectedScrollSnap());
+  }, []);
+
+  const scrollToIndex = React.useCallback(
+    (index: number) => {
+      if (emblaApi) {
+        emblaApi.scrollTo(index);
+      }
+    },
+    [emblaApi]
+  );
+
+  React.useEffect(() => {
+    if (!emblaApi) return;
+    onSelect(emblaApi);
+    emblaApi.on("reInit", onSelect);
+    emblaApi.on("select", onSelect);
+    return () => {
+      emblaApi?.off("select", onSelect);
+    };
+  }, [emblaApi, onSelect]);
+
 
   useEffect(() => {
     // Add check for product before accessing options
@@ -140,16 +169,46 @@ export default function ClientProductPage({
     <div className="min-h-screen px-4 py-4 md:px-6 md:py-6 lg:px-24 lg:py-8">
       {" "}
       {/* Increased padding */}
-      <div className="flex flex-col md:flex-row gap-16 pb-16 relative">
-        {" "}
-        {/* Increased gap and bottom padding */}
-        <div className="flex-[2] w-full md:w-1/2 md:sticky md:top-24 self-start relative">
-          {" "}
-          {/* Adjusted sticky top */}
-          <Carousel images={product.images.edges.map((e) => e.node)}>
-            <CarouselContent>
+      {/* Main container for image gallery and product details */}
+      <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 pb-16 relative"> {/* Changed md:flex-row to lg:flex-row */}
+
+        {/* Image Gallery Section */}
+        {/* Wrap gallery content for sticky positioning */}
+        <div className="w-full lg:w-3/5 flex flex-col lg:flex-row gap-4 lg:sticky lg:top-24 self-start"> {/* Changed md: to lg: */}
+
+          {/* Vertical Thumbnails (Desktop - LG and up) */}
+          {/* Added sticky wrapper for vertical thumbnails */}
+          <div className="hidden lg:block lg:sticky lg:top-24 self-start"> {/* Show only on lg+, make wrapper sticky */}
+            <div className="lg:w-24 flex flex-col gap-3 overflow-y-auto max-h-[calc(100vh-10rem)] pr-2"> {/* Set max height relative to viewport, ensure flex-col */}
               {product.images.edges.map((edge, index) => (
-                <CarouselItem key={index} className="aspect-[2/3]"> {/* Changed aspect ratio */}
+                <button
+                  key={edge.node.url} // Use unique URL as key
+                onClick={() => scrollToIndex(index)}
+                className={cn(
+                  "w-20 h-20 border border-transparent rounded-lg overflow-hidden focus:outline-none transition-all duration-300 shrink-0", // Added shrink-0
+                  selectedIndex === index
+                    ? "border-[3px] border-primary shadow-md"
+                    : "border-border hover:border-[3px] hover:border-primary/50 hover:shadow-sm"
+                )}
+                aria-label={`Go to slide ${index + 1}`}
+              >
+                <Image
+                  src={edge.node.url ? decodeURIComponent(edge.node.url) : ''}
+                  alt={edge.node.altText || `Thumbnail ${index + 1}`}
+                  width={80}
+                  height={80}
+                  className="object-cover w-full h-full"
+                />
+              </button>
+            ))}
+            </div> {/* Close the inner div for thumbnails */}
+          </div> {/* Close the sticky wrapper div */}
+
+          {/* Main Image Carousel Viewport */}
+          <div className="overflow-hidden flex-1" ref={emblaRef}> {/* Added flex-1 */}
+            <div className="flex"> {/* Embla requires a flex container */}
+              {product.images.edges.map((edge, index) => (
+                <div key={edge.node.url} className="min-w-0 shrink-0 grow-0 basis-full aspect-[2/3]"> {/* Use unique URL as key, Embla item structure */}
                   <button
                     type="button"
                     className="relative w-full h-full rounded-lg overflow-hidden cursor-zoom-in block"
@@ -159,20 +218,30 @@ export default function ClientProductPage({
                     }}
                   >
                     <Image
-                      // Decode URL before passing to Image component
                       src={edge.node.url ? decodeURIComponent(edge.node.url) : ''}
                       alt={edge.node.altText || product.title}
-                      fill={true} // Use fill instead of width/height
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Example sizes, adjust as needed
-                      className="object-cover" // Keep object-cover, remove w-full and aspect ratio here
+                      fill={true}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover"
+                      priority={index === 0} // Prioritize loading the first image
                     />
                   </button>
-                </CarouselItem>
+                </div>
               ))}
-            </CarouselContent>
-            <CarouselThumbnail />{" "}
-            {/* We might need to adjust this later if needed */}
-          </Carousel>
+            </div>
+          </div>
+
+          {/* Horizontal Thumbnails (Mobile/Tablet - Below LG) */}
+          <div className="block lg:hidden mt-4"> {/* Show below lg breakpoint */}
+            <ThumbnailList
+              images={product.images.edges.map((e) => e.node)}
+              selectedIndex={selectedIndex}
+              scrollToIndex={scrollToIndex}
+              orientation="horizontal"
+            />
+          </div>
+
+          {/* Lightbox remains the same */}
           <Lightbox
             open={lightboxOpen}
             close={() => setLightboxOpen(false)}
@@ -197,12 +266,10 @@ export default function ClientProductPage({
             }}
           />
         </div>
-        <div className="flex-[1] w-full md:w-1/2 md:sticky md:top-24 self-start space-y-4 md:space-y-6 lg:space-y-8">
-          {" "}
-          {/* Increased spacing & Adjusted sticky top */}
+
+        {/* Product Details Section */}
+        <div className="w-full lg:w-2/5 lg:sticky lg:top-24 self-start space-y-4 md:space-y-6 lg:space-y-8"> {/* Changed md: to lg: for width and sticky */}
           <div className="space-y-6 lg:space-y-8">
-            {" "}
-            {/* Increased spacing */}
             <p className="text-3xl lg:text-5xl font-bold">
               {product.title}
             </p>{" "}
@@ -288,23 +355,20 @@ export default function ClientProductPage({
                             key={value.id}
                             variant={isSelected ? "default" : "outline"}
                             disabled={!isAvailable}
-                            className={`relative flex items-center justify-center rounded-md px-4 py-2 cursor-pointer border-2 ${
-                              // Already has cursor-pointer
-                              isSelected ? "border-primary" : "border-border"
-                            } ${
-                              !isAvailable
-                                ? "opacity-50 cursor-not-allowed"
-                                : ""
-                            }`}
-                            style={{ minWidth: "4rem" }} // Ensure minimum width for consistency
+                            className={cn(
+                              `relative flex items-center justify-center rounded-full border-2 size-10 md:size-12 cursor-pointer`, // Fixed size, removed padding/min-width
+                              isSelected ? "border-primary" : "border-border",
+                              !isAvailable && "opacity-50 cursor-not-allowed"
+                            )}
                             onClick={() =>
                               handleOptionChange(option.name, value.name)
                             }
                           >
                             {hasSwatch && value.swatch?.color && (
                               <span
-                                className="w-5 h-5 rounded-sm border mr-2" // Changed to rounded-sm, added margin
+                                className="size-full rounded-full border" // Use size-full
                                 style={{ backgroundColor: value.swatch.color }}
+                                title={value.name} // Add title for accessibility
                               />
                             )}
                             {value.swatch?.image?.previewImage.url ? (
@@ -312,13 +376,13 @@ export default function ClientProductPage({
                                 // Decode swatch image URL
                                 src={value.swatch.image.previewImage.url ? decodeURIComponent(value.swatch.image.previewImage.url) : ''}
                                 alt={value.swatch.image.alt || value.name}
-                                width={24}
-                                height={24}
-                                className="rounded-sm mr-2" // Changed to rounded-sm, added margin
+                                fill // Use fill to cover the button area
+                                className="rounded-full object-cover" // Ensure image is rounded and covers
                               />
                             ) : null}
-                            <span className="text-sm">{value.name}</span>{" "}
-                            {/* Ensure text is always visible */}
+                            {!hasSwatch && ( // Only show text if no swatch
+                              <span className="text-xs md:text-sm">{value.name}</span>
+                            )}
                           </Button>
                         );
                       })}
@@ -378,7 +442,7 @@ export default function ClientProductPage({
                     <Link href="/cart" className="block">
                       {" "}
                       {/* Use block for full width */}
-                      <Button className="w-full rounded-md py-3 text-lg font-medium transition-all flex items-center justify-center gap-2 cursor-pointer">
+                      <Button className="w-full rounded-full py-6 text-lg font-medium transition-all flex items-center justify-center gap-2 cursor-pointer"> {/* Changed py-3 to py-6 and rounded-md to rounded-full */}
                         {/* Already has cursor-pointer */}
                         <ArrowRight className="w-5 h-5" />
                         <span>Go to Cart</span>
@@ -392,7 +456,7 @@ export default function ClientProductPage({
                         selectedVariant.quantityAvailable < quantity ||
                         isAdding
                       }
-                      className="w-full rounded-md py-6 flex items-center justify-center gap-2 text-lg font-medium cursor-pointer" // Already has cursor-pointer
+                      className="w-full rounded-full py-6 flex items-center justify-center gap-2 text-lg font-medium cursor-pointer" // Changed rounded-md to rounded-full
                       // glowVariant="vip-gold" // Removed glow effect
                     >
                       {isAdding ? (
@@ -486,7 +550,7 @@ export default function ClientProductPage({
   );
 }
 
-// --- WishlistActionButton Component (Moved outside ClientProductPage for clarity) ---
+// --- WishlistActionButton Component (Restored) ---
 interface WishlistActionButtonProps {
   variantId: string;
 }
@@ -495,7 +559,6 @@ const WishlistActionButton: React.FC<WishlistActionButtonProps> = ({
   variantId,
 }) => {
   const { addToWishlist, removeFromWishlist, isItemInWishlist } = useWishlist();
-  // No need for local state here, rely directly on context for button state
   const isInWishlist = isItemInWishlist(variantId);
 
   const handleToggle = () => {
@@ -508,14 +571,14 @@ const WishlistActionButton: React.FC<WishlistActionButtonProps> = ({
 
   return (
     <Button
-      variant="outline" // Use outline variant
-      className="w-full rounded-md py-6 flex items-center justify-center gap-2 cursor-pointer text-lg font-medium" // Match py-6 and text/font styles
+      variant="outline"
+      className="w-full rounded-full py-6 flex items-center justify-center gap-2 cursor-pointer text-lg font-medium"
       onClick={handleToggle}
       aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
     >
       <Heart
         className={`w-5 h-5 transition-colors duration-200 ${
-          isInWishlist ? "fill-red-500 text-red-500" : "text-gray-500" // Add default color
+          isInWishlist ? "fill-red-500 text-red-500" : "text-gray-500"
         }`}
       />
       {isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}

@@ -373,7 +373,8 @@ export default function ClientCartPage() {
                       }`}
                     >
                       {/* Product Image with Mobile Optimization */}
-                      <div className="relative aspect-square w-32 h-32 sm:w-28 sm:h-28 lg:w-32 lg:h-32 mx-auto sm:mx-0 rounded-lg overflow-hidden shrink-0 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                      {/* Changed aspect-square to aspect-[2/3] and adjusted width/height constraints */}
+                      <div className="relative aspect-[2/3] w-24 sm:w-20 lg:w-24 mx-auto sm:mx-0 rounded-lg overflow-hidden shrink-0 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
                         {item.merchandise?.image?.url && (
                           <Image
                             src={item.merchandise.image.url}
@@ -744,8 +745,10 @@ export default function ClientCartPage() {
                   </span>
                   <span className="font-bold text-xl text-primary">
                     {priceSymbol}
-                    {cart.subtotalAmount?.amount}{" "}
-                    {/* Use subtotalAmount which reflects discounts */}
+                    {(
+                      Number(cart.subtotalAmount?.amount ?? 0) - // Start with subtotal
+                      Number(cart.totalDiscountAmount?.amount ?? 0) // Subtract total discount
+                    ).toFixed(2)}
                   </span>
                 </div>
               </div>

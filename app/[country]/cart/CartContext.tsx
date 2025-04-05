@@ -60,6 +60,10 @@ interface Cart {
     totalTaxAmount?: { amount: string; currencyCode: string } | null; // Optional
     totalDutyAmount?: { amount: string; currencyCode: string } | null; // Optional
   };
+  // Moved discountAllocations to top level of Cart interface
+  discountAllocations?: {
+    discountedAmount: { amount: string; currencyCode: string };
+  }[];
   lines: { edges: { node: CartLineNode }[] };
   totalQuantity: number;
   discountCodes: {
@@ -85,6 +89,9 @@ interface CartState {
   itemCount: number;
   subtotalAmount: { amount: string; currencyCode: string } | null;
   totalAmount: { amount: string; currencyCode: string } | null;
+  totalTaxAmount: { amount: string; currencyCode: string } | null; // Added tax amount
+  totalDutyAmount: { amount: string; currencyCode: string } | null; // Added duty amount
+  totalDiscountAmount: { amount: string; currencyCode: string } | null; // Added total discount amount
   discountCodes: { code: string; applicable: boolean }[]; // Added discount codes to state
 }
 
@@ -165,6 +172,9 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
       itemCount: 0,
       subtotalAmount: null,
       totalAmount: null,
+      totalTaxAmount: null, // Initialize tax
+      totalDutyAmount: null, // Initialize duty
+      totalDiscountAmount: null, // Initialize total discount
       discountCodes: [], // Initialize discount codes
     };
 
@@ -188,20 +198,39 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   const [isApplyingDiscount, setIsApplyingDiscount] = useState<boolean>(false);
 
   // Helper function to map API Cart to CartState
-  const mapApiCartToState = (apiCart: Cart): CartState => ({
-    cartId: apiCart.id,
-    items: apiCart.lines.edges.map((edge) => ({
-      variantId: edge.node.merchandise.id,
-      quantity: edge.node.quantity,
-      lineId: edge.node.id,
-      merchandise: edge.node.merchandise, // Use the full merchandise object
-    })),
-    checkoutUrl: apiCart.checkoutUrl,
-    itemCount: apiCart.totalQuantity,
-    subtotalAmount: apiCart.cost.subtotalAmount,
-    totalAmount: apiCart.cost.totalAmount,
-    discountCodes: apiCart.discountCodes || [], // Ensure discountCodes is always an array
-  });
+  const mapApiCartToState = (apiCart: Cart): CartState => {
+    // Calculate total discount amount from top-level discountAllocations
+    const totalDiscountValue = (apiCart.discountAllocations || []).reduce(
+      (sum: number, allocation: { discountedAmount: { amount: string } }) => sum + parseFloat(allocation.discountedAmount.amount),
+      0
+    );
+    const totalDiscountAmount =
+      totalDiscountValue > 0 && apiCart.cost.subtotalAmount // Ensure currency code exists
+        ? {
+            amount: totalDiscountValue.toFixed(2),
+            currencyCode: apiCart.cost.subtotalAmount.currencyCode,
+          }
+        : null;
+
+    return {
+      cartId: apiCart.id,
+      items: apiCart.lines.edges.map((edge: { node: CartLineNode }) => ({ // Add type for edge
+        variantId: edge.node.merchandise.id,
+        quantity: edge.node.quantity,
+        lineId: edge.node.id,
+        merchandise: edge.node.merchandise, // Use the full merchandise object
+      })),
+      checkoutUrl: apiCart.checkoutUrl,
+      itemCount: apiCart.totalQuantity,
+      subtotalAmount: apiCart.cost.subtotalAmount,
+      totalAmount: apiCart.cost.totalAmount,
+      totalTaxAmount: apiCart.cost.totalTaxAmount || null, // Map tax amount
+      totalDutyAmount: apiCart.cost.totalDutyAmount || null, // Map duty amount
+      totalDiscountAmount: totalDiscountAmount, // Map calculated total discount
+      discountCodes: apiCart.discountCodes || [], // Ensure discountCodes is always an array
+    };
+  };
+
 
   // Function to fetch cart data from Shopify
   const getCart = useCallback(async () => {
