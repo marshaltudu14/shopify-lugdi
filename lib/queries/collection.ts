@@ -13,6 +13,7 @@ export const GET_COLLECTION_PRODUCTS = gql`
     collection(handle: $handle) {
       id
       title
+      description # Added collection description
 
       image {
         ...ImageFragment

@@ -71,6 +71,7 @@ export interface ProductByHandle {
   productType: string; // Added productType
   totalInventory: number;
   tags: string[];
+  featuredImage?: ImageNode | null; // Added featuredImage
   images: {
     edges: {
       cursor: string;

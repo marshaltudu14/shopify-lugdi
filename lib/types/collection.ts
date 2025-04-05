@@ -48,6 +48,7 @@ export interface CollectionPageInfo {
 export interface CollectionNode {
   id: string;
   title: string;
+  description: string; // Added collection description
   seo: SEO;
   image: ImageNode;
   products: {

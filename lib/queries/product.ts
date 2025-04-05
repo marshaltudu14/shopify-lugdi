@@ -14,6 +14,9 @@ export const GET_SINGLE_PRODUCT = gql`
       productType # Added productType
       totalInventory
       tags
+      featuredImage { # Added featuredImage
+        ...ImageFragment
+      }
       images(first: 20) {
         edges {
           cursor

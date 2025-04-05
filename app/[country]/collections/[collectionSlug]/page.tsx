@@ -39,8 +39,10 @@ export async function generateMetadata({
     const seoTitle =
       collection?.seo?.title ||
       `Buy ${collection?.title} Fashion Apparels & Accessories Online`;
+    // Implement description fallback: SEO -> Collection Description -> Default
     const seoDescription =
-      collection?.seo?.description ||
+      collection?.seo?.description ??
+      collection?.description ??
       `Discover a wide selection of ${collection?.title} fashion apparels & accessories. Enjoy new arrivals, exclusive deals, and premium quality.`;
     const seoImage = collection?.image?.url || "";
 

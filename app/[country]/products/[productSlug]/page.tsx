@@ -31,8 +31,16 @@ export async function generateMetadata({
     const productData = data.product;
 
     const seoTitle = productData?.seo?.title || productData?.title;
-    const seoDescription = productData?.seo?.description;
-    const seoImage = productData?.images?.edges[0]?.node?.url || "";
+    // Implement description fallback
+    const seoDescription =
+      productData?.seo?.description ??
+      productData?.description ??
+      `Check out ${productData?.title} and other fashion items at Lugdi.`;
+    // Prioritize featuredImage, then first valid image from images array
+    const seoImage =
+      productData?.featuredImage?.url ??
+      productData?.images?.edges?.find((edge) => edge?.node?.url)?.node?.url ??
+      "";
 
     return {
       title: seoTitle,
@@ -40,12 +48,19 @@ export async function generateMetadata({
       openGraph: {
         title: seoTitle,
         description: seoDescription,
-        images: [
-          {
-            url: seoImage,
-            alt: productData?.images?.edges[0]?.node?.altText || seoTitle,
-          },
-        ],
+        images: seoImage
+          ? [
+              {
+                url: seoImage,
+                // Use alt text from featuredImage if available, otherwise fallback
+                alt:
+                  productData?.featuredImage?.altText ||
+                  productData?.images?.edges?.find((edge) => edge?.node?.url)
+                    ?.node?.altText ||
+                  seoTitle,
+              },
+            ]
+          : [], // Return empty array if no image found
       },
       alternates: {
         canonical: canonicalUrl,
