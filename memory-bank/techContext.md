@@ -6,10 +6,10 @@
 - **Language:** TypeScript
 - **UI Library:** Shadcn/ui (built on Radix UI primitives)
 - **Styling:** Tailwind CSS (v4+)
-- **State Management:** Zustand
+- **State Management:** React Context (for Cart), Zustand (dependency present, but not currently used)
 - **API Communication:** Apollo Client (for GraphQL)
 - **Backend:** Shopify (via Storefront GraphQL API - assumed)
-- **Authentication:** next-auth (v4) - Presence confirmed, specific implementation TBD.
+- **Authentication:** Custom implementation using Shopify Customer Account API tokens (access/refresh tokens stored in cookies). `next-auth` dependency is present but unused.
 - **Forms:** React Hook Form with Zod for validation.
 
 ## 2. Development Environment

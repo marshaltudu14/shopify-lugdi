@@ -10,8 +10,9 @@
 
 - **Component Model:** Utilizes reusable components, likely following Atomic Design principles to some extent, leveraging Shadcn/ui components.
 - **State Management:**
-  - **Cart:** React Context API (`CartContext`) for client-side cart state. State is persisted to encrypted `localStorage`.
-  - **Global State (Potential):** Zustand is listed as a dependency, potentially used for other global state needs (e.g., UI state, user session if not handled by next-auth). Needs confirmation.
+  - **Cart:** React Context API (`CartContext`) for client-side cart state. State is persisted to encrypted `localStorage`. (Zustand dependency exists but is unused).
+  - **Wishlist:** React Context API (`WishlistContext`) for client-side wishlist state.
+  - **Global State (Potential):** Zustand is listed as a dependency, but is not currently used in the codebase. State management primarily relies on React Context and local component state.
   - **Local State:** Standard React `useState` and `useEffect` for component-level state.
 - **Data Fetching:**
   - **Server Components:** Likely used for initial page loads, fetching data directly on the server (e.g., product details, collection pages).
@@ -30,13 +31,13 @@
 - **Collection Pages:** Similar to products, fetching collection data and associated products. Product filtering functionality has been removed from these pages.
 - **Search Pages:** Fetching products based on a query term. Product filtering functionality has been removed from these pages.
 - **Cart Operations:** Client-side logic within `CartContext.tsx` interacting with Shopify's cart mutations via Apollo Client. State synchronized with encrypted `localStorage`.
-- **Country Selection/Routing:** Middleware (`middleware.ts`?) or logic within page/layout components likely handles redirection or context setting based on the URL's country segment. `CountriesCombobox.tsx` suggests a manual selection mechanism.
+- **Country Selection/Routing:** Middleware (`middleware.ts`) handles country detection (cookie/IP), sets cookies, redirects inactive countries to `/coming-soon`, enforces `/[country]/` structure. `CountriesCombobox.tsx` likely allows manual override/selection.
 
 ## 4. Security Considerations
 
 - **Cart Persistence:** Client-side cart data in `localStorage` is encrypted using AES (`crypto-js`) with a key from environment variables (`NEXT_PUBLIC_CART_ENCRYPTION_KEY`).
 - **API Keys:** Shopify Storefront API keys and other secrets should be securely managed via environment variables.
-- **Authentication:** If `next-auth` is fully implemented, it handles user session management securely.
+- **Authentication:** Custom implementation in `middleware.ts` handles Shopify Customer Account API token refresh and validation for protected routes (e.g., `/account`). Tokens stored in secure, httpOnly cookies. `next-auth` dependency is unused.
 
 ## 5. Code Organization
 

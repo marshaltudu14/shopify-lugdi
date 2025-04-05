@@ -23,16 +23,16 @@
 
 - **Theme Simplification:** The removal of the dynamic theme system simplifies styling logic significantly, relying only on the base light/dark modes.
 - **Component Reusability:** Refactoring the wishlist to use `ProductCard` improves consistency.
-- **Zustand Usage:** Still needs clarification.
-- **`next-auth` Usage:** Still needs clarification.
-- **Middleware:** Still needs investigation.
+- **Zustand Usage:** Dependency exists, but not currently implemented.
+- **Authentication:** Custom implementation using Shopify Customer Account API tokens (handled in `middleware.ts`). Protects `/account` route. `next-auth` dependency is unused.
+- **Middleware:** Implemented (`middleware.ts`). Handles country detection/redirection (based on cookie/IP, redirects inactive countries to `/coming-soon`, enforces `/[country]/` structure) and authentication token refresh/validation for protected routes.
 
 ## 5. Important Patterns & Preferences
 
 - **Internationalization:** URL-based routing (`/[country]/`) remains a core pattern.
 - **Styling:** Heavy reliance on Tailwind CSS and Shadcn/ui components, now simplified to base light/dark themes.
 - **API:** GraphQL via Apollo Client for Shopify interaction.
-- **Cart State:** Client-side management via React Context with encrypted `localStorage` persistence.
+- **Cart State:** Client-side management via React Context with encrypted `localStorage` persistence. (Zustand dependency exists but is unused).
 - **Wishlist State:** Client-side management via React Context (`WishlistContext`).
 
 ## 6. Learnings & Insights

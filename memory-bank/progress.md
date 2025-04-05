@@ -22,9 +22,12 @@
   - "Coming Soon" page functionality
   - Error handling pages/logic
 - **Checkout Flow:** Confirm the transition from the cart page to the Shopify checkout URL.
-- **Authentication:** Determine if user authentication (`next-auth`) is required and/or implemented. If so, integrate login, logout, profile views, etc.
-- **Zustand Integration:** Clarify if and where Zustand is used for state management.
-- **Middleware Logic:** Investigate `middleware.ts` to understand its role (e.g., default country redirection, auth protection).
+- **Authentication:** Custom authentication using Shopify Customer Account API tokens is implemented in `middleware.ts`, protecting the `/account` route and handling token refresh. `next-auth` dependency is unused.
+- **Zustand Integration:** Dependency exists, but no usage found in the codebase. State management relies on React Context (Cart, Wishlist) and local state.
+- **Middleware Logic:** `middleware.ts` is implemented and handles:
+  - Country detection (cookie/IP) and redirection for inactive countries or incorrect URL structure.
+  - Setting country cookies.
+  - Authentication token validation and refresh for protected routes (`/account`).
 - **Shopify Backend Sync:** Ensure frontend reflects data accurately from Shopify (products, inventory, pricing, potentially markets).
 - **Footer Links:** Policy links in the footer are currently hardcoded and point to '#'. Need to update with actual URLs or implement dynamic fetching later.
 - **Testing:** Define and implement a testing strategy (unit, integration, e2e).
@@ -45,7 +48,7 @@
 ## 5. Evolution of Decisions
 
 - (Initial State) Project structure suggests a headless Shopify approach using Next.js.
-- (Initial State) Cart state management uses React Context with encryption, not Zustand.
+- (Initial State) Cart state management uses React Context with encryption. (Zustand dependency exists but is unused).
 - (Update) Removed Gold Theme and seasonal/festival theme system. Reverted to standard black/white theme.
 - (Update) Corrected cart total display.
 - (Update) Removed gold theme styling from Footer.

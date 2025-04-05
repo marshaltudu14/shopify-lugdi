@@ -16,7 +16,7 @@ To build a modern, global e-commerce storefront for the Lugdi fashion brand. The
 - **Search:** Allow users to search for products within the store.
 - **Responsive Design:** Ensure the storefront is usable and visually appealing across various devices (desktop, tablet, mobile).
 - **Branding:** Reflect Lugdi's brand identity ("bold fashion brand merging cultural heritage with modern style... artistic graphic T-shirts, luxury streetwear... inspired by mythology, futuristic aesthetics, and abstract art") through design, custom fonts (Blippo, Baumans), and content.
-- **Technology Stack:** Utilize Next.js, TypeScript, Tailwind CSS, Shadcn/ui, Zustand, and Apollo Client.
+- **Technology Stack:** Utilize Next.js, TypeScript, Tailwind CSS, Shadcn/ui, Apollo Client. (Zustand is a dependency but not currently implemented for state management).
 
 ## 4. Primary Audience/Users
 
@@ -29,11 +29,11 @@ Global online shoppers interested in unique, culturally inspired fashion and lux
   - Integration with Shopify Storefront GraphQL API for product data, collections, cart management, and search.
   - Implementation of country selection and routing.
   - UI/UX design implementation based on Shadcn/ui components and custom styling.
-  - State management using Zustand.
+  - State management using React Context (for Cart). (Zustand is a dependency but not currently implemented).
   - Basic SEO setup (metadata generation).
 - **Out of Scope (Assumed):**
   - Shopify backend configuration (product setup, inventory, pricing, Shopify Markets setup).
   - Order processing and fulfillment logic.
   - Payment gateway integration (typically handled by redirecting to Shopify's checkout).
-  - User authentication features (unless explicitly added later - `next-auth` is present but usage needs confirmation).
+  - User authentication features (Implemented via custom Shopify Customer Account API token handling in middleware, not `next-auth`).
   - Advanced analytics integration beyond basic setup.
