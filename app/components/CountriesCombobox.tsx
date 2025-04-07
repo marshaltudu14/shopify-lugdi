@@ -38,8 +38,10 @@ export default function CountriesCombobox({
   }, [countries, selectedSlug]);
 
   const filteredCountries = countries
-    .filter((country) =>
-      country.name.toLowerCase().includes(searchValue.toLowerCase())
+    .filter(
+      (country) =>
+        country.active && // Filter only active countries
+        country.name.toLowerCase().includes(searchValue.toLowerCase())
     )
     .sort((a, b) => a.name.localeCompare(b.name));
 

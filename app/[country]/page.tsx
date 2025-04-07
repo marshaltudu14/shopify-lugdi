@@ -58,9 +58,11 @@ export default async function CountryHomePage({
   // Update variable declarations for menu data and product data
   let menCollectionsMenu: GetCollectionsByMenuResponse | null = null;
   let womenCollectionsMenu: GetCollectionsByMenuResponse | null = null;
-  let newArrivalsProducts: CollectionProductNode[] = []; // Use correct type
-  let mensProducts: CollectionProductNode[] = []; // Use correct type
-  let womensProducts: CollectionProductNode[] = []; // Use correct type
+  let newArrivalsProducts: CollectionProductNode[] = [];
+  let mensProducts: CollectionProductNode[] = [];
+  let womensProducts: CollectionProductNode[] = [];
+  let bestSellingProducts: CollectionProductNode[] = []; // Add for best-sellers
+  let storiesOfUsProducts: CollectionProductNode[] = []; // Add for stories-of-us
 
   try {
     const client = initializeApollo();
@@ -118,21 +120,52 @@ export default async function CountryHomePage({
         fetchPolicy: "network-only",
       });
 
+      // Fetch Best Selling Products using GET_COLLECTION_PRODUCTS
+      const { data: bestSellingCollectionData } = await client.query<CollectionData>({
+        query: GET_COLLECTION_PRODUCTS,
+        variables: {
+          handle: "best-sellers", // Corrected handle
+          first: 12,
+          sortKey: "BEST_SELLING",
+          reverse: false,
+          country: isoCountryCode,
+        },
+        fetchPolicy: "network-only",
+      });
+
+      // Fetch Stories of Us Products using GET_COLLECTION_PRODUCTS
+      const { data: storiesOfUsCollectionData } = await client.query<CollectionData>({
+        query: GET_COLLECTION_PRODUCTS,
+        variables: {
+          handle: "stories-of-us", // Assumed handle
+          first: 12,
+          sortKey: "CREATED", // Or BEST_SELLING, RELEVANCE etc. - Assuming CREATED for now
+          reverse: true,
+          country: isoCountryCode,
+        },
+        fetchPolicy: "network-only",
+      });
+
       // Assign fetched menu data and extracted product data
       menCollectionsMenu = menMenuData;
       womenCollectionsMenu = womenMenuData;
-      // Extract product nodes directly for all three sections
+      // Extract product nodes directly for all sections
       newArrivalsProducts = newArrivalsCollectionData?.collection?.products?.edges?.map(edge => edge.node) || [];
       mensProducts = mensCollectionData?.collection?.products?.edges?.map(edge => edge.node) || [];
       womensProducts = womensCollectionData?.collection?.products?.edges?.map(edge => edge.node) || [];
+      bestSellingProducts = bestSellingCollectionData?.collection?.products?.edges?.map(edge => edge.node) || [];
+      storiesOfUsProducts = storiesOfUsCollectionData?.collection?.products?.edges?.map(edge => edge.node) || [];
+
     } catch (error) {
       // Update catch block assignments
       menCollectionsMenu = null;
-    womenCollectionsMenu = null;
-    newArrivalsProducts = []; // Nullify on error
-    mensProducts = []; // Nullify on error
-    womensProducts = []; // Nullify on error
-    console.error("Error fetching homepage data:", error); // Updated error message
+      womenCollectionsMenu = null;
+      newArrivalsProducts = [];
+      mensProducts = [];
+      womensProducts = [];
+      bestSellingProducts = []; // Nullify on error
+      storiesOfUsProducts = []; // Nullify on error
+      console.error("Error fetching homepage data:", error);
   }
 
   const country: Country | null =
@@ -153,9 +186,11 @@ export default async function CountryHomePage({
       // themeClass prop removed, client gets it from context
       menCollectionsMenu={menCollectionsMenu}
       womenCollectionsMenu={womenCollectionsMenu}
-      newArrivalsProducts={newArrivalsProducts} // Pass array of nodes
-      mensProducts={mensProducts} // Pass array of nodes
-      womensProducts={womensProducts} // Pass array of nodes
+      newArrivalsProducts={newArrivalsProducts}
+      mensProducts={mensProducts}
+      womensProducts={womensProducts}
+      bestSellingProducts={bestSellingProducts} // Pass best sellers
+      storiesOfUsProducts={storiesOfUsProducts} // Pass stories of us
     />
   );
 }

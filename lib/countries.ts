@@ -19,7 +19,7 @@ export const countries: Country[] = [
   {
     name: "Australia",
     slug: "au",
-    active: true,
+    active: false,
     currencyCode: "AUD",
     currencySymbol: "$",
     languageCode: "en-AU",

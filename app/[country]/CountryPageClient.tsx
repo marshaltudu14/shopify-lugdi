@@ -25,8 +25,10 @@ interface CountryPageClientProps {
   menCollectionsMenu: GetCollectionsByMenuResponse | null;
   womenCollectionsMenu: GetCollectionsByMenuResponse | null;
   newArrivalsProducts: CollectionProductNode[]; // Change type to match passed data
-  mensProducts: CollectionProductNode[]; // Change prop name and type
-  womensProducts: CollectionProductNode[]; // Change prop name and type
+  mensProducts: CollectionProductNode[];
+  womensProducts: CollectionProductNode[];
+  bestSellingProducts: CollectionProductNode[]; // Add best sellers prop
+  storiesOfUsProducts: CollectionProductNode[]; // Add stories of us prop
   // themeClass prop is no longer needed here, will get from context
 }
 
@@ -37,8 +39,10 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
   menCollectionsMenu,
   womenCollectionsMenu,
   newArrivalsProducts,
-  mensProducts, // Destructure new prop name
-  womensProducts, // Destructure new prop name
+  mensProducts,
+  womensProducts,
+  bestSellingProducts, // Destructure best sellers
+  storiesOfUsProducts, // Destructure stories of us
   // themeClass removed from props
 }) => {
   // Removed theme context usage
@@ -102,23 +106,135 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
         <BannerCarousel banners={banners} />
       </motion.div>
 
+      {/* Stories of Us Section (New) */}
+      <section className="py-8 bg-background relative z-10"> {/* Reduced padding */}
+        {storiesOfUsProducts.length > 0 && (
+          <div className="container mx-auto px-4 space-y-6"> {/* Reduced space */}
+            <div className="relative">
+              {/* Modified Header for Stories of Us */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+                className="flex justify-between items-center gap-4" // Applied flex layout
+              >
+                <div>
+                  {/* Removed Badge Span */}
+                  <h2 className="text-2xl font-bold tracking-tight"> {/* Reduced heading size, removed margin */}
+                    Stories Of Us
+                  </h2>
+                  <p className="text-muted-foreground mt-1 max-w-2xl"> {/* Adjusted margin */}
+                    Our premium collection telling unique stories through design.
+                  </p>
+                </div>
+                <Link href="/collections/stories-of-us" className="hidden md:block"> {/* Hide link on mobile */}
+                  <Button variant="outline" size="sm" className="items-center gap-1 cursor-pointer"> {/* Changed variant, size, gap */}
+                    View All
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg> {/* Adjusted icon size */}
+                  </Button>
+                </Link>
+              </motion.div>
+            </div>
+            <ScrollArea className="w-full whitespace-nowrap">
+              <div className="flex w-max space-x-6 pb-4">
+                {storiesOfUsProducts.map((product, index) => (
+                  <motion.div
+                    key={`stories-${product.id}`}
+                    initial={{ opacity: 0, x: 50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    className="w-[200px] md:w-[250px] lg:w-[300px] inline-block"
+                  >
+                    <ProductCard product={product} />
+                  </motion.div>
+                ))}
+              </div>
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
+            {/* Removed mobile-only link for Stories of Us */}
+          </div>
+        )}
+      </section>
+
+      {/* Best Sellers Section (New) */}
+      <section className="py-8 relative z-10"> {/* Reduced padding */}
+        {bestSellingProducts.length > 0 && (
+          <div className="container mx-auto px-4 space-y-6"> {/* Reduced space */}
+            <div className="relative">
+              {/* Modified Header for Best Sellers */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+                className="flex justify-between items-center gap-4" // Applied flex layout
+              >
+                <div>
+                  {/* Removed Badge Span */}
+                  <h2 className="text-2xl font-bold tracking-tight"> {/* Reduced heading size, removed margin */}
+                    Best Sellers
+                  </h2>
+                  <p className="text-muted-foreground mt-1 max-w-2xl"> {/* Adjusted margin */}
+                    Discover the most loved items by our community.
+                  </p>
+                </div>
+                <Link href="/collections/best-sellers" className="hidden md:block"> {/* Hide link on mobile */}
+                  <Button variant="outline" size="sm" className="items-center gap-1 cursor-pointer"> {/* Changed variant, size, gap */}
+                    View All
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg> {/* Adjusted icon size */}
+                  </Button>
+                </Link>
+              </motion.div>
+            </div>
+            <ScrollArea className="w-full whitespace-nowrap">
+              <div className="flex w-max space-x-6 pb-4">
+                {bestSellingProducts.map((product, index) => (
+                  <motion.div
+                    key={`best-${product.id}`}
+                    initial={{ opacity: 0, x: 50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    className="w-[200px] md:w-[250px] lg:w-[300px] inline-block"
+                  >
+                    <ProductCard product={product} />
+                  </motion.div>
+                ))}
+              </div>
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
+             {/* Removed mobile-only link for Best Sellers */}
+          </div>
+        )}
+      </section>
+
       {/* New Arrivals */}
-      <section className="py-12 bg-background relative z-10"> {/* Reduced padding */}
-        <div className="container mx-auto px-4 space-y-8">
+      <section className="py-8 bg-background relative z-10"> {/* Reduced padding */}
+        <div className="container mx-auto px-4 space-y-6"> {/* Reduced space */}
+           {/* Modified Header for New Arrivals */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
+            className="flex justify-between items-center gap-4" // Applied flex layout
           >
-            <h2 className="text-3xl font-bold tracking-tight flex items-center">
-              New Arrivals
-              <span className="ml-3 px-2 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary">
-                Just In
-              </span>
-            </h2>
-            <p className="mt-2 text-muted-foreground">
-              Discover our latest additions
-            </p>
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight flex items-center"> {/* Reduced heading size */}
+                New Arrivals
+                 {/* Removed Badge Span */}
+              </h2>
+              <p className="mt-1 text-muted-foreground"> {/* Adjusted margin */}
+                Discover our latest additions
+              </p>
+            </div>
+             <Link href="/collections/new-arrivals" className="hidden md:block"> {/* Hide link on mobile */}
+               <Button variant="outline" size="sm" className="items-center gap-1 cursor-pointer"> {/* Changed variant, size, gap */}
+                 View All
+                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg> {/* Adjusted icon size */}
+               </Button>
+             </Link>
           </motion.div>
 
           <ScrollArea className="w-full whitespace-nowrap">
@@ -139,61 +255,37 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
             </div>
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
-
-          <div className="text-right">
-            <Link href="/collections/new-arrivals">
-              <Button variant="link" className="cursor-pointer">
-                View all new arrivals →
-              </Button>
-            </Link>
-          </div>
+           {/* Removed separate link div for New Arrivals */}
         </div>
       </section>
 
       {/* Featured Products - For Him */}
-      <section className="py-12 relative z-10"> {/* Reduced padding */}
+      <section className="py-8 relative z-10"> {/* Reduced padding */}
         {mensProducts.length > 0 && ( // Use mensProducts data
-          <div className="container mx-auto px-4 space-y-8">
+          <div className="container mx-auto px-4 space-y-6"> {/* Reduced space */}
             <div className="relative">
+               {/* Modified Header for Featured Men */}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
-                className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4"
+                className="flex justify-between items-center gap-4" // Applied flex layout
               >
                 <div>
-                  <span className="text-sm font-medium text-primary bg-primary/10 px-3 py-1 rounded-full">
-                    Featured Collection
-                  </span>
-                  <h2 className="text-3xl font-bold tracking-tight mt-2">
+                   {/* Removed Badge Span */}
+                  <h2 className="text-2xl font-bold tracking-tight"> {/* Reduced heading size, removed margin */}
                     Curated For Him
                   </h2>
-                  <p className="text-muted-foreground mt-2 max-w-2xl">
+                  <p className="text-muted-foreground mt-1 max-w-2xl"> {/* Adjusted margin */}
                     Handpicked selection of premium menswear designed for
                     comfort, style, and confidence.
                   </p>
                 </div>
-                <Link href="/collections/mens-collection">
-                  <Button
-                    variant="outline"
-                    className="hidden md:flex items-center gap-2 cursor-pointer"
-                  >
+                <Link href="/collections/mens-collection" className="hidden md:block"> {/* Hide link on mobile */}
+                  <Button variant="outline" size="sm" className="items-center gap-1 cursor-pointer"> {/* Changed variant, size, gap */}
                     View All
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M5 12h14" />
-                      <path d="m12 5 7 7-7 7" />
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg> {/* Adjusted icon size */}
                   </Button>
                 </Link>
               </motion.div>
@@ -217,63 +309,38 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
               </div>
               <ScrollBar orientation="horizontal" />
             </ScrollArea>
-
-            <div className="md:hidden text-right">
-              <Link href="/collections/mens-collection">
-                <Button variant="link" className="cursor-pointer">
-                  Shop all men's collection →
-                </Button>
-              </Link>
-            </div>
+             {/* Removed mobile-only link for Featured Men */}
           </div>
         )}
       </section>
 
       {/* Featured Products - For Her */}
-      <section className="py-12 bg-background relative z-10"> {/* Reduced padding */}
+      <section className="py-8 bg-background relative z-10"> {/* Reduced padding */}
         {womensProducts.length > 0 && ( // Use womensProducts data
-          <div className="container mx-auto px-4 space-y-8">
+          <div className="container mx-auto px-4 space-y-6"> {/* Reduced space */}
             <div className="relative">
+               {/* Modified Header for Featured Women */}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
-                className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4"
+                className="flex justify-between items-center gap-4" // Applied flex layout
               >
                 <div>
-                  {/* Changed pink to primary theme color */}
-                  <span className="text-sm font-medium text-primary bg-primary/10 px-3 py-1 rounded-full">
-                    Featured Collection
-                  </span>
-                  <h2 className="text-3xl font-bold tracking-tight mt-2">
+                   {/* Removed Badge Span */}
+                  <h2 className="text-2xl font-bold tracking-tight"> {/* Reduced heading size, removed margin */}
                     Designed For Her
                   </h2>
-                  <p className="text-muted-foreground mt-2 max-w-2xl">
+                  <p className="text-muted-foreground mt-1 max-w-2xl"> {/* Adjusted margin */}
                     Elegant and contemporary womenswear that celebrates
                     individuality and grace.
                   </p>
                 </div>
-                <Link href="/collections/womens-collection">
-                  <Button
-                    variant="outline"
-                    className="hidden md:flex items-center gap-2 cursor-pointer"
-                  >
+                <Link href="/collections/womens-collection" className="hidden md:block"> {/* Hide link on mobile */}
+                  <Button variant="outline" size="sm" className="items-center gap-1 cursor-pointer"> {/* Changed variant, size, gap */}
                     View All
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M5 12h14" />
-                      <path d="m12 5 7 7-7 7" />
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg> {/* Adjusted icon size */}
                   </Button>
                 </Link>
               </motion.div>
@@ -297,20 +364,13 @@ const CountryPageClient: React.FC<CountryPageClientProps> = ({
               </div>
               <ScrollBar orientation="horizontal" />
             </ScrollArea>
-
-            <div className="md:hidden text-right">
-              <Link href="/collections/womens-collection">
-                <Button variant="link" className="cursor-pointer">
-                  Shop all women's collection →
-                </Button>
-              </Link>
-            </div>
+             {/* Removed mobile-only link for Featured Women */}
           </div>
         )}
       </section>
 
       {/* Premium Category Showcase */}
-      <section className="py-16 relative overflow-hidden bg-gradient-to-b from-background via-background/80 to-background"> {/* Reduced padding */}
+      <section className="py-12 relative overflow-hidden bg-gradient-to-b from-background via-background/80 to-background"> {/* Reduced padding */}
         <div className="absolute inset-0 bg-grid-small-black/[0.04] dark:bg-grid-small-white/[0.03] z-0" />
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
