@@ -6,19 +6,21 @@
 - **Language:** TypeScript
 - **UI Library:** Shadcn/ui (built on Radix UI primitives)
 - **Styling:** Tailwind CSS (v4+)
-- **State Management:** React Context (for Cart), Zustand (dependency present, but not currently used)
-- **API Communication:** Apollo Client (for GraphQL)
-- **Backend:** Shopify (via Storefront GraphQL API - assumed)
-- **Authentication:** Custom implementation using Shopify Customer Account API tokens (access/refresh tokens stored in cookies). `next-auth` dependency is present but unused.
+- **State Management:** React Context (for Cart & Wishlist), Zustand (dependency present, but not currently used)
+- **API Communication:** Apollo Client (for GraphQL via `/api/graphql` route)
+- **Backend:** Shopify (via Storefront GraphQL API)
+- **Authentication:** Custom implementation using Shopify Customer Account API tokens (handled in `middleware.ts`). `next-auth` dependency is present but unused.
 - **Forms:** React Hook Form with Zod for validation.
+- **Testing:** Jest with React Testing Library (`@testing-library/react`, `@testing-library/jest-dom`).
 
 ## 2. Development Environment
 
 - **Package Manager:** npm (inferred from `package-lock.json`)
 - **Linting:** ESLint (configured via `eslint.config.mjs`)
-- **Formatting:** Likely Prettier (often used with Next.js/Tailwind, auto-formatting observed)
-- **Build Tool:** Next.js CLI (`next build`)
-- **Development Server:** Next.js CLI (`next dev --turbopack`)
+- **Formatting:** Likely Prettier (often used with Next.js/Tailwind, auto-formatting observed).
+- **Build Tool:** Next.js CLI (`next build`).
+- **Development Server:** Next.js CLI (`next dev --turbopack`).
+- **Containerization:** `Dockerfile` present, suggesting potential for Docker deployment.
 
 ## 3. Key Dependencies & Libraries
 
@@ -32,6 +34,8 @@
 - `next-themes`: Theme management (light/dark mode) - Note: Custom seasonal/festival theme system removed.
 - `sonner`: Toast notifications
 - `zod`: Schema validation
+- `google-auth-library`: Present, purpose unclear in current context.
+- `nodemailer`: Present, purpose unclear in current context.
 
 ## 4. Fonts
 
@@ -43,3 +47,4 @@
 - Relies heavily on Shopify's Storefront API for product, collection, and cart data. API rate limits and schema structure are constraints.
 - Internationalization logic depends on the structure defined in `lib/countries.ts` and URL routing (`/[country]/...`).
 - Performance optimization is crucial for a global audience (handled partly by Next.js features like Server Components, caching, etc.).
+- Testing infrastructure (Jest, RTL) is set up but the extent of test coverage is unknown.
