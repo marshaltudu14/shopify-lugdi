@@ -8,6 +8,14 @@ export const GET_MENU = gql`
       items {
         title
         url
+        resource {
+          __typename # To check resource type
+          ... on Page {
+            id     # Fetch ID
+            handle # Keep handle just in case, but prioritize ID
+          }
+          # Add other relevant resource types if needed (e.g., Collection, Product)
+        }
       }
     }
   }

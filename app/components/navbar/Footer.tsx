@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
+// Removed useParams import
 import { getCookie } from "@/utils/CookieUtils";
 import LugdiUtils from "@/utils/LugdiUtils";
 import { useQuery } from "@apollo/client";
@@ -17,11 +18,25 @@ import { MenuItem } from "@/lib/types/menu";
 const Footer = () => {
   // Removed props from signature
   // Removed logoDecorationClass from context
+  // Removed params and country extraction
+
   // TODO: Implement proper loading and error states
   const { data: policiesData } = useQuery(GET_MENU, {
     variables: { handle: "policies" },
   });
   const policyItems: MenuItem[] = policiesData?.menu?.items || [];
+
+  // Helper function to ensure URL starts with https://
+  function ensureStartWith(stringToCheck: string, startsWith: string) {
+    return stringToCheck.startsWith(startsWith)
+      ? stringToCheck
+      : `${startsWith}${stringToCheck}`;
+  }
+
+  // Get Shopify domain from environment variable
+  const shopifyDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN
+    ? ensureStartWith(process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN, "https://")
+    : "";
 
   const socialLinks = [
     {
@@ -94,12 +109,22 @@ const Footer = () => {
                   whileHover={{ scale: 1.05 }} // Simple hover effect
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <Link
-                    href={item.url || "#"}
-                    className="text-muted-foreground hover:text-foreground text-sm"
-                  >
-                    {item.title}
-                  </Link>
+                  {(() => {
+                    // Remove Shopify domain to make URL relative
+                    const relativeUrl = shopifyDomain
+                      ? item.url.replace(shopifyDomain, "")
+                      : item.url;
+                    const href = relativeUrl || "#"; // Fallback to # if URL is empty after replace
+
+                    return (
+                      <Link
+                        href={href}
+                        className="text-muted-foreground hover:text-foreground text-sm"
+                      >
+                        {item.title}
+                      </Link>
+                    );
+                  })()}
                 </motion.li>
               ))}
             </ul>

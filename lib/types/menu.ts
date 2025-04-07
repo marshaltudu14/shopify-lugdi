@@ -6,7 +6,8 @@ export interface MenuItem {
   url: string;
   resource?: {
     // Make resource optional as not all menu items link to a resource
-    id?: string; // Optional ID
+    __typename?: string; // Type identifier
+    id?: string; // Optional ID (Added for Page resources)
     title?: string; // Optional title (might differ from menu item title)
     handle?: string; // Optional handle
     image?: ImageNode | null; // Optional image, using the ImageNode type
