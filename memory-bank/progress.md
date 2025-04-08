@@ -6,11 +6,11 @@
 - **Routing:** App Router structure implemented with dynamic routes for countries, products, collections, search, cart, etc.
 - **Basic Layout:** Global Header, Footer, ThemeProvider, ApolloWrapper established. Custom fonts loaded. Dynamic metadata generation based on country context.
 - **Theming:** Removed previous dynamic/seasonal theme system. Now uses a standard black & white theme for light/dark modes defined via CSS variables in `app/globals.css`. Removed "Gold Theme" and "Sun Glow" effects. Updated coupon bar styling.
-- **Cart System:** Client-side cart functionality (add, remove, update, view) implemented using React Context (`CartContext`) and Shopify GraphQL mutations. Cart state is persisted securely in encrypted `localStorage`. Corrected cart total display to use `subtotalAmount`. Removed gold theme elements.
-- **Internationalization Foundation:** URL structure (`/[country]/`) supports country contexts. `lib/countries.ts` likely holds country data. Country code is used in layout and cart API calls. A `CountriesCombobox.tsx` exists.
+- **Cart System:** Client-side cart functionality (add, remove, update, view, apply/remove discounts) implemented using React Context (`CartContext`). Interacts directly with Shopify GraphQL mutations. Cart state is persisted securely in country-specific encrypted `localStorage`. Includes quantity limits and user feedback via toasts.
+- **Internationalization Foundation:** URL structure (`/[country]/`) supports country contexts. `lib/countries.ts` defines country configurations (currency, language, banners, active status). Currently, only 'in' (India) is active. Middleware enforces routing based on this. Country code is used in layout and cart API calls. A `CountriesCombobox.tsx` exists.
 - **Component Structure:** Various UI components (Shadcn, custom like `ProductCard`, `BannerCarousel`) are present. Client components exist for key pages (Cart, Product, Collection, Search, Wishlist). Footer component uses base theme. `ProductCard` used consistently (including on Wishlist page). Product images standardized to 2:3 aspect ratio. Discount badge styling updated.
-- **API Integration:** Apollo Client is configured. GraphQL queries and mutations for Shopify Storefront API (cart, products, collections, wishlist details) are defined. An API route for GraphQL (`/api/graphql`) exists.
-- **Wishlist:** Client-side wishlist functionality implemented using React Context (`WishlistContext`). Wishlist page fetches variant details and displays items using `ProductCard`.
+- **API Integration:** Apollo Client is configured. GraphQL queries and mutations for Shopify Storefront API (cart, products, collections, menus, shop policies, wishlist details) are defined. An API route for GraphQL (`/api/graphql`) exists.
+- **Wishlist:** Client-side wishlist functionality implemented using React Context (`WishlistContext`). Persists variant IDs directly to `localStorage` (no encryption). Wishlist page fetches variant details and displays items using `ProductCard`.
 
 ## 2. What's Left to Build / Verify
 
@@ -25,9 +25,9 @@
 - **Authentication:** Custom authentication using Shopify Customer Account API tokens is implemented in `middleware.ts`, protecting the `/account` route and handling token refresh. `next-auth` dependency is unused.
 - **Zustand Integration:** Dependency exists, but no usage found in the codebase. State management relies on React Context (Cart, Wishlist) and local state.
 - **Middleware Logic:** `middleware.ts` is implemented and handles:
-  - Country detection (cookie/IP) and redirection for inactive countries or incorrect URL structure.
-  - Setting country cookies.
-  - Authentication token validation and refresh for protected routes (`/account`).
+  - Country detection (cookie `lugdi_location` or `x-vercel-ip-country` header) and redirection for inactive countries (based on `lib/countries.ts`) or incorrect URL structure.
+  - Setting country cookies (`lugdi_location`, `lugdi_location_name`).
+  - Authentication token validation and refresh for protected routes (`/account`) using Shopify Customer Account API tokens.
 - **Shopify Backend Sync:** Ensure frontend reflects data accurately from Shopify (products, inventory, pricing, potentially markets).
 - **Footer Links:** Policy links in the footer are currently hardcoded and point to '#'. Need to update with actual URLs or implement dynamic fetching later.
 - **Testing:** Define and implement a testing strategy (unit, integration, e2e).

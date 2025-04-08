@@ -88,7 +88,7 @@ export default function ProductGrid({
       {/* Infinite Scroll Sentinel & Loader */}
       {hasNextPage && (
         <div
-          ref={sentinelRef}
+          ref={sentinelRef as React.RefObject<HTMLDivElement>} // Cast ref type to resolve React 18 type mismatch
           className="flex items-center justify-center mt-8 h-10" // Added height to prevent layout shift
         >
           {isLoadingMore && <Loader2 className="animate-spin" />}

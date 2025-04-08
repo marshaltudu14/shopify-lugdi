@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Search, Menu, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ThemeSwitcher } from "@/components/theme-switcher";
+// Removed ThemeSwitcher import
 import {
   Sheet,
   SheetContent,
@@ -204,8 +204,7 @@ export default function MobileHeader({
               </Button>
             </motion.div>
 
-            {/* Theme Switcher */}
-            <ThemeSwitcher />
+            {/* Theme Switcher Removed */}
           </div>
         </div>
 
