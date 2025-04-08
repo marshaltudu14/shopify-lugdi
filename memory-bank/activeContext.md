@@ -18,6 +18,18 @@
 
 - Await further instructions or tasks from the user. Memory banks are now up-to-date based on the current codebase state.
 
+## Size Chart Feature (April 2025)
+
+- Size charts are country-specific (currently India only).
+- Size charts are mapped to product types via an isolated mapping file (`lib/sizeChartProductTypeMap.ts`).
+- The mapping supports **multiple product types per size chart**.
+- The size chart is displayed **only if** the product type matches the mapping.
+- The size chart is shown in a **modal popup** using Shadcn UI `Dialog`.
+- The "Size Chart" button is styled with ghost variant, blue color, and cursor-pointer.
+- The selected size's measurements are always shown inline below the size options.
+- The size chart data itself is isolated in `lib/sizeCharts.ts` for easy updates.
+- The implementation is extensible for other countries and product types.
+
 ## 4. Active Decisions & Considerations
 
 - **Theme Simplification:** Confirmed removal of dynamic theme system; relies on base light/dark modes.

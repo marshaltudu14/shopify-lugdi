@@ -5,6 +5,8 @@ import {
   buttonHoverVariants,
   itemVariants,
 } from "@/app/components/FramerMotion";
+import { ProductSizeChart } from "@/app/components/product/ProductSizeChart";
+import { sizeChartProductTypeMap } from "@/lib/sizeChartProductTypeMap";
 import { Button } from "@/components/ui/button";
 import { GetSingleProductResponse } from "@/lib/types/product";
 import { ProductsData } from "@/lib/types/products"; // Import ProductsData
@@ -51,6 +53,7 @@ export default function ClientProductPage({
   const [selectedOptions, setSelectedOptions] = useState<
     Record<string, string>
   >({});
+  const [showSizeChart, setShowSizeChart] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const { cart, addToCart } = useCart();
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -329,7 +332,20 @@ export default function ClientProductPage({
             {product && product.options?.length > 0 && product.variants?.edges?.length > 1
               ? product.options.map((option) => (
                   <div key={option.id} className="space-y-2">
-                    <label className="font-medium text-lg">{option.name}</label>
+                    <label className="font-medium text-lg flex items-center gap-2">
+                      {option.name}
+                      {option.name.toLowerCase() === "size" && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="text-blue-600 dark:text-blue-400 cursor-pointer"
+                          onClick={() => setShowSizeChart(true)}
+                        >
+                          Size Chart
+                        </Button>
+                      )}
+                    </label>
                     <div className="flex gap-3 flex-wrap">
                       {option.optionValues.map((value) => {
                         const isSelected =
@@ -387,6 +403,25 @@ export default function ClientProductPage({
                         );
                       })}
                     </div>
+                    {option.name.toLowerCase() === "size" && (() => {
+                      let matchedChartKey: string | undefined = undefined
+                      for (const [chartKey, productTypes] of Object.entries(sizeChartProductTypeMap)) {
+                        if (productTypes.includes(product.productType)) {
+                          matchedChartKey = chartKey
+                          break
+                        }
+                      }
+                      if (!matchedChartKey) return null
+                      return (
+                        <ProductSizeChart
+                          productType={matchedChartKey}
+                          countryCode="in"
+                          selectedSize={selectedOptions["Size"]}
+                          open={showSizeChart}
+                          onOpenChange={setShowSizeChart}
+                        />
+                      )
+                    })()}
                   </div>
                 ))
               : null}

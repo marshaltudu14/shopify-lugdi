@@ -48,5 +48,13 @@
 - **App Router Structure:** Features organized within the `app/` directory, often using route groups or nested folders.
 - **Components:** Reusable UI elements in `app/components/` and `components/` (likely Shadcn UI).
 - **Lib:** Core logic, utilities, API definitions (`lib/queries`, `lib/mutations`), Apollo setup (`lib/apollo`), type definitions (`lib/types`).
+- **Size Chart Mapping:** 
+  - `lib/sizeCharts.ts` contains country-specific size chart data.
+  - `lib/sizeChartProductTypeMap.ts` maps **multiple product types** to a single size chart key.
+  - The product page dynamically determines which size chart to show based on this mapping.
+- **Size Chart UI:**
+  - The size chart is displayed in a **modal popup** using Shadcn UI `Dialog`.
+  - The "Size Chart" button is styled with ghost variant, blue color, and cursor-pointer.
+  - The selected size's measurements are always shown inline.
 - **Utilities:** Helper functions in `utils/`.
 - **Styling:** Global styles in `app/globals.css`, component-level styling via Tailwind classes. Custom fonts loaded via `next/font/local` in `app/layout.tsx`.
