@@ -2,7 +2,7 @@
 
 ## 1. Current Focus
 
-- Completed codebase scan and updated Memory Banks.
+- Implemented dynamic, country-specific sitemaps using Next.js metadata conventions.
 
 ## 2. Recent Changes
 
@@ -16,7 +16,8 @@
 
 ## 3. Next Steps
 
-- Await further instructions or tasks from the user. Memory banks are now up-to-date based on the current codebase state.
+- Commit sitemap changes locally.
+- Await further instructions.
 
 ## Size Chart Feature (April 2025)
 
@@ -38,7 +39,7 @@
 - **Authentication:** Confirmed custom Shopify Customer Account API token implementation in `middleware.ts`. `next-auth` removed.
 - **Middleware:** Confirmed logic for country detection/redirection (cookie/IP, active country check, `/coming-soon` redirect) and authentication token handling.
 - **GraphQL Usage:** Confirmed use of fragments and `@inContext` directive for Shopify API interactions.
-- **Sitemap:** Confirmed hybrid approach linking to Shopify's sitemap.
+- **Sitemap:** Implemented dynamic, country-specific sitemaps using Next.js metadata conventions (`app/sitemap.ts`, `app/[country]/sitemap.ts`, `app/[country]/[resource]/sitemap.ts`). Removed chunking due to complexity and low item count. Fetches data dynamically from Shopify Storefront API with pagination.
 
 ## 5. Important Patterns & Preferences
 
@@ -55,3 +56,14 @@
 - State management is handled consistently via React Context.
 - Middleware effectively manages routing and authentication concerns.
 - GraphQL queries are structured using fragments and context directives.
+
+## Sitemap Implementation (April 2025)
+
+- **Structure:** Hierarchical sitemaps generated using Next.js metadata conventions.
+  - `app/sitemap.ts`: Main index linking to base URL and active country sitemaps.
+  - `app/[country]/sitemap.ts`: Country index linking to resource sitemaps and policy pages for that country.
+  - `app/[country]/[resource]/sitemap.ts`: Resource-specific sitemaps (products, collections, blogs, articles, pages, metaobjects) fetching all items for that country.
+- **Technology:** Uses `export default function sitemap()` returning `MetadataRoute.Sitemap`.
+- **Data Fetching:** Uses `lib/shopifySitemapFetcher.ts` utility to fetch all paginated resources from Shopify Storefront API.
+- **Chunking:** Removed due to complexity and low item count. Each resource type generates a single sitemap file per country.
+- **Country-Aware:** Explicit country folders (`app/in/`) ensure correct URLs.

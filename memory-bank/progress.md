@@ -11,6 +11,7 @@
 - **Component Structure:** Various UI components (Shadcn, custom like `ProductCard`, `BannerCarousel`) are present. Client components exist for key pages (Cart, Product, Collection, Search, Wishlist). Footer component uses base theme. `ProductCard` used consistently (including on Wishlist page). Product images standardized to 2:3 aspect ratio. Discount badge styling updated.
 - **API Integration:** Apollo Client is configured. GraphQL queries and mutations for Shopify Storefront API (cart, products, collections, menus, shop policies, wishlist details) are defined. An API route for GraphQL (`/api/graphql`) exists.
 - **Wishlist:** Client-side wishlist functionality implemented using React Context (`WishlistContext`). Persists variant IDs directly to `localStorage` (no encryption). Wishlist page fetches variant details and displays items using `ProductCard`.
+- **Sitemap:** Dynamic, hierarchical sitemaps implemented using Next.js metadata conventions (`app/sitemap.ts`, `app/[country]/sitemap.ts`, `app/[country]/[resource]/sitemap.ts`). Fetches data from Shopify Storefront API with pagination. Country-specific and non-chunked.
 
 ## 2. What's Left to Build / Verify
 
