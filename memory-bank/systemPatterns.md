@@ -21,7 +21,13 @@
   - **GraphQL:** Queries utilize fragments (e.g., `ImageFragment`, `MoneyFragment` from `lib/fragments.ts`) for reusability and the `@inContext(country: $country)` directive for fetching country-specific data (likely via Shopify Markets).
 - **Routing:** Next.js App Router with dynamic segments for internationalization (`/[country]/...`) and specific resources (`/collections/[collectionSlug]`, `/products/[productSlug]`).
 - **Styling:** Utility-first CSS with Tailwind CSS, managed via `clsx`, `tailwind-merge`, and potentially `class-variance-authority`.
-- **Sitemap Generation:** Hybrid approach. `app/sitemap.ts` generates basic entries (homepage, policy pages per country). Relies on Shopify's native sitemap (`shop.lugdi.store/sitemap.xml`) for product/collection URLs. API routes under `app/api/sitemap/` exist but their current usage is unclear from `app/sitemap.ts`.
+- **Sitemap Generation:** Dynamic, hierarchical sitemaps generated using Next.js metadata conventions.
+  - `app/sitemap.ts`: Main index linking to base URL and active country sitemaps.
+  - `app/[country]/sitemap.ts`: Country index linking to resource sitemaps and policy pages for that country (e.g., `app/in/sitemap.ts`).
+  - `app/[country]/[resource]/sitemap.ts`: Resource-specific sitemaps (products, collections, blogs, articles, pages, metaobjects) fetching all items for that country (e.g., `app/in/products/sitemap.ts`).
+  - Uses `export default function sitemap()` returning `MetadataRoute.Sitemap`.
+  - Fetches data dynamically from Shopify Storefront API using `lib/shopifySitemapFetcher.ts` (handles pagination).
+  - Chunking was removed; each resource type generates a single sitemap file per country.
 - **Internationalization (i18n):**
   - URL-based country detection (`/[country]/`).
   - Dynamic metadata (`generateMetadata` in `app/layout.tsx`) and `lang` attribute generation based on country parameter.
