@@ -2,7 +2,7 @@
 
 ## 1. Current Focus
 
-- Implemented dynamic, country-specific sitemaps using Next.js metadata conventions.
+- Refactoring sitemap generation.
 
 ## 2. Recent Changes
 
@@ -13,10 +13,11 @@
   - Seasonal/Festival theme system removed.
   - Styling updates (coupon bar, product image aspect ratio, discount badge) applied.
   - Wishlist page uses `ProductCard`.
+- **Sitemap Refactoring:** Replaced complex, multi-file sitemap generation with a catch-all dynamic API route (`app/[...sitemap]/route.ts`) that proxies and modifies any requested sitemap file (`sitemap*.xml`) from the Shopify store (`shop.lugdi.store`). Updated middleware matcher to exclude these files.
 
 ## 3. Next Steps
 
-- Commit sitemap changes locally.
+- Update `progress.md`.
 - Await further instructions.
 
 ## Size Chart Feature (April 2025)
@@ -37,9 +38,9 @@
 - **Component Reusability:** Confirmed `ProductCard` usage in Wishlist.
 - **State Management:** Confirmed reliance on React Context for Cart (encrypted localStorage, country-specific) and Wishlist (unencrypted localStorage). Zustand removed.
 - **Authentication:** Confirmed custom Shopify Customer Account API token implementation in `middleware.ts`. `next-auth` removed.
-- **Middleware:** Confirmed logic for country detection/redirection (cookie/IP, active country check, `/coming-soon` redirect) and authentication token handling.
+- **Middleware:** Confirmed logic for country detection/redirection (cookie/IP, active country check, `/coming-soon` redirect) and authentication token handling. Updated `config.matcher` to exclude sitemap XML files (`sitemap*.xml`) from processing to prevent incorrect country redirects.
 - **GraphQL Usage:** Confirmed use of fragments and `@inContext` directive for Shopify API interactions.
-- **Sitemap:** Implemented dynamic, country-specific sitemaps using Next.js metadata conventions (`app/sitemap.ts`, `app/[country]/sitemap.ts`, `app/[country]/[resource]/sitemap.ts`). Removed chunking due to complexity and low item count. Fetches data dynamically from Shopify Storefront API with pagination.
+- **Sitemap:** Simplified sitemap generation. Now uses a catch-all dynamic API route (`app/[...sitemap]/route.ts`) to proxy and modify any requested sitemap file (`sitemap*.xml`) from the Shopify store (`shop.lugdi.store`), replacing the domain before serving. Removed previous multi-file implementation.
 
 ## 5. Important Patterns & Preferences
 
@@ -56,14 +57,3 @@
 - State management is handled consistently via React Context.
 - Middleware effectively manages routing and authentication concerns.
 - GraphQL queries are structured using fragments and context directives.
-
-## Sitemap Implementation (April 2025)
-
-- **Structure:** Hierarchical sitemaps generated using Next.js metadata conventions.
-  - `app/sitemap.ts`: Main index linking to base URL and active country sitemaps.
-  - `app/[country]/sitemap.ts`: Country index linking to resource sitemaps and policy pages for that country.
-  - `app/[country]/[resource]/sitemap.ts`: Resource-specific sitemaps (products, collections, blogs, articles, pages, metaobjects) fetching all items for that country.
-- **Technology:** Uses `export default function sitemap()` returning `MetadataRoute.Sitemap`.
-- **Data Fetching:** Uses `lib/shopifySitemapFetcher.ts` utility to fetch all paginated resources from Shopify Storefront API.
-- **Chunking:** Removed due to complexity and low item count. Each resource type generates a single sitemap file per country.
-- **Country-Aware:** Explicit country folders (`app/in/`) ensure correct URLs.

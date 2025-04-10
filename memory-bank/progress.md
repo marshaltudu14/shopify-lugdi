@@ -11,7 +11,7 @@
 - **Component Structure:** Various UI components (Shadcn, custom like `ProductCard`, `BannerCarousel`) are present. Client components exist for key pages (Cart, Product, Collection, Search, Wishlist). Footer component uses base theme. `ProductCard` used consistently (including on Wishlist page). Product images standardized to 2:3 aspect ratio. Discount badge styling updated.
 - **API Integration:** Apollo Client is configured. GraphQL queries and mutations for Shopify Storefront API (cart, products, collections, menus, shop policies, wishlist details) are defined. An API route for GraphQL (`/api/graphql`) exists.
 - **Wishlist:** Client-side wishlist functionality implemented using React Context (`WishlistContext`). Persists variant IDs directly to `localStorage` (no encryption). Wishlist page fetches variant details and displays items using `ProductCard`.
-- **Sitemap:** Dynamic, hierarchical sitemaps implemented using Next.js metadata conventions (`app/sitemap.ts`, `app/[country]/sitemap.ts`, `app/[country]/[resource]/sitemap.ts`). Fetches data from Shopify Storefront API with pagination. Country-specific and non-chunked.
+- **Sitemap:** **Refactored.** Now uses a catch-all dynamic API route handler (`app/[...sitemap]/route.ts`) to proxy and modify any requested sitemap file (`sitemap*.xml`) from the Shopify store (`shop.lugdi.store`), replacing the domain before serving. Middleware excludes these paths. This simplifies the previous complex, multi-file implementation.
 
 ## 2. What's Left to Build / Verify
 
@@ -26,7 +26,7 @@
 - **Authentication:** Custom authentication using Shopify Customer Account API tokens is implemented in `middleware.ts`, protecting the `/account` route and handling token refresh. `next-auth` dependency is unused.
 - **Zustand Integration:** Dependency exists, but no usage found in the codebase. State management relies on React Context (Cart, Wishlist) and local state.
 - **Middleware Logic:** `middleware.ts` is implemented and handles:
-  - Country detection (cookie `lugdi_location` or `x-vercel-ip-country` header) and redirection for inactive countries (based on `lib/countries.ts`) or incorrect URL structure.
+  - Country detection (cookie `lugdi_location` or `x-vercel-ip-country` header) and redirection for inactive countries (based on `lib/countries.ts`) or incorrect URL structure. The `config.matcher` excludes static assets, API routes, and sitemap XML files (`sitemap*.xml`).
   - Setting country cookies (`lugdi_location`, `lugdi_location_name`).
   - Authentication token validation and refresh for protected routes (`/account`) using Shopify Customer Account API tokens.
 - **Shopify Backend Sync:** Ensure frontend reflects data accurately from Shopify (products, inventory, pricing, potentially markets).
@@ -57,3 +57,4 @@
 - (Update) Refactored Wishlist page to use ProductCard.
 - (Update) Updated discount badge styling.
 - (Decision) Footer policy links will remain hardcoded for now.
+- (Update) Refactored sitemap generation to use a catch-all dynamic API route handler (`app/[...sitemap]/route.ts`), proxying and modifying sitemaps from the Shopify store (`shop.lugdi.store`). Updated middleware to exclude sitemap paths.

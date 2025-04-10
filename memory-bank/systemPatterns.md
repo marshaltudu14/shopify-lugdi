@@ -21,19 +21,13 @@
   - **GraphQL:** Queries utilize fragments (e.g., `ImageFragment`, `MoneyFragment` from `lib/fragments.ts`) for reusability and the `@inContext(country: $country)` directive for fetching country-specific data (likely via Shopify Markets).
 - **Routing:** Next.js App Router with dynamic segments for internationalization (`/[country]/...`) and specific resources (`/collections/[collectionSlug]`, `/products/[productSlug]`).
 - **Styling:** Utility-first CSS with Tailwind CSS, managed via `clsx`, `tailwind-merge`, and potentially `class-variance-authority`.
-- **Sitemap Generation:** Dynamic, hierarchical sitemaps generated using Next.js metadata conventions.
-  - `app/sitemap.ts`: Main index linking to base URL and active country sitemaps.
-  - `app/[country]/sitemap.ts`: Country index linking to resource sitemaps and policy pages for that country (e.g., `app/in/sitemap.ts`).
-  - `app/[country]/[resource]/sitemap.ts`: Resource-specific sitemaps (products, collections, blogs, articles, pages, metaobjects) fetching all items for that country (e.g., `app/in/products/sitemap.ts`).
-  - Uses `export default function sitemap()` returning `MetadataRoute.Sitemap`.
-  - Fetches data dynamically from Shopify Storefront API using `lib/shopifySitemapFetcher.ts` (handles pagination).
-  - Chunking was removed; each resource type generates a single sitemap file per country.
+- **Sitemap Generation:** A dynamic sitemap proxy is implemented using a catch-all API Route Handler (`app/sitemap/[[...sitemapSlug]]/route.ts`). This handler intercepts requests for any path starting with `/sitemap` and ending with `.xml` (e.g., `/sitemap.xml`, `/sitemap_pages_1.xml`). It fetches the corresponding sitemap file from `https://shop.lugdi.store`, replaces all occurrences of `https://shop.lugdi.store` with the current site's URL (`process.env.NEXT_PUBLIC_SITE_URL`), and **adds a `/sitemap/` prefix only to `<loc>` URLs ending with `.xml`**. This ensures sub-sitemap URLs are correctly routed while product/page URLs remain unchanged. This approach simplifies generation by leveraging the existing Shopify sitemap structure while serving it under the current domain.
 - **Internationalization (i18n):**
   - URL-based country detection (`/[country]/`).
   - Dynamic metadata (`generateMetadata` in `app/layout.tsx`) and `lang` attribute generation based on country parameter.
   - Country code passed in API requests (`CartContext.tsx`).
   - Country configuration (including active status, currency, language, banners) managed in `lib/countries.ts`. Currently, only 'in' (India) is active.
-  - Middleware (`middleware.ts`) handles country detection (cookie `lugdi_location` or `x-vercel-ip-country` header), sets cookies (`lugdi_location`, `lugdi_location_name`), redirects inactive countries to `/coming-soon`, and enforces `/[country]/...` URL structure based on active countries defined in `lib/countries.ts`.
+  - Middleware (`middleware.ts`) handles country detection (cookie `lugdi_location` or `x-vercel-ip-country` header), sets cookies (`lugdi_location`, `lugdi_location_name`), redirects inactive countries to `/coming-soon`, and enforces `/[country]/...` URL structure based on active countries defined in `lib/countries.ts`. The middleware's `config.matcher` is configured to exclude static assets, API routes, and sitemap XML files (`sitemap*.xml`) from its processing.
 
 ## 3. Important Implementation Paths
 
