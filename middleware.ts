@@ -31,9 +31,14 @@ export async function refreshToken(refreshTokenValue: string): Promise<{
 }
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
+  const pathName = request.nextUrl.pathname || "";
+  // Log every request that hits the middleware *before* the matcher is technically applied by Next.js internals
+  // Note: The matcher runs *before* the middleware function body executes.
+  // If we see logs for sitemap paths here, it confirms the matcher isn't excluding them as expected.
+  console.log(`[Middleware] Request received for path: ${pathName}`);
+
   try {
     const cookies = request.cookies;
-    const pathName = request.nextUrl.pathname || "";
     const protectedRoutes = ["/account"];
     const isProtectedRoute = protectedRoutes.some((route) =>
       pathName.startsWith(route)
@@ -200,6 +205,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp|gltf|bin|glb)$).*)",
+    // Exclude static assets, images, icons, robots.txt, and all sitemap XML files
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.*\\.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp|gltf|bin|glb)$).*)",
   ],
 };
