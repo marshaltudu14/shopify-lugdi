@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-import { countries, Country } from "./lib/countries";
+import { countries } from "./lib/countries";
 import LugdiUtils from "./utils/LugdiUtils";
 
 // Rename parameter to avoid conflict with function name
@@ -32,11 +32,6 @@ export async function refreshToken(refreshTokenValue: string): Promise<{
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
   const pathName = request.nextUrl.pathname || "";
-  // Log every request that hits the middleware *before* the matcher is technically applied by Next.js internals
-  // Note: The matcher runs *before* the middleware function body executes.
-  // If we see logs for sitemap paths here, it confirms the matcher isn't excluding them as expected.
-  console.log(`[Middleware] Request received for path: ${pathName}`);
-
   try {
     const cookies = request.cookies;
     const protectedRoutes = ["/account"];
@@ -95,15 +90,19 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
       cookies.get(LugdiUtils.location_cookieName)?.value || null;
     const detectedCountryCode =
       request.headers.get("x-vercel-ip-country") || "in";
-    const activeCountryCode = cookieCountryCode || detectedCountryCode;
+    let activeCountryCode = cookieCountryCode || detectedCountryCode;
 
-    const activeCountry: Country | undefined = countries.find(
+    let activeCountry = countries.find(
       (country) =>
         country.slug.toLowerCase() === activeCountryCode.toLowerCase()
     );
 
-    const isCountryActive = activeCountry?.active || false;
-    const countryName = activeCountry?.name || "";
+    if (!activeCountry || !activeCountry.active) {
+      activeCountryCode = "in";
+      activeCountry = countries.find((c) => c.slug === "in")!;
+    }
+
+    const countryName = activeCountry.name;
 
     let response = NextResponse.next();
 
@@ -123,38 +122,6 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
       pathName.startsWith(excluded)
     );
 
-    const isComingSoonPage = pathName.includes("/coming-soon");
-
-    if (!isCountryActive && !isComingSoonPage) {
-      const redirectUrl = new URL(
-        `/${activeCountryCode}/coming-soon`,
-        request.url
-      );
-      response = NextResponse.redirect(redirectUrl);
-      response.cookies.set(LugdiUtils.location_cookieName, activeCountryCode, {
-        path: "/",
-      });
-      response.cookies.set(
-        LugdiUtils.location_name_country_cookie,
-        countryName,
-        { path: "/" }
-      );
-      return response;
-    }
-
-    if (isCountryActive && isComingSoonPage) {
-      // Redirect to the correct country homepage, not just '/'
-      response = NextResponse.redirect(new URL(`/${activeCountryCode.toLowerCase()}`, request.url));
-      response.cookies.set(LugdiUtils.location_cookieName, activeCountryCode, {
-        path: "/",
-      });
-      response.cookies.set(
-        LugdiUtils.location_name_country_cookie,
-        countryName,
-        { path: "/" }
-      );
-      return response;
-    }
 
     if (isExcludedPath) {
       return response;

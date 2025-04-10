@@ -1,60 +1,59 @@
-# Project Progress: Lugdi Storefront (Initial Assessment)
+# Project Progress: Lugdi Storefront (April 2025 Update)
 
-## 1. What Works / Implemented Features (Inferred)
+## 1. What Works / Implemented Features
 
-- **Core Setup:** Next.js project initialized with TypeScript, Tailwind CSS, Shadcn/ui.
-- **Routing:** App Router structure implemented with dynamic routes for countries, products, collections, search, cart, etc.
-- **Basic Layout:** Global Header, Footer, ThemeProvider, ApolloWrapper established. Custom fonts loaded. Dynamic metadata generation based on country context.
-- **Theming:** Removed previous dynamic/seasonal theme system. Now uses a standard black & white theme for light/dark modes defined via CSS variables in `app/globals.css`. Removed "Gold Theme" and "Sun Glow" effects. Updated coupon bar styling.
-- **Cart System:** Client-side cart functionality (add, remove, update, view, apply/remove discounts) implemented using React Context (`CartContext`). Interacts directly with Shopify GraphQL mutations. Cart state is persisted securely in country-specific encrypted `localStorage`. Includes quantity limits and user feedback via toasts.
-- **Internationalization Foundation:** URL structure (`/[country]/`) supports country contexts. `lib/countries.ts` defines country configurations (currency, language, banners, active status). Currently, only 'in' (India) is active. Middleware enforces routing based on this. Country code is used in layout and cart API calls. A `CountriesCombobox.tsx` exists.
-- **Component Structure:** Various UI components (Shadcn, custom like `ProductCard`, `BannerCarousel`) are present. Client components exist for key pages (Cart, Product, Collection, Search, Wishlist). Footer component uses base theme. `ProductCard` used consistently (including on Wishlist page). Product images standardized to 2:3 aspect ratio. Discount badge styling updated.
-- **API Integration:** Apollo Client is configured. GraphQL queries and mutations for Shopify Storefront API (cart, products, collections, menus, shop policies, wishlist details) are defined. An API route for GraphQL (`/api/graphql`) exists.
-- **Wishlist:** Client-side wishlist functionality implemented using React Context (`WishlistContext`). Persists variant IDs directly to `localStorage` (no encryption). Wishlist page fetches variant details and displays items using `ProductCard`.
-- **Sitemap:** **Refactored.** Now uses a catch-all dynamic API route handler (`app/[...sitemap]/route.ts`) to proxy and modify any requested sitemap file (`sitemap*.xml`) from the Shopify store (`shop.lugdi.store`), replacing the domain before serving. Middleware excludes these paths. This simplifies the previous complex, multi-file implementation.
+- **Core Setup:** Next.js project with TypeScript, Tailwind CSS, Shadcn/ui.
+- **Routing:** App Router with dynamic routes for countries, products, collections, search, cart, etc.
+- **Basic Layout:** Global Header, Footer, ThemeProvider, ApolloWrapper. Custom fonts. Dynamic metadata based on country.
+- **Theming:** Simplified to standard black & white light/dark modes. Removed seasonal/festival themes.
+- **Cart System:** Client-side cart with React Context, encrypted country-specific localStorage. Shopify GraphQL integration. Quantity limits, toasts.
+- **Internationalization:** 
+  - URL-based routing (`/[country]/`).
+  - **Only India (`/in`) is active.**
+  - Middleware **forces all visitors to India storefront** if their country is inactive or unknown.
+  - Country code used in layout and cart API calls.
+  - `CountriesCombobox.tsx` exists.
+- **Component Structure:** Shadcn and custom components (`ProductCard`, `BannerCarousel`). Client components for Cart, Product, Collection, Search, Wishlist. Footer uses base theme. Product images standardized. Discount badge updated.
+- **API Integration:** Apollo Client with Shopify Storefront API (cart, products, collections, menus, policies, wishlist). `/api/graphql` route exists.
+- **Wishlist:** Client-side wishlist with React Context, unencrypted localStorage. Uses `ProductCard`.
+- **Sitemap:** Refactored to a catch-all API route (`app/[...sitemap]/route.ts`) proxying Shopify sitemaps. Middleware excludes these paths.
 
 ## 2. What's Left to Build / Verify
 
-- **Feature Completeness:** Verify the full functionality and UI implementation of:
+- **Feature Completeness:** Verify:
   - Collection Pages
   - Search Results Page
   - Homepage content (`app/page.tsx`)
-  - Country selection mechanism (`CountriesCombobox.tsx` integration)
-  - "Coming Soon" page functionality
+  - Country selection UI (`CountriesCombobox.tsx`)
   - Error handling pages/logic
-- **Checkout Flow:** Confirm the transition from the cart page to the Shopify checkout URL.
-- **Authentication:** Custom authentication using Shopify Customer Account API tokens is implemented in `middleware.ts`, protecting the `/account` route and handling token refresh. `next-auth` dependency is unused.
-- **Zustand Integration:** Dependency exists, but no usage found in the codebase. State management relies on React Context (Cart, Wishlist) and local state.
-- **Middleware Logic:** `middleware.ts` is implemented and handles:
-  - Country detection (cookie `lugdi_location` or `x-vercel-ip-country` header) and redirection for inactive countries (based on `lib/countries.ts`) or incorrect URL structure. The `config.matcher` excludes static assets, API routes, and sitemap XML files (`sitemap*.xml`).
-  - Setting country cookies (`lugdi_location`, `lugdi_location_name`).
-  - Authentication token validation and refresh for protected routes (`/account`) using Shopify Customer Account API tokens.
-- **Shopify Backend Sync:** Ensure frontend reflects data accurately from Shopify (products, inventory, pricing, potentially markets).
-- **Footer Links:** Policy links in the footer are currently hardcoded and point to '#'. Need to update with actual URLs or implement dynamic fetching later.
-- **Testing:** Define and implement a testing strategy (unit, integration, e2e).
-- **Deployment:** Configure deployment environment and CI/CD pipeline.
-- **Optimization:** Further performance tuning (image optimization, code splitting, caching strategies).
+- **Checkout Flow:** Confirm cart → Shopify checkout transition.
+- **Authentication:** Custom Shopify Customer Account API token flow protects `/account`. Token refresh works. `next-auth` removed.
+- **Shopify Backend Sync:** Ensure frontend reflects Shopify data (products, inventory, pricing).
+- **Footer Links:** Policy links are hardcoded, update or fetch dynamically later.
+- **Testing:** Define and implement unit, integration, e2e tests.
+- **Deployment:** Configure deployment and CI/CD.
+- **Optimization:** Performance tuning (images, code splitting, caching).
 
 ## 3. Current Status
 
-- Initial Memory Bank documentation established based on code analysis.
-- Core technical stack and architectural patterns identified.
-- Basic cart and internationalization structures are in place.
-- Ready for specific task assignments.
+- Middleware **simplified**:
+  - **Always redirects to India storefront** for all visitors.
+  - **"Coming soon" feature and pages removed.**
+  - No redirects to `/coming-soon` anymore.
+- Internationalization is **India-only** for now.
+- Sitemap refactoring complete.
+- No known issues with country detection or redirects.
+- Ready for further feature development or international expansion in future.
 
 ## 4. Known Issues / Blockers
 
-- None identified yet, pending deeper code review and testing.
+- None identified currently.
 
 ## 5. Evolution of Decisions
 
-- (Initial State) Project structure suggests a headless Shopify approach using Next.js.
-- (Initial State) Cart state management uses React Context with encryption. (Zustand dependency exists but is unused).
-- (Update) Removed Gold Theme and seasonal/festival theme system. Reverted to standard black/white theme.
-- (Update) Corrected cart total display.
-- (Update) Removed gold theme styling from Footer.
-- (Update) Standardized product image aspect ratio to 2:3.
-- (Update) Refactored Wishlist page to use ProductCard.
-- (Update) Updated discount badge styling.
-- (Decision) Footer policy links will remain hardcoded for now.
-- (Update) Refactored sitemap generation to use a catch-all dynamic API route handler (`app/[...sitemap]/route.ts`), proxying and modifying sitemaps from the Shopify store (`shop.lugdi.store`). Updated middleware to exclude sitemap paths.
+- Removed dynamic/seasonal themes.
+- Simplified cart and wishlist.
+- Removed unused dependencies (`next-auth`, `zustand`, etc.).
+- Refactored sitemap to catch-all proxy.
+- **Removed "coming soon" feature and redirects.**
+- Middleware now **forces fallback to India** for all visitors.
