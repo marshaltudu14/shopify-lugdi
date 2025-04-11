@@ -5,6 +5,8 @@ export interface CollectionProductNode {
   title: string;
   handle: string;
   availableForSale: boolean;
+  description: string;
+  seo: SEO;
   priceRange: {
     minVariantPrice: Price;
   };

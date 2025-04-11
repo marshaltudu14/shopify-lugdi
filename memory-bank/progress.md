@@ -17,6 +17,8 @@
 - **API Integration:** Apollo Client with Shopify Storefront API (cart, products, collections, menus, policies, wishlist). `/api/graphql` route exists.
 - **Wishlist:** Client-side wishlist with React Context, unencrypted localStorage. Uses `ProductCard`.
 - **Sitemap:** Refactored to a catch-all API route (`app/[...sitemap]/route.ts`) proxying Shopify sitemaps. Middleware excludes these paths.
+- **SEO Structured Data:** Product pages now include `priceValidUntil` in JSON-LD structured data for both `AggregateOffer` and each `Offer`, addressing Google Search Console warnings. No review/rating fields present (not supported).
+- **Merchant Listings Structured Data:** Product and collection pages now include `hasMerchantReturnPolicy` (refund policy) and `shippingDetails` (localized, with policy link) in all offers, and ensure `description` is present for all products. Shopify queries and types updated for compliance.
 
 ## 2. What's Left to Build / Verify
 
@@ -33,6 +35,7 @@
 - **Testing:** Define and implement unit, integration, e2e tests.
 - **Deployment:** Configure deployment and CI/CD.
 - **Optimization:** Performance tuning (images, code splitting, caching).
+- **SEO Validation:** Validate product and collection structured data using Google's Rich Results and Merchant Listings Test tools to confirm resolution of Search Console and Merchant Center warnings.
 
 ## 3. Current Status
 
