@@ -168,6 +168,11 @@ export default async function ProductPage({
 
   const product = productData?.product;
 
+  // Calculate priceValidUntil as 30 days from now in YYYY-MM-DD format
+  const priceValidUntil = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .slice(0, 10);
+
   const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -204,6 +209,51 @@ export default async function ProductPage({
       availability: product?.availableForSale
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",
+      priceValidUntil,
+      hasMerchantReturnPolicy: {
+        "@type": "MerchantReturnPolicy",
+        name: "Refund Policy",
+        url: "https://shop.lugdi.store/policies/refund-policy",
+        returnPolicyCategory: "RefundPolicy"
+      },
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingDestination: {
+          "@type": "DefinedRegion",
+          addressCountry: isoCountryCode
+        },
+        shippingRate: {
+          "@type": "MonetaryAmount",
+          value: 0,
+          currency: product?.variants.edges[0]?.node.price.currencyCode || currentCountry?.currencyCode || "INR"
+        },
+        deliveryTime: {
+          "@type": "ShippingDeliveryTime",
+          businessDays: {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday"
+            ]
+          },
+          handlingTime: {
+            "@type": "QuantitativeValue",
+            minValue: 1,
+            maxValue: 2,
+            unitCode: "d"
+          },
+          transitTime: {
+            "@type": "QuantitativeValue",
+            minValue: 2,
+            maxValue: 7,
+            unitCode: "d"
+          }
+        },
+        shippingPolicy: "https://shop.lugdi.store/policies/shipping-policy"
+      },
       offerCount: product?.variants.edges.length || 0,
       offers: product?.variants.edges.map((edge) => ({
         "@type": "Offer",
@@ -222,6 +272,51 @@ export default async function ProductPage({
         availability: edge.node.availableForSale
           ? "https://schema.org/InStock"
           : "https://schema.org/OutOfStock",
+        priceValidUntil,
+        hasMerchantReturnPolicy: {
+          "@type": "MerchantReturnPolicy",
+          name: "Refund Policy",
+          url: "https://shop.lugdi.store/policies/refund-policy",
+          returnPolicyCategory: "RefundPolicy"
+        },
+        shippingDetails: {
+          "@type": "OfferShippingDetails",
+          shippingDestination: {
+            "@type": "DefinedRegion",
+            addressCountry: isoCountryCode
+          },
+          shippingRate: {
+            "@type": "MonetaryAmount",
+            value: 0,
+            currency: edge.node.price.currencyCode || currentCountry?.currencyCode || "INR"
+          },
+          deliveryTime: {
+            "@type": "ShippingDeliveryTime",
+            businessDays: {
+              "@type": "OpeningHoursSpecification",
+              dayOfWeek: [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday"
+              ]
+            },
+            handlingTime: {
+              "@type": "QuantitativeValue",
+              minValue: 1,
+              maxValue: 2,
+              unitCode: "d"
+            },
+            transitTime: {
+              "@type": "QuantitativeValue",
+              minValue: 2,
+              maxValue: 7,
+              unitCode: "d"
+            }
+          },
+          shippingPolicy: "https://shop.lugdi.store/policies/shipping-policy"
+        }
       })),
       seller: {
         "@type": "Organization",

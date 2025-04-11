@@ -7,6 +7,18 @@
 
 ## 2. Recent Changes
 
+- **Merchant Listings Structured Data Update (April 2025):**
+  - Updated JSON-LD structured data for both product (`app/[country]/products/[productSlug]/page.tsx`) and collection (`app/[country]/collections/[collectionSlug]/page.tsx`) pages to address Google Merchant Center and Search Console warnings.
+  - Added `hasMerchantReturnPolicy` (using refund policy) and `shippingDetails` (localized, with policy link) to all offers in both product and collection structured data.
+  - Ensured `description` is present for all products in both product and collection structured data.
+  - Updated Shopify GraphQL fragments and queries to fetch `description` and `seo` for collection products.
+  - Updated TypeScript types to match new data requirements.
+  - No breaking changes to other files; changes are isolated to structured data output for SEO and Merchant Center.
+- **Product Structured Data Update (April 2025):**
+  - Updated JSON-LD structured data for product pages (`app/[country]/products/[productSlug]/page.tsx`) to address Google Search Console warnings.
+  - Added `priceValidUntil` (current date + 30 days) to both `AggregateOffer` and each `Offer` in the schema.
+  - Confirmed no review or rating fields are present, as Lugdi does not support product reviews.
+  - No breaking changes to other files; change is isolated to structured data output for SEO.
 - **Dependency Cleanup:** Uninstalled unused libraries (`next-auth`, `zustand`, `google-auth-library`, `nodemailer`). Downgraded React to v18.
 - **File Cleanup:** Deleted unused files related to removed themes and features (`lib/types/next-auth.d.ts`, `lib/theme-config.ts`, `lib/theme-utils.ts`, `app/components/ProductFilters.tsx`, `app/components/collection/CollectionFilters.tsx`, `components/theme-switcher.tsx`).
 - **Previous Changes (Confirmed by Scan):**
@@ -23,6 +35,7 @@
 
 ## 3. Next Steps
 
+- Validate product and collection structured data using Google's Rich Results and Merchant Listings Test tools.
 - Update `progress.md`.
 - Await further instructions.
 

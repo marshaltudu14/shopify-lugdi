@@ -132,6 +132,7 @@ export default async function CollectionPage({
           name: edge.node.title,
           url: `${siteUrl}/${country}/products/${edge.node.handle}`,
           image: edge.node.featuredImage?.url || "",
+          description: edge.node.description || edge.node.seo?.description || `Buy ${edge.node.title} at Lugdi.`,
           offers: {
             "@type": "Offer",
             price: Number(edge.node.priceRange.minVariantPrice.amount),
@@ -149,6 +150,50 @@ export default async function CollectionPage({
                   edge.node.compareAtPriceRange.minVariantPrice.currencyCode,
               },
             }),
+            hasMerchantReturnPolicy: {
+              "@type": "MerchantReturnPolicy",
+              name: "Refund Policy",
+              url: "https://shop.lugdi.store/policies/refund-policy",
+              returnPolicyCategory: "RefundPolicy"
+            },
+            shippingDetails: {
+              "@type": "OfferShippingDetails",
+              shippingDestination: {
+                "@type": "DefinedRegion",
+                addressCountry: isoCountryCode
+              },
+              shippingRate: {
+                "@type": "MonetaryAmount",
+                value: 0,
+                currency: edge.node.priceRange.minVariantPrice.currencyCode
+              },
+              deliveryTime: {
+                "@type": "ShippingDeliveryTime",
+                businessDays: {
+                  "@type": "OpeningHoursSpecification",
+                  dayOfWeek: [
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday"
+                  ]
+                },
+                handlingTime: {
+                  "@type": "QuantitativeValue",
+                  minValue: 1,
+                  maxValue: 2,
+                  unitCode: "d"
+                },
+                transitTime: {
+                  "@type": "QuantitativeValue",
+                  minValue: 2,
+                  maxValue: 7,
+                  unitCode: "d"
+                }
+              },
+              shippingPolicy: "https://shop.lugdi.store/policies/shipping-policy"
+            }
           },
         },
       })

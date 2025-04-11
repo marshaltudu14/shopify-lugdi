@@ -22,6 +22,11 @@ export const BasicProductFragment = gql`
     handle
     availableForSale
     totalInventory
+    description
+    seo {
+      title
+      description
+    }
     options {
       id
       name
