@@ -24,8 +24,12 @@ export const GET_WISHLIST_ITEMS_DETAILS = gql`
           id
           title # Product title
           handle
+          description
+          seo {
+            title
+            description
+          }
           featuredImage {
-            # Added featuredImage for fallback
             ...ImageFragment
           }
         }

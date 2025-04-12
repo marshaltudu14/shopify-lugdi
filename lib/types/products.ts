@@ -1,10 +1,12 @@
-import { ImageNode, Price } from "./type";
+import { ImageNode, Price, SEO } from "./type";
 
 export interface ProductsNode {
   id: string;
   title: string;
   handle: string;
   availableForSale: boolean;
+  description: string;
+  seo: SEO;
   priceRange: {
     minVariantPrice: Price;
   };
@@ -14,19 +16,16 @@ export interface ProductsNode {
   featuredImage: ImageNode;
   totalInventory: number;
   options: {
-    // Added options field
     id: string;
     name: string;
     values: string[];
   }[];
-  // Updated variants field for filtering
   variants: {
     edges: {
       node: {
         id: string;
-        availableForSale: boolean; // Added availableForSale
+        availableForSale: boolean;
         selectedOptions: {
-          // Added selectedOptions
           name: string;
           value: string;
         }[];

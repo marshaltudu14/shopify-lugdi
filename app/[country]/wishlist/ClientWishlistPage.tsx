@@ -123,11 +123,12 @@ export default function ClientWishlistPage({
 
           // Adapt ProductVariant data to CollectionProductNode structure for ProductCard
           const productForCard: CollectionProductNode = {
-            // Removed __typename as it's not in the interface
-            id: item.product.id, // Use product ID
+            id: item.product.id,
             title: item.product.title,
             handle: item.product.handle,
-            featuredImage: item.image || item.product.featuredImage || null, // Prioritize variant image, fallback to null
+            description: item.product.description || "",
+            seo: item.product.seo || { title: item.product.title, description: "" },
+            featuredImage: item.image || item.product.featuredImage || null,
             priceRange: {
               minVariantPrice: item.price,
             },
@@ -135,7 +136,7 @@ export default function ClientWishlistPage({
               minVariantPrice: item.compareAtPrice || {
                 amount: "0",
                 currencyCode: item.price.currencyCode,
-              }, // Provide default if null
+              },
             },
             availableForSale: item.availableForSale,
             totalInventory: item.quantityAvailable, // Map quantityAvailable
