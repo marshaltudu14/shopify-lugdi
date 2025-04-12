@@ -38,7 +38,9 @@ export interface ProductVariant {
     id: string;
     title: string;
     handle: string;
-    featuredImage?: ImageNode | null; // Ensure featuredImage is included
+    description: string;
+    seo: SEO;
+    featuredImage?: ImageNode | null;
   };
 }
 
@@ -99,6 +101,8 @@ export interface ProductRecommendation {
   title: string;
   handle: string;
   availableForSale: boolean;
+  description: string;
+  seo: SEO;
   totalInventory: number;
   featuredImage: ImageNode;
   compareAtPriceRange: PriceRange;
@@ -108,7 +112,6 @@ export interface ProductRecommendation {
     name: string;
     values: string[];
   }[];
-  // Updated variants field for filtering
   variants: {
     edges: {
       node: {
