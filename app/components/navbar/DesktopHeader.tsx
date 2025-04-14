@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Search, User, ShoppingCart, Menu, X, Heart } from "lucide-react"; // Added Heart
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-// Removed ThemeSwitcher import
+import { ThemeSwitcher } from "@/components/ui/theme-switcher";
 import { Country } from "@/lib/countries";
 import { MenuItem } from "@/lib/types/menu";
 import CountriesCombobox from "../CountriesCombobox";
@@ -235,7 +235,8 @@ export default function DesktopHeader({
                 </Link>
               </motion.div>
 
-              {/* Theme Switcher Removed */}
+              {/* Theme Switcher */}
+              <ThemeSwitcher />
 
               {/* Mobile Menu Toggle - Shown on tablet and mobile */}
               <div className="lg:hidden">
