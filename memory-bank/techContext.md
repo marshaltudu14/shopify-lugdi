@@ -31,7 +31,7 @@
 - `framer-motion`: Animations
 - `js-cookie`: Client-side cookie management
 - `lucide-react`: Icon library
-- `next-themes`: Theme management (light/dark mode) - Note: Custom seasonal/festival theme system removed.
+- `next-themes`: Theme management (light/dark/system modes) - Implemented with dropdown menu in both desktop and mobile headers. Custom seasonal/festival theme system removed.
 - `sonner`: Toast notifications
 - `zod`: Schema validation
 - `google-auth-library`: Present, purpose unclear in current context.

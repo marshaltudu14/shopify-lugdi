@@ -5,9 +5,13 @@
 - **Core Setup:** Next.js project with TypeScript, Tailwind CSS, Shadcn/ui.
 - **Routing:** App Router with dynamic routes for countries, products, collections, search, cart, etc.
 - **Basic Layout:** Global Header, Footer, ThemeProvider, ApolloWrapper. Custom fonts. Dynamic metadata based on country.
-- **Theming:** Simplified to standard black & white light/dark modes. Removed seasonal/festival themes.
+- **Theming:**
+  - Simplified to standard black & white light/dark modes. Removed seasonal/festival themes.
+  - **Theme Toggle:** Implemented in both desktop and mobile headers using `next-themes` library.
+  - Dropdown menu with Light, Dark, and System options.
+  - Animated icons (Sun, Moon, Laptop) for visual feedback.
 - **Cart System:** Client-side cart with React Context, encrypted country-specific localStorage. Shopify GraphQL integration. Quantity limits, toasts.
-- **Internationalization:** 
+- **Internationalization:**
   - URL-based routing (`/[country]/`).
   - **Only India (`/in`) is active.**
   - Middleware **forces all visitors to India storefront** if their country is inactive or unknown.

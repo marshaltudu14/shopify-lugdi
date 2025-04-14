@@ -6,6 +6,7 @@
 - **Backend:** Headless Shopify via Storefront GraphQL API.
 - **API Communication:** GraphQL via Apollo Client. REST APIs for internal routes if needed.
 - **Global Context:** `ApolloWrapper`, `ThemeProvider`, `WishlistProvider` in root layout.
+- **Theme Management:** `next-themes` library with `ThemeProvider` in root layout, `ThemeSwitcher` component in headers.
 
 ## 2. Key Design Patterns
 
@@ -37,7 +38,7 @@
 - **Collection Pages:** GraphQL fetch, no filtering.
 - **Search Pages:** GraphQL fetch, no filtering.
 - **Cart Operations:** Managed in `CartContext.tsx`, encrypted localStorage, Shopify GraphQL.
-- **Country Selection/Routing:** 
+- **Country Selection/Routing:**
   - Middleware detects country via cookie or IP.
   - **Always falls back to India if country is inactive or unknown.**
   - Enforces URL normalization.
@@ -56,7 +57,7 @@
 - **App Router:** Features in `app/` directory.
 - **Components:** UI in `app/components/` and `components/`.
 - **Lib:** API logic, Apollo setup, types, size charts.
-- **Size Chart Mapping:** 
+- **Size Chart Mapping:**
   - `lib/sizeCharts.ts` for data.
   - `lib/sizeChartProductTypeMap.ts` for mapping.
   - Modal popup with Shadcn UI `Dialog`.

@@ -84,6 +84,10 @@ This list tracks potential features, enhancements, and technical tasks for the L
 
 ## Ongoing Technical Tasks & Maintenance
 
+*   **[x] Theme Toggle Implementation:**
+    *   ✅ Implement theme toggle in desktop and mobile headers.
+    *   ✅ Support light, dark, and system modes.
+    *   ✅ Use appropriate icons and animations for better UX.
 *   **[ ] Testing Strategy:**
     *   Define and implement unit tests (e.g., Jest/Vitest) for critical utilities and components.
     *   Implement integration tests for user flows (cart, login).

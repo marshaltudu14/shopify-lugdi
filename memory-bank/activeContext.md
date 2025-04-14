@@ -1,36 +1,39 @@
-## 2025-04-12: Plan to Resolve Type Error in ProductCard Usage
+## 2025-04-12: Theme Toggle Implementation
 
-### Problem
-A type error occurs in `ClientProductPage.tsx` when passing `edge.node` (of type `ProductsNode`) to `ProductCard`, which expects a `CollectionProductNode`. The error is due to `ProductsNode` missing the `description` and `seo` fields, which are present in `CollectionProductNode`.
+### Current Focus
+Implementing a theme toggle feature in both desktop and mobile headers to allow users to switch between light and dark themes.
 
-### Investigation Steps
-- Compared `ProductsNode` and `CollectionProductNode` interfaces.
-- Confirmed `ProductCard` expects a `CollectionProductNode`.
-- Verified the GraphQL fragment (`BasicProductFragment`) used for related products includes `description` and `seo`.
-- Determined the TypeScript type for `relatedProductsData` is `ProductsData`, which uses `ProductsNode` (missing the required fields).
+### Implementation Details
+- Using `next-themes` library for theme management
+- Theme toggle component (`ThemeSwitcher`) implemented in `components/ui/theme-switcher.tsx`
+- Integrated in both desktop and mobile headers
+- Supports three modes: light, dark, and system
+- Uses Lucide icons (Sun, Moon, Laptop) for visual representation
+- Includes animation effects with Framer Motion
 
-### Solution Plan
-1. **Type Alignment:**  
-   Update `ProductsNode` in `lib/types/products.ts` to include:
-   - `description: string`
-   - `seo: SEO` (from `lib/types/type.ts`)
+### Key Components
+- `ThemeProvider` from `next-themes` in root layout (`app/layout.tsx`)
+- `ThemeSwitcher` component with dropdown menu for theme selection
+- Theme-specific CSS variables in `globals.css`
 
-2. **Type Consistency:**  
-   Ensure this change does not break other usages of `ProductsNode` (safe, as the fragment always returns these fields).
-
-3. **Build Verification:**  
-   Re-run the build to confirm the error is resolved.
+### Technical Approach
+- Simplified theme system by removing seasonal/festival themes
+- Using standard light/dark mode with CSS variables
+- Client-side component with hydration protection
+- Dropdown menu for better user experience
 
 #### Mermaid Diagram
 
 ```mermaid
 flowchart TD
-    A[relatedProductsData uses ProductsNode] --> B[ProductsNode missing description, seo]
-    B --> C[Type error in ProductCard]
-    C --> D[Update ProductsNode to include description, seo]
-    D --> E[Type matches CollectionProductNode]
-    E --> F[Type error resolved]
+    A[ThemeProvider in root layout] --> B[useTheme hook in components]
+    B --> C[ThemeSwitcher component]
+    C --> D[Light/Dark/System options]
+    D --> E[CSS variables in globals.css]
+    E --> F[Styled components]
 ```
 
-### Next Step
-Switch to Code mode and implement the type update in `lib/types/products.ts`.
+### Next Steps
+- Test theme toggle across different devices and browsers
+- Ensure consistent styling across theme changes
+- Consider adding theme preference persistence
