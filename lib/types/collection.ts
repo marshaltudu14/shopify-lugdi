@@ -32,6 +32,11 @@ export interface CollectionProductNode {
           name: string;
           value: string;
         }[];
+        price: Price;
+        compareAtPrice?: Price | null;
+        quantityAvailable?: number | null;
+        image?: ImageNode | null;
+        title: string;
       };
     }[];
   };

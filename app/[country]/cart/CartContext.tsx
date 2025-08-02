@@ -9,7 +9,6 @@ import React, {
   useCallback,
   ReactNode, // Import ReactNode
 } from "react";
-import detailedProductsData from "@/lib/mock-data/detailedProducts.json";
 import cartVariantsData from "@/lib/mock-data/cartVariants.json";
 import { toast } from "sonner";
 
@@ -191,7 +190,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
 
   // Mock addToCart function
   const addToCart = async (variantId: string, quantity: number) => {
-    let currentItems = [...cart.items];
+    const currentItems = [...cart.items];
     const existingItem = currentItems.find(
       (item) => item.variantId === variantId
     );

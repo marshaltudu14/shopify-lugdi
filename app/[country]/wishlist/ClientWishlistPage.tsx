@@ -105,13 +105,21 @@ export default function ClientWishlistPage() {
             seo: item.product.seo || { title: item.product.title, description: "" },
             featuredImage: item.image || item.product.featuredImage || null,
             priceRange: {
-              minVariantPrice: item.price,
-            },
-            compareAtPriceRange: {
-              minVariantPrice: item.compareAtPrice || {
-                amount: "0",
+              minVariantPrice: {
+                amount: item.price.amount,
                 currencyCode: item.price.currencyCode,
               },
+            },
+            compareAtPriceRange: {
+              minVariantPrice: item.compareAtPrice
+                ? {
+                    amount: item.compareAtPrice.amount,
+                    currencyCode: item.compareAtPrice.currencyCode,
+                  }
+                : {
+                    amount: "0",
+                    currencyCode: item.price.currencyCode,
+                  },
             },
             availableForSale: item.availableForSale,
             totalInventory: item.quantityAvailable, // Map quantityAvailable

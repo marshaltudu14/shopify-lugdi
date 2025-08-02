@@ -99,6 +99,11 @@ const mockProductBase: CollectionProductNode = {
           id: 'gid://shopify/ProductVariant/67890',
           availableForSale: true,
           selectedOptions: [],
+          price: {
+            amount: '15.00',
+            currencyCode: 'USD',
+          },
+          title: 'Test Variant Title',
         },
       },
     ],

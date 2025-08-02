@@ -117,7 +117,12 @@ export interface ProductRecommendation {
       node: {
         id: string;
         availableForSale: boolean;
-        selectedOptions: SelectedOption[];
+                selectedOptions: SelectedOption[];
+        price: Price;
+        compareAtPrice?: Price | null;
+        quantityAvailable?: number | null;
+        image?: ImageNode | null;
+        title: string;
       };
     }[];
   };
