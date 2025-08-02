@@ -109,7 +109,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   const [isApplyingDiscount, setIsApplyingDiscount] = useState<boolean>(false);
 
   // Helper function to map mock data to CartState
-  const mapMockDataToCartState = (mockItems: MockCartItem[]): MockCartState => {
+  const mapMockDataToCartState = useCallback((mockItems: MockCartItem[]): MockCartState => {
     let subtotal = 0;
     let totalQuantity = 0;
 
@@ -119,9 +119,9 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
     });
 
     return {
-      cartId: cart.cartId || "mock_cart_id",
+      cartId: "mock_cart_id",
       items: mockItems,
-      checkoutUrl: cart.checkoutUrl || "/mock-checkout",
+      checkoutUrl: "/mock-checkout",
       itemCount: totalQuantity,
       subtotalAmount: { amount: subtotal.toFixed(2), currencyCode: "INR" },
       totalAmount: { amount: subtotal.toFixed(2), currencyCode: "INR" },
@@ -130,14 +130,14 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
       totalDiscountAmount: null,
       discountCodes: [],
     };
-  };
+  }, []);
 
   // Mock getCart function
   const getCart = useCallback(async () => {
     // In a real scenario, you might fetch mock data based on cart.cartId
     // For now, we'll just ensure the state is consistent with current items
     setCart((prevCart) => mapMockDataToCartState(prevCart.items));
-  }, []);
+  }, [mapMockDataToCartState]);
 
   // Effect to initialize cart from storage on load
   useEffect(() => {
@@ -154,39 +154,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [cart]);
 
-  // Mock createCart function
-  const createCart = async (
-    lines: { merchandiseId: string; quantity: number }[]
-  ): Promise<MockCartState> => {
-    const newItems: MockCartItem[] = [];
-    lines.forEach((line) => {
-      const productVariant = cartVariantsData.find(
-        (p) => p.id === line.merchandiseId
-      );
-      if (productVariant) {
-        newItems.push({
-          variantId: line.merchandiseId,
-          quantity: line.quantity,
-          lineId: `mock_line_${Date.now()}_${Math.random()}`,
-          merchandise: {
-            id: productVariant.id,
-            title: productVariant.title,
-            image: productVariant.image,
-            price: productVariant.price,
-            compareAtPrice: productVariant.compareAtPrice,
-            availableForSale: productVariant.availableForSale,
-            quantityAvailable: productVariant.quantityAvailable,
-            selectedOptions: productVariant.selectedOptions,
-            product: productVariant.product,
-          },
-        });
-      }
-    });
-    const newCartState = mapMockDataToCartState(newItems);
-    setCart(newCartState);
-    toast.success("Cart created with item!");
-    return newCartState;
-  };
+  
 
   // Mock addToCart function
   const addToCart = async (variantId: string, quantity: number) => {

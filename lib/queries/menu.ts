@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql, DocumentNode } from "@apollo/client";
 import { Menu, MenuItemWithCollection } from "../types/menu";
 import { ImageFragment } from "../fragments"; // Correct import name
 import mockMenuData from "../mock-data/menu.json"; // Import mock data
@@ -61,7 +61,7 @@ export type GetCollectionsByMenuResponse = {
 // Mock function to simulate Apollo Client query
 export const initializeApollo = () => {
   return {
-    query: async ({ query, variables }: { query: any; variables: any }) => {
+    query: async ({ query, variables }: { query: DocumentNode; variables: Record<string, any> }) => {
       if (query === GET_MENU) {
         return { data: { menu: mockMenuData } };
       }
