@@ -90,7 +90,7 @@ export default function DesktopHeader({
                           transition={{ type: "spring", stiffness: 400 }}
                         >
                           <Link
-                            href={item.url}
+                            href={`/${selectedCountrySlug}${item.url}`}
                             className="text-sm font-medium uppercase tracking-wider hover:text-primary transition-colors"
                           >
                             {item.title}
@@ -274,7 +274,7 @@ export default function DesktopHeader({
                       transition={{ type: "spring", stiffness: 400 }}
                     >
                       <Link
-                        href={item.url}
+                        href={`/${selectedCountrySlug}${item.url}`}
                         className="text-sm text-center font-medium uppercase tracking-wider transition-colors block py-2"
                       >
                         {item.title}

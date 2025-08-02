@@ -1,13 +1,11 @@
-import { initializeApollo } from "@/lib/apollo/apollo-client";
-import { GET_SINGLE_PRODUCT } from "@/lib/queries/product";
-import { GET_PRODUCTS } from "@/lib/queries/products"; // Import GET_PRODUCTS
 import { Metadata } from "next";
-import { convertSlugToTitle } from "@/utils/SlugToTitle";
 import { notFound } from "next/navigation";
 import { countries } from "@/lib/countries";
-import { GetSingleProductResponse } from "@/lib/types/product";
-import { ProductsData } from "@/lib/types/products"; // Use ProductsData instead
 import ClientProductPage from "./ClientProductPage";
+import detailedProductsData from "@/lib/mock-data/detailedProducts.json";
+import mockProductsData from "@/lib/mock-data/products.json";
+import { GetSingleProductResponse } from "@/lib/types/product";
+import { ProductsData } from "@/lib/types/products";
 
 export async function generateMetadata({
   params,
@@ -15,76 +13,46 @@ export async function generateMetadata({
   params: Promise<{ country: string; productSlug: string }>;
 }): Promise<Metadata> {
   const { productSlug, country } = await params;
-  const client = initializeApollo();
-
-  const isoCountryCode = country ? country.toUpperCase() : "IN";
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lugdi.store";
   const canonicalUrl = `${siteUrl}/${country}/products/${productSlug}`;
 
-  try {
-    const { data } = await client.query<GetSingleProductResponse>({
-      query: GET_SINGLE_PRODUCT,
-      variables: { handle: productSlug, country: isoCountryCode },
-    });
+  // Find product by handle from detailed products data
+  const productData = detailedProductsData.find(p => p.product.handle === productSlug)?.product;
 
-    const productData = data.product;
+  const seoTitle = productData?.seo?.title || productData?.title;
+  const seoDescription =
+    productData?.seo?.description ??
+    productData?.description ??
+    `Check out ${productData?.title} and other fashion items at Lugdi.`;
+  const seoImage =
+    productData?.featuredImage?.url ??
+    productData?.images?.edges?.find((edge) => edge?.node?.url)?.node?.url ??
+    "";
 
-    const seoTitle = productData?.seo?.title || productData?.title;
-    // Implement description fallback
-    const seoDescription =
-      productData?.seo?.description ??
-      productData?.description ??
-      `Check out ${productData?.title} and other fashion items at Lugdi.`;
-    // Prioritize featuredImage, then first valid image from images array
-    const seoImage =
-      productData?.featuredImage?.url ??
-      productData?.images?.edges?.find((edge) => edge?.node?.url)?.node?.url ??
-      "";
-
-    return {
+  return {
+    title: seoTitle,
+    description: seoDescription,
+    openGraph: {
       title: seoTitle,
       description: seoDescription,
-      openGraph: {
-        title: seoTitle,
-        description: seoDescription,
-        images: seoImage
-          ? [
-              {
-                url: seoImage,
-                // Use alt text from featuredImage if available, otherwise fallback
-                alt:
-                  productData?.featuredImage?.altText ||
-                  productData?.images?.edges?.find((edge) => edge?.node?.url)
-                    ?.node?.altText ||
-                  seoTitle,
-              },
-            ]
-          : [], // Return empty array if no image found
-      },
-      alternates: {
-        canonical: canonicalUrl,
-      },
-    };
-  } catch (error) {
-    console.error("Error fetching product SEO data:", error);
-    const defaultTitle = `Buy ${convertSlugToTitle(productSlug)} Online`;
-    return {
-      title: defaultTitle,
-      description: `Shop for ${convertSlugToTitle(
-        productSlug
-      )} and other fashion items at Lugdi.`,
-      openGraph: {
-        title: defaultTitle,
-        description: `Shop for ${convertSlugToTitle(
-          productSlug
-        )} and other fashion items at Lugdi.`,
-      },
-      alternates: {
-        canonical: canonicalUrl,
-      },
-    };
-  }
+      images: seoImage
+        ? [
+            {
+              url: seoImage,
+              alt:
+                productData?.featuredImage?.altText ||
+                productData?.images?.edges?.find((edge) => edge?.node?.url)
+                  ?.node?.altText ||
+                seoTitle,
+            },
+          ]
+        : [],
+    },
+    alternates: {
+      canonical: canonicalUrl,
+    },
+  };
 }
 
 export default async function ProductPage({
@@ -105,67 +73,39 @@ export default async function ProductPage({
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lugdi.store";
 
-  let productData: GetSingleProductResponse | null = null;
-  let relatedProductsData: ProductsData | null = null; // Use ProductsData type
+  // Find product by handle from detailed products data
+  const foundProduct = detailedProductsData.find(p => p.product.handle === productSlug);
 
-  try {
-    const client = initializeApollo();
-
-    const { data: productDataRes } =
-      await client.query<GetSingleProductResponse>({
-        query: GET_SINGLE_PRODUCT,
-        variables: {
-          handle: productSlug,
-          country: isoCountryCode,
-        },
-      });
-    productData = productDataRes;
-
-    // Fetch related products by type if productType exists
-    const productType = productData?.product?.productType;
-    const currentProductHandle = productData?.product?.handle; // Use handle to exclude current product
-
-    if (productType && currentProductHandle) {
-      try {
-        const { data: relatedProductsRes } =
-          await client.query<ProductsData>({ // Use ProductsData type
-            query: GET_PRODUCTS,
-            variables: {
-              first: 13, // Fetch 13 initially to account for potential self-inclusion
-              query: `product_type:'${productType}'`, // Remove handle filter from query
-              sortKey: "RELEVANCE", // Sort by relevance
-              reverse: false,
-              country: isoCountryCode,
-            },
-          });
-
-        // Filter out the current product from the results manually
-        if (relatedProductsRes?.products?.edges && currentProductHandle) {
-          const filteredEdges = relatedProductsRes.products.edges.filter(
-            (edge) => edge.node.handle !== currentProductHandle
-          );
-          // Take the first 12 after filtering
-          relatedProductsData = {
-            ...relatedProductsRes,
-            products: {
-              ...relatedProductsRes.products,
-              edges: filteredEdges.slice(0, 12),
-            },
-          };
-        } else {
-          relatedProductsData = relatedProductsRes; // Assign original if filtering wasn't possible
-        }
-      } catch (relatedError) {
-        console.error("Error fetching related products:", relatedError);
-        // Continue without related products if this fetch fails
-        relatedProductsData = null;
-      }
-    }
-  } catch (error) {
-    console.error("Error fetching main product data:", error);
+  if (!foundProduct) {
     return notFound();
   }
 
+  const productData: GetSingleProductResponse = foundProduct;
+
+  // Convert basic products to full ProductsData structure
+  const relatedProductsData: ProductsData = {
+    products: {
+      edges: mockProductsData.map((p, i) => ({
+        cursor: String(i + 1),
+        node: {
+          ...p,
+          description: `High-quality ${p.title.toLowerCase()} with excellent craftsmanship.`,
+          seo: {
+            title: p.title,
+            description: `Shop ${p.title.toLowerCase()} at great prices.`
+          },
+          options: [],
+          variants: {
+            edges: []
+          }
+        }
+      })),
+      pageInfo: {
+        hasNextPage: false,
+        endCursor: String(mockProductsData.length),
+      },
+    },
+  };
   const product = productData?.product;
 
   // Calculate priceValidUntil as 30 days from now in YYYY-MM-DD format

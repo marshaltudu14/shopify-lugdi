@@ -69,6 +69,11 @@ const mockProductBase: CollectionProductNode = {
   title: 'Test Product Title',
   handle: 'test-product-handle',
   availableForSale: true,
+  description: 'Test product description.',
+  seo: {
+    title: 'Test SEO Title',
+    description: 'Test SEO description.',
+  },
   totalInventory: 15,
   options: [],
   featuredImage: {

@@ -1,0 +1,54 @@
+{
+  "menu": {
+    "handle": "main-menu",
+    "items": [
+      {
+        "title": "Home",
+        "url": "/",
+        "resource": null
+      },
+      {
+        "title": "Men",
+        "url": "/collections/men-collections",
+        "resource": {
+          "__typename": "Collection",
+          "id": "gid://shopify/Collection/1",
+          "title": "Men",
+          "handle": "men-collections",
+          "image": {
+            "url": "https://picsum.photos/seed/menu-men/200/200",
+            "altText": "Men's Collection Image"
+          }
+        }
+      },
+      {
+        "title": "Women",
+        "url": "/collections/women-collections",
+        "resource": {
+          "__typename": "Collection",
+          "id": "gid://shopify/Collection/2",
+          "title": "Women",
+          "handle": "women-collections",
+          "image": {
+            "url": "https://picsum.photos/seed/menu-women/200/200",
+            "altText": "Women's Collection Image"
+          }
+        }
+      },
+      {
+        "title": "Kids",
+        "url": "/collections/kids",
+        "resource": {
+          "__typename": "Collection",
+          "id": "gid://shopify/Collection/3",
+          "title": "Kids",
+          "handle": "kids",
+          "image": {
+            "url": "https://picsum.photos/seed/menu-kids/200/200",
+            "altText": "Kids Collection Image"
+          }
+        }
+      }
+    ]
+  }
+}

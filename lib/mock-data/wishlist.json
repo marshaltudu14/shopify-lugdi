@@ -1,0 +1,67 @@
+
+[
+  {
+    "id": "gid://shopify/ProductVariant/1",
+    "title": "S",
+    "availableForSale": true,
+    "quantityAvailable": 50,
+    "image": {
+      "url": "https://picsum.photos/seed/men/400/600",
+      "altText": "Classic T-Shirt"
+    },
+    "price": {
+      "amount": "20.0",
+      "currencyCode": "INR"
+    },
+    "compareAtPrice": {
+      "amount": "25.0",
+      "currencyCode": "INR"
+    },
+    "product": {
+      "id": "gid://shopify/Product/1",
+      "title": "Classic T-Shirt",
+      "handle": "classic-t-shirt",
+      "description": "A classic t-shirt made from 100% cotton.",
+      "seo": {
+        "title": "Classic T-Shirt",
+        "description": "A classic t-shirt made from 100% cotton."
+      },
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/men/400/600",
+        "altText": "Classic T-Shirt"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/ProductVariant/4",
+    "title": "M",
+    "availableForSale": true,
+    "quantityAvailable": 50,
+    "image": {
+      "url": "https://picsum.photos/seed/women/400/600",
+      "altText": "Denim Jeans"
+    },
+    "price": {
+      "amount": "50.0",
+      "currencyCode": "INR"
+    },
+    "compareAtPrice": {
+      "amount": "60.0",
+      "currencyCode": "INR"
+    },
+    "product": {
+      "id": "gid://shopify/Product/2",
+      "title": "Denim Jeans",
+      "handle": "denim-jeans",
+      "description": "A pair of comfortable denim jeans.",
+      "seo": {
+        "title": "Denim Jeans",
+        "description": "A pair of comfortable denim jeans."
+      },
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/women/400/600",
+        "altText": "Denim Jeans"
+      }
+    }
+  }
+]

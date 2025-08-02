@@ -1,0 +1,49 @@
+
+[
+  {
+    "id": "gid://shopify/Product/4",
+    "title": "Recommended Product 1",
+    "handle": "recommended-product-1",
+    "availableForSale": true,
+    "totalInventory": 20,
+    "featuredImage": {
+      "url": "https://picsum.photos/seed/recommendation1/400/600",
+      "altText": "Recommended Product 1"
+    },
+    "compareAtPriceRange": {
+      "minVariantPrice": {
+        "amount": "30.0",
+        "currencyCode": "INR"
+      }
+    },
+    "priceRange": {
+      "minVariantPrice": {
+        "amount": "25.0",
+        "currencyCode": "INR"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Product/5",
+    "title": "Recommended Product 2",
+    "handle": "recommended-product-2",
+    "availableForSale": true,
+    "totalInventory": 15,
+    "featuredImage": {
+      "url": "https://picsum.photos/seed/recommendation2/400/600",
+      "altText": "Recommended Product 2"
+    },
+    "compareAtPriceRange": {
+      "minVariantPrice": {
+        "amount": "45.0",
+        "currencyCode": "INR"
+      }
+    },
+    "priceRange": {
+      "minVariantPrice": {
+        "amount": "40.0",
+        "currencyCode": "INR"
+      }
+    }
+  }
+]

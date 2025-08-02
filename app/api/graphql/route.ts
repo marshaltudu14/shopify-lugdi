@@ -1,57 +1,149 @@
 import { NextRequest, NextResponse } from "next/server";
+import products from "@/lib/mock-data/products.json";
+import detailedProducts from "@/lib/mock-data/detailedProducts.json";
+import getCollectionProducts from "@/lib/mock-data/getCollectionProducts.json";
+import cart from "@/lib/mock-data/cart.json";
+import menu from "@/lib/mock-data/menu.json";
+import shopPolicies from "@/lib/mock-data/shopPolicies.json";
+import wishlist from "@/lib/mock-data/wishlist.json";
+import productRecommendations from "@/lib/mock-data/productRecommendations.json";
+import cartVariants from "@/lib/mock-data/cartVariants.json";
 
 export async function POST(req: NextRequest) {
-  let body;
-  try {
-    body = await req.json();
-  } catch (error) {
-    console.error("API: Failed to parse request body:", error);
-    return NextResponse.json(
-      { error: "Invalid JSON in request body" },
-      { status: 400 }
-    );
-  }
+  const body = await req.json();
+  const { query, variables } = body;
 
-  function ensureStartWith(stringToCheck: string, startsWith: string) {
-    return stringToCheck.startsWith(startsWith)
-      ? stringToCheck
-      : `${startsWith}${stringToCheck}`;
-  }
+  let data;
 
-  const domain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN
-    ? ensureStartWith(process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN, "https://")
-    : "";
+  if (query.includes("getProducts")) {
+    data = {
+      data: {
+        products: {
+          edges: products.map((p, i) => ({ cursor: String(i + 1), node: p })),
+          pageInfo: {
+            hasNextPage: false,
+            endCursor: String(products.length),
+          },
+        },
+      },
+    };
+  } else if (query.includes("getSingleProduct")) {
+    // Find product by handle from detailed products data
+    const foundProduct = detailedProducts.find(p => p.product.handle === variables.handle);
+    data = {
+      data: {
+        product: foundProduct?.product || null,
+      },
+    };
+  } else if (query.includes("getCollectionProducts")) {
+    interface MockCollection {
+  handle: string;
+  // Add other properties of your mock collection here if needed
+}
 
-  const endpoint = `${domain}${process.env.NEXT_PUBLIC_SHOPIFY_GRAPHQL_ENDPOINT}`;
-  const token = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
+    const collection = (getCollectionProducts as MockCollection[]).find(c => c.handle === variables.handle);
+    data = {
+      data: {
+        collection: collection || null, // Explicitly return null if not found
+      },
+    };
+  } else if (query.includes("getCart")) {
+    data = {
+      data: {
+        cart: cart,
+      },
+    };
+  } else if (query.includes("GetMenu")) {
+    // Ensure menu structure is correct for Apollo Client
+    const safeMenu = {
+      ...menu.menu,
+      items: menu.menu.items.map(item => ({
+        ...item,
+        // Ensure all required fields are present
+        title: item.title || "",
+        url: item.url || "",
+        resource: item.resource || null,
+      }))
+    };
 
-  if (!token) {
-    console.error("API: Shopify access token not configured");
-    return NextResponse.json(
-      { error: "Shopify access token is not configured" },
-      { status: 500 }
-    );
-  }
-
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Shopify-Storefront-Access-Token": token,
-    },
-    body: JSON.stringify(body),
-  });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    console.error("API: Shopify GraphQL error:", data);
-    return NextResponse.json(data, { status: response.status });
-  }
-
-  // Log GraphQL errors for debugging
-  if (data.errors) {
-    console.error("API: Shopify GraphQL returned errors:", data.errors);
+    data = {
+      data: {
+        menu: safeMenu,
+      },
+    };
+  } else if (query.includes("CreateCart")) {
+    data = {
+      data: {
+        cartCreate: {
+          cart: cart,
+        },
+      },
+    };
+  } else if (query.includes("cartLinesAdd")) {
+    data = {
+      data: {
+        cartLinesAdd: {
+          cart: cart,
+        },
+      },
+    };
+  } else if (query.includes("cartLinesRemove")) {
+    data = {
+      data: {
+        cartLinesRemove: {
+          cart: cart,
+        },
+      },
+    };
+  } else if (query.includes("cartLinesUpdate")) {
+    data = {
+      data: {
+        cartLinesUpdate: {
+          cart: cart,
+        },
+      },
+    };
+  } else if (query.includes("GetShopPolicies")) {
+    data = {
+      data: shopPolicies,
+    };
+  } else if (query.includes("getWishlistItemsDetails")) {
+    data = {
+      data: {
+        nodes: wishlist,
+      },
+    };
+  } else if (query.includes("getSingleProductRecommendation")) {
+    data = {
+      data: {
+        productRecommendations: productRecommendations,
+      },
+    };
+  } else if (query.includes("getCartVariants")) {
+    data = {
+      data: {
+        nodes: cartVariants,
+      },
+    };
+  } else if (query.includes("GetShopPolicies")) {
+    data = {
+      data: {
+        shop: shopPolicies,
+      },
+    };
+  } else if (query.includes("getWishlistItemsDetails")) {
+    // Handle wishlist items query - return variants based on IDs
+    const requestedIds = variables.ids || [];
+    const wishlistVariants = wishlist.filter(item => requestedIds.includes(item.id));
+    data = {
+      data: {
+        nodes: wishlistVariants,
+      },
+    };
+  } else {
+    data = {
+      data: {},
+    };
   }
 
   return NextResponse.json(data);

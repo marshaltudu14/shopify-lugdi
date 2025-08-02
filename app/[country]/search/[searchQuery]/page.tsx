@@ -3,10 +3,8 @@ import SearchPageClient from "./SearchPageClient";
 import { cookies } from "next/headers";
 import LugdiUtils from "@/utils/LugdiUtils";
 import { Metadata } from "next";
-import { initializeApollo } from "@/lib/apollo/apollo-client";
 import { ProductsData } from "@/lib/types/products";
-import { GET_PRODUCTS } from "@/lib/queries/products";
-import { notFound } from "next/navigation";
+import mockProductsData from "@/lib/mock-data/products.json";
 
 export async function generateMetadata({
   params,
@@ -36,27 +34,39 @@ export default async function SearchPage({
   const countrySlug = cookieStore.get(LugdiUtils.location_cookieName)?.value;
   const isoCountryCode = countrySlug ? countrySlug.toUpperCase() : "IN";
 
-  const client = initializeApollo();
+  // Use mock data for search - filter products based on search query
+  const filteredProducts = mockProductsData.filter(product =>
+    product.title.toLowerCase().includes(decodedQuery.toLowerCase()) ||
+    product.handle.toLowerCase().includes(decodedQuery.toLowerCase())
+  );
 
-  let searchProducts: ProductsData | null = null;
+  // Convert basic products to full ProductsNode structure
+  const productsWithFullData = filteredProducts.map(product => ({
+    ...product,
+    description: `High-quality ${product.title.toLowerCase()} with excellent craftsmanship.`,
+    seo: {
+      title: product.title,
+      description: `Shop ${product.title.toLowerCase()} at great prices.`
+    },
+    options: [],
+    variants: {
+      edges: []
+    }
+  }));
 
-  try {
-    const { data } = await client.query<ProductsData>({
-      query: GET_PRODUCTS,
-      variables: {
-        first: LugdiUtils.product_quantity || 20,
-        sortKey: "RELEVANCE",
-        query: decodedQuery,
-        reverse: false,
-        country: isoCountryCode,
+  const searchProducts: ProductsData = {
+    products: {
+      edges: productsWithFullData.map((p, i) => ({ cursor: String(i + 1), node: p })),
+      pageInfo: {
+        hasNextPage: false,
+        endCursor: String(productsWithFullData.length),
       },
-    });
+    },
+  };
 
-    if (!data?.products) return notFound();
-
-    searchProducts = data;
-  } catch (error) {
-    console.error("error fetching products data", error);
+  if (filteredProducts.length === 0) {
+    // Still return the component but with empty results instead of 404
+    // return notFound();
   }
 
   return (

@@ -4,9 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-// Removed useParams import
-import { getCookie } from "@/utils/CookieUtils";
-import LugdiUtils from "@/utils/LugdiUtils";
+// Removed unused imports
 import { useQuery } from "@apollo/client";
 import { GET_MENU } from "@/lib/queries/menu";
 import { MenuItem } from "@/lib/types/menu";
@@ -26,17 +24,9 @@ const Footer = () => {
   });
   const policyItems: MenuItem[] = policiesData?.menu?.items || [];
 
-  // Helper function to ensure URL starts with https://
-  function ensureStartWith(stringToCheck: string, startsWith: string) {
-    return stringToCheck.startsWith(startsWith)
-      ? stringToCheck
-      : `${startsWith}${stringToCheck}`;
-  }
+  // Removed unused ensureStartWith function
 
-  // Get Shopify domain from environment variable
-  const shopifyDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN
-    ? ensureStartWith(process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN, "https://")
-    : "";
+  // No longer need Shopify domain for demo mode
 
   const socialLinks = [
     {
@@ -110,11 +100,8 @@ const Footer = () => {
                   transition={{ type: "spring", stiffness: 300 }}
                 >
                   {(() => {
-                    // Remove Shopify domain to make URL relative
-                    const relativeUrl = shopifyDomain
-                      ? item.url.replace(shopifyDomain, "")
-                      : item.url;
-                    const href = relativeUrl || "#"; // Fallback to # if URL is empty after replace
+                    // Use URL as-is from mock data (already relative)
+                    const href = item.url || "#"; // Fallback to # if URL is empty
 
                     return (
                       <Link
@@ -143,8 +130,7 @@ const Footer = () => {
             transition={{ delay: 0.2 }} // Shorter delay
             className="mb-4 md:mb-0" // Margin bottom on mobile
           >
-            © {new Date().getFullYear()} lugdi{" "}
-            {getCookie(LugdiUtils.location_name_country_cookie)}. All rights
+            © {new Date().getFullYear()} lugdi. All rights
             reserved.
           </motion.p>
 

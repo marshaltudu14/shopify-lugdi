@@ -3,11 +3,8 @@
 "use client";
 
 import React, { useState, useEffect, Suspense } from "react";
-import { useQuery } from "@apollo/client";
-import { GET_MENU, GetMenuResponse } from "@/lib/queries/menu";
 import { countries } from "@/lib/countries";
 import { cn } from "@/lib/utils";
-import { initializeApollo } from "@/lib/apollo/apollo-client";
 import DesktopHeader from "./DesktopHeader";
 import MobileHeader from "./MobileHeader";
 import { MenuItem } from "@/lib/types/menu";
@@ -15,6 +12,7 @@ import { getCookie, setCookie } from "@/utils/CookieUtils";
 import LugdiUtils from "@/utils/LugdiUtils";
 import { Skeleton } from "@/components/ui/skeleton";
 import MobileBottomNav from "./MobileBottomNav";
+import menuData from "@/lib/mock-data/menu.json";
 // Removed getActiveTheme and themeConfig imports
 
 // Removed HeaderProps interface
@@ -25,12 +23,6 @@ export default function Header(/* Removed props */) {
   const [, setSelectedCountryName] = useState("");
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-
-  const client = initializeApollo();
-  const { data } = useQuery<GetMenuResponse>(GET_MENU, {
-    variables: { handle: "main-menu" },
-    client,
-  });
 
   const handleCountryChange = (slug: string, name: string) => {
     setSelectedCountrySlug(slug);
@@ -64,23 +56,15 @@ export default function Header(/* Removed props */) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
-  function ensureStartWith(stringToCheck: string, startsWith: string) {
-    return stringToCheck.startsWith(startsWith)
-      ? stringToCheck
-      : `${startsWith}${stringToCheck}`;
-  }
+  // Removed unused ensureStartWith function
 
   // activeTheme logic removed as it's no longer used in this component
 
-  const domain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN
-    ? ensureStartWith(process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN, "https://")
-    : "";
-
-  const menuItems: MenuItem[] =
-    data?.menu?.items.map((item) => ({
-      ...item,
-      url: item.url.replace(domain, ""),
-    })) || [];
+  // No longer need Shopify domain for demo mode - menu items use relative URLs
+  const menuItems: MenuItem[] = menuData.menu.items.map((item: MenuItem) => ({
+    ...item,
+    url: item.url, // Use URLs as-is from mock data
+  })) || [];
 
   // Removed activeTheme logic
   // const activeTheme = getActiveTheme(selectedCountrySlug, themeConfig);

@@ -10,19 +10,31 @@ import {
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
 function createApolloClient(): ApolloClient<NormalizedCacheObject> {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
-  const uri = siteUrl ? `${siteUrl}/api/graphql` : '/api/graphql'; // Keep fallback
+  // Always use mock data - no more Shopify API calls
+  const uri = '/api/graphql';
 
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
     link: new HttpLink({
-      uri: uri, // Use the derived uri
-      // Add fetch options if needed for authentication
+      uri: uri,
       fetchOptions: {
         credentials: "same-origin",
       },
     }),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        Menu: {
+          fields: {
+            items: {
+              merge: false, // Don't merge arrays, replace them
+            },
+          },
+        },
+        MenuItem: {
+          keyFields: ["title", "url"], // Use title and url as unique identifiers
+        },
+      },
+    }),
   });
 }
 

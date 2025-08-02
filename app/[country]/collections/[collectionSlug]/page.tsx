@@ -1,12 +1,11 @@
 import { Metadata } from "next";
-import { initializeApollo } from "@/lib/apollo/apollo-client";
-import { GET_COLLECTION_PRODUCTS } from "@/lib/queries/collection";
 import React from "react";
 import { convertSlugToTitle } from "@/utils/SlugToTitle";
 import { CollectionData, CollectionProductEdge } from "@/lib/types/collection";
 import ClientCollectionPage from "./ClientCollectionPage";
 import { notFound } from "next/navigation";
 import LugdiUtils from "@/utils/LugdiUtils";
+import getCollectionProducts from "@/lib/mock-data/getCollectionProducts.json";
 
 export async function generateMetadata({
   params,
@@ -14,69 +13,42 @@ export async function generateMetadata({
   params: Promise<{ country: string; collectionSlug: string }>;
 }): Promise<Metadata> {
   const { collectionSlug, country } = await params;
-  const client = initializeApollo();
 
   const isoCountryCode = country ? country.toUpperCase() : "IN";
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lugdi.store";
   const canonicalUrl = `${siteUrl}/${country}/collections/${collectionSlug}`;
 
-  try {
-    const { data } = await client.query<CollectionData>({
-      query: GET_COLLECTION_PRODUCTS,
-      variables: {
-        handle: collectionSlug,
-        first: 1,
-        sortKey: "RELEVANCE",
-        reverse: false,
-        country: isoCountryCode,
-      },
-    });
+  const collection = (getCollectionProducts as any[]).find(c => c.handle === collectionSlug);
 
-    if (!data?.collection) return notFound();
+  if (!collection) return notFound();
 
-    const collection = data.collection;
+  const seoTitle =
+    collection?.seo?.title ||
+    `Buy ${collection?.title} Fashion Apparels & Accessories Online`;
+  // Implement description fallback: SEO -> Collection Description -> Default
+  const seoDescription =
+    collection?.seo?.description ??
+    collection?.description ??
+    `Discover a wide selection of ${collection?.title} fashion apparels & accessories. Enjoy new arrivals, exclusive deals, and premium quality.`;
+  const seoImage = collection?.image?.url || "";
 
-    const seoTitle =
-      collection?.seo?.title ||
-      `Buy ${collection?.title} Fashion Apparels & Accessories Online`;
-    // Implement description fallback: SEO -> Collection Description -> Default
-    const seoDescription =
-      collection?.seo?.description ??
-      collection?.description ??
-      `Discover a wide selection of ${collection?.title} fashion apparels & accessories. Enjoy new arrivals, exclusive deals, and premium quality.`;
-    const seoImage = collection?.image?.url || "";
-
-    return {
+  return {
+    title: seoTitle,
+    description: seoDescription,
+    openGraph: {
       title: seoTitle,
       description: seoDescription,
-      openGraph: {
-        title: seoTitle,
-        description: seoDescription,
-        images: [
-          {
-            url: seoImage,
-            alt: collection?.image?.altText || seoTitle,
-          },
-        ],
-      },
-      alternates: {
-        canonical: canonicalUrl,
-      },
-    };
-  } catch (error) {
-    console.error("Error fetching Collection SEO metadata:", error);
-    return {
-      title: `Buy ${convertSlugToTitle(
-        collectionSlug
-      )} Fashion Apparels & Accessories Online`,
-      description: `Discover a wide selection of ${convertSlugToTitle(
-        collectionSlug
-      )} fashion apparels & accessories. Enjoy new arrivals, exclusive deals, and premium quality.`,
-      alternates: {
-        canonical: canonicalUrl,
-      },
-    };
-  }
+      images: [
+        {
+          url: seoImage,
+          alt: collection?.image?.altText || seoTitle,
+        },
+      ],
+    },
+    alternates: {
+      canonical: canonicalUrl,
+    },
+  };
 }
 
 export default async function CollectionPage({
@@ -88,30 +60,13 @@ export default async function CollectionPage({
   const isoCountryCode = country ? country.toUpperCase() : "IN";
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lugdi.store";
 
-  let initialData: CollectionData | null;
-  try {
-    const client = initializeApollo();
-    const { data } = await client.query<CollectionData>({
-      query: GET_COLLECTION_PRODUCTS,
-      variables: {
-        handle: collectionSlug,
-        first: LugdiUtils.product_quantity || 20,
-        sortKey: "RELEVANCE",
-        reverse: false,
-        country: isoCountryCode,
-      },
-    });
-    initialData = data;
-  } catch (error) {
-    console.error("Error fetching collection:", error);
-    initialData = null;
-  }
+  const initialData = (getCollectionProducts as any[]).find(c => c.handle === collectionSlug);
 
-  if (!initialData?.collection) {
+  if (!initialData) {
     return notFound();
   }
 
-  const collection = initialData.collection;
+  const collection = initialData;
   const collectionJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",

@@ -1,0 +1,21 @@
+
+{
+  "shop": {
+    "privacyPolicy": {
+      "title": "Privacy Policy",
+      "body": "<p>This is a mock privacy policy. Your privacy is important to us.</p>"
+    },
+    "refundPolicy": {
+      "title": "Refund Policy",
+      "body": "<p>This is a mock refund policy. All sales are final unless otherwise stated.</p>"
+    },
+    "shippingPolicy": {
+      "title": "Shipping Policy",
+      "body": "<p>This is a mock shipping policy. We ship worldwide.</p>"
+    },
+    "termsOfService": {
+      "title": "Terms of Service",
+      "body": "<p>This is a mock terms of service. By using this website, you agree to our terms.</p>"
+    }
+  }
+}

@@ -1,0 +1,2938 @@
+[
+  {
+    "id": "gid://shopify/Collection/1",
+    "title": "Men",
+    "description": "A collection of men's clothing.",
+    "handle": "men-collections",
+    "image": {
+      "url": "https://picsum.photos/400/600?random=4",
+      "altText": "Men's Collection"
+    },
+    "seo": {
+      "title": "Men's Collection",
+      "description": "A collection of men's clothing."
+    },
+    "products": {
+      "edges": [
+        {
+          "cursor": "1",
+          "node": {
+            "id": "gid://shopify/Product/1",
+            "title": "Classic T-Shirt",
+            "handle": "classic-t-shirt",
+            "availableForSale": true,
+            "totalInventory": 100,
+            "featuredImage": {
+              "url": "https://picsum.photos/400/600?random=1",
+              "altText": "Classic T-Shirt"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "20.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "25.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "2",
+          "node": {
+            "id": "gid://shopify/Product/11",
+            "title": "Men's Polo Shirt",
+            "handle": "mens-polo-shirt",
+            "availableForSale": true,
+            "totalInventory": 80,
+            "featuredImage": {
+              "url": "https://picsum.photos/400/600?random=5",
+              "altText": "Men's Polo Shirt"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "35.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "40.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "3",
+          "node": {
+            "id": "gid://shopify/Product/12",
+            "title": "Men's Jeans",
+            "handle": "mens-jeans",
+            "availableForSale": true,
+            "totalInventory": 70,
+            "featuredImage": {
+              "url": "https://picsum.photos/400/600?random=6",
+              "altText": "Men's Jeans"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "60.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "75.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "4",
+          "node": {
+            "id": "gid://shopify/Product/13",
+            "title": "Men's Jacket",
+            "handle": "mens-jacket",
+            "availableForSale": true,
+            "totalInventory": 50,
+            "featuredImage": {
+              "url": "https://picsum.photos/400/600?random=7",
+              "altText": "Men's Jacket"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "120.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "150.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "5",
+          "node": {
+            "id": "gid://shopify/Product/14",
+            "title": "Men's Sneakers",
+            "handle": "mens-sneakers",
+            "availableForSale": true,
+            "totalInventory": 90,
+            "featuredImage": {
+              "url": "https://picsum.photos/400/600?random=8",
+              "altText": "Men's Sneakers"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "90.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "110.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "5"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/2",
+    "title": "Women",
+    "description": "A collection of women's clothing.",
+    "handle": "women-collections",
+    "image": {
+      "url": "https://picsum.photos/400/600?random=9",
+      "altText": "Women's Collection"
+    },
+    "seo": {
+      "title": "Women's Collection",
+      "description": "A collection of women's clothing."
+    },
+    "products": {
+      "edges": [
+        {
+          "cursor": "1",
+          "node": {
+            "id": "gid://shopify/Product/2",
+            "title": "Denim Jeans",
+            "handle": "denim-jeans",
+            "availableForSale": true,
+            "totalInventory": 50,
+            "featuredImage": {
+              "url": "https://picsum.photos/400/600?random=10",
+              "altText": "Denim Jeans"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "50.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "60.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "2",
+          "node": {
+            "id": "gid://shopify/Product/15",
+            "title": "Women's Summer Dress",
+            "handle": "womens-summer-dress",
+            "availableForSale": true,
+            "totalInventory": 70,
+            "featuredImage": {
+              "url": "https://picsum.photos/400/600?random=11",
+              "altText": "Women's Summer Dress"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "70.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "85.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "3",
+          "node": {
+            "id": "gid://shopify/Product/16",
+            "title": "Women's Blouse",
+            "handle": "womens-blouse",
+            "availableForSale": true,
+            "totalInventory": 90,
+            "featuredImage": {
+              "url": "https://picsum.photos/400/600?random=12",
+              "altText": "Women's Blouse"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "40.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "48.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "4",
+          "node": {
+            "id": "gid://shopify/Product/17",
+            "title": "Women's Skirt",
+            "handle": "womens-skirt",
+            "availableForSale": true,
+            "totalInventory": 60,
+            "featuredImage": {
+              "url": "https://picsum.photos/400/600?random=13",
+              "altText": "Women's Skirt"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "65.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "5",
+          "node": {
+            "id": "gid://shopify/Product/18",
+            "title": "Women's Heels",
+            "handle": "womens-heels",
+            "availableForSale": true,
+            "totalInventory": 40,
+            "featuredImage": {
+              "url": "https://picsum.photos/400/600?random=14",
+              "altText": "Women's Heels"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "100.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "120.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "5"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/4",
+    "title": "New Arrivals",
+    "description": "The latest products in our store.",
+    "handle": "new-arrivals",
+    "image": {
+      "url": "https://picsum.photos/seed/new-arrivals/400/600",
+      "altText": "New Arrivals"
+    },
+    "seo": {
+      "title": "New Arrivals",
+      "description": "The latest products in our store."
+    },
+    "products": {
+      "edges": [
+        {
+          "cursor": "1",
+          "node": {
+            "id": "gid://shopify/Product/6",
+            "title": "New T-Shirt Design",
+            "handle": "new-t-shirt-design",
+            "availableForSale": true,
+            "totalInventory": 120,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/new-tshirt/400/600",
+              "altText": "New T-Shirt Design"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "35.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "2",
+          "node": {
+            "id": "gid://shopify/Product/19",
+            "title": "Trendy Hoodie",
+            "handle": "trendy-hoodie",
+            "availableForSale": true,
+            "totalInventory": 100,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/trendy-hoodie/400/600",
+              "altText": "Trendy Hoodie"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "50.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "60.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "3",
+          "node": {
+            "id": "gid://shopify/Product/20",
+            "title": "Stylish Cap",
+            "handle": "stylish-cap",
+            "availableForSale": true,
+            "totalInventory": 150,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/stylish-cap/400/600",
+              "altText": "Stylish Cap"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "20.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "25.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "4",
+          "node": {
+            "id": "gid://shopify/Product/21",
+            "title": "Graphic Socks",
+            "handle": "graphic-socks",
+            "availableForSale": true,
+            "totalInventory": 200,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/graphic-socks/400/600",
+              "altText": "Graphic Socks"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "10.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "12.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "5",
+          "node": {
+            "id": "gid://shopify/Product/22",
+            "title": "Designer Backpack",
+            "handle": "designer-backpack",
+            "availableForSale": true,
+            "totalInventory": 60,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/designer-backpack/400/600",
+              "altText": "Designer Backpack"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "180.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "200.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "5"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/5",
+    "title": "Men's Collection",
+    "description": "Curated collection for men.",
+    "handle": "mens-collection",
+    "image": {
+      "url": "https://picsum.photos/seed/mens-collection/400/600",
+      "altText": "Men's Collection"
+    },
+    "seo": {
+      "title": "Men's Collection",
+      "description": "Curated collection for men."
+    },
+    "products": {
+      "edges": [
+        {
+          "cursor": "1",
+          "node": {
+            "id": "gid://shopify/Product/7",
+            "title": "Men's Casual Shirt",
+            "handle": "mens-casual-shirt",
+            "availableForSale": true,
+            "totalInventory": 80,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-shirt/400/600",
+              "altText": "Men's Casual Shirt"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "2",
+          "node": {
+            "id": "gid://shopify/Product/23",
+            "title": "Men's Formal Trousers",
+            "handle": "mens-formal-trousers",
+            "availableForSale": true,
+            "totalInventory": 60,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-trousers/400/600",
+              "altText": "Men's Formal Trousers"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "70.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "85.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "3",
+          "node": {
+            "id": "gid://shopify/Product/24",
+            "title": "Men's Leather Wallet",
+            "handle": "mens-leather-wallet",
+            "availableForSale": true,
+            "totalInventory": 110,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-wallet/400/600",
+              "altText": "Men's Leather Wallet"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "38.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "4",
+          "node": {
+            "id": "gid://shopify/Product/25",
+            "title": "Men's Sports Shorts",
+            "handle": "mens-sports-shorts",
+            "availableForSale": true,
+            "totalInventory": 95,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-shorts/400/600",
+              "altText": "Men's Sports Shorts"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "25.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "5",
+          "node": {
+            "id": "gid://shopify/Product/26",
+            "title": "Men's Running Shoes",
+            "handle": "mens-running-shoes",
+            "availableForSale": true,
+            "totalInventory": 75,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-shoes/400/600",
+              "altText": "Men's Running Shoes"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "110.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "130.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "5"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/6",
+    "title": "Women's Collection",
+    "description": "Curated collection for women.",
+    "handle": "womens-collection",
+    "image": {
+      "url": "https://picsum.photos/seed/womens-collection/400/600",
+      "altText": "Women's Collection"
+    },
+    "seo": {
+      "title": "Women's Collection",
+      "description": "Curated collection for women."
+    },
+    "products": {
+      "edges": [
+        {
+          "cursor": "1",
+          "node": {
+            "id": "gid://shopify/Product/8",
+            "title": "Women's Summer Dress",
+            "handle": "womens-summer-dress",
+            "availableForSale": true,
+            "totalInventory": 90,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-dress/400/600",
+              "altText": "Women's Summer Dress"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "60.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "70.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "2",
+          "node": {
+            "id": "gid://shopify/Product/27",
+            "title": "Women's Casual Top",
+            "handle": "womens-casual-top",
+            "availableForSale": true,
+            "totalInventory": 110,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-top/400/600",
+              "altText": "Women's Casual Top"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "35.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "3",
+          "node": {
+            "id": "gid://shopify/Product/28",
+            "title": "Women's Leggings",
+            "handle": "womens-leggings",
+            "availableForSale": true,
+            "totalInventory": 130,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-leggings/400/600",
+              "altText": "Women's Leggings"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "25.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "4",
+          "node": {
+            "id": "gid://shopify/Product/29",
+            "title": "Women's Handbag",
+            "handle": "womens-handbag",
+            "availableForSale": true,
+            "totalInventory": 50,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-handbag/400/600",
+              "altText": "Women's Handbag"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "90.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "110.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "5",
+          "node": {
+            "id": "gid://shopify/Product/30",
+            "title": "Women's Sandals",
+            "handle": "womens-sandals",
+            "availableForSale": true,
+            "totalInventory": 80,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-sandals/400/600",
+              "altText": "Women's Sandals"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "65.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "75.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "5"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/4",
+    "title": "New Arrivals",
+    "description": "The latest products in our store.",
+    "handle": "new-arrivals",
+    "image": {
+      "url": "https://picsum.photos/seed/new-arrivals/400/600",
+      "altText": "New Arrivals"
+    },
+    "seo": {
+      "title": "New Arrivals",
+      "description": "The latest products in our store."
+    },
+    "products": {
+      "edges": [
+        {
+          "cursor": "1",
+          "node": {
+            "id": "gid://shopify/Product/6",
+            "title": "New T-Shirt Design",
+            "handle": "new-t-shirt-design",
+            "availableForSale": true,
+            "totalInventory": 120,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/new-tshirt/400/600",
+              "altText": "New T-Shirt Design"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "35.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "2",
+          "node": {
+            "id": "gid://shopify/Product/19",
+            "title": "Trendy Hoodie",
+            "handle": "trendy-hoodie",
+            "availableForSale": true,
+            "totalInventory": 100,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/trendy-hoodie/400/600",
+              "altText": "Trendy Hoodie"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "50.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "60.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "3",
+          "node": {
+            "id": "gid://shopify/Product/20",
+            "title": "Stylish Cap",
+            "handle": "stylish-cap",
+            "availableForSale": true,
+            "totalInventory": 150,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/stylish-cap/400/600",
+              "altText": "Stylish Cap"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "20.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "25.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "4",
+          "node": {
+            "id": "gid://shopify/Product/21",
+            "title": "Graphic Socks",
+            "handle": "graphic-socks",
+            "availableForSale": true,
+            "totalInventory": 200,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/graphic-socks/400/600",
+              "altText": "Graphic Socks"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "10.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "12.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "5",
+          "node": {
+            "id": "gid://shopify/Product/22",
+            "title": "Designer Backpack",
+            "handle": "designer-backpack",
+            "availableForSale": true,
+            "totalInventory": 60,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/designer-backpack/400/600",
+              "altText": "Designer Backpack"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "180.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "200.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "5"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/5",
+    "title": "Men's Collection",
+    "description": "Curated collection for men.",
+    "handle": "mens-collection",
+    "image": {
+      "url": "https://picsum.photos/seed/mens-collection/400/600",
+      "altText": "Men's Collection"
+    },
+    "seo": {
+      "title": "Men's Collection",
+      "description": "Curated collection for men."
+    },
+    "products": {
+      "edges": [
+        {
+          "cursor": "1",
+          "node": {
+            "id": "gid://shopify/Product/7",
+            "title": "Men's Casual Shirt",
+            "handle": "mens-casual-shirt",
+            "availableForSale": true,
+            "totalInventory": 80,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-shirt/400/600",
+              "altText": "Men's Casual Shirt"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "2",
+          "node": {
+            "id": "gid://shopify/Product/23",
+            "title": "Men's Formal Trousers",
+            "handle": "mens-formal-trousers",
+            "availableForSale": true,
+            "totalInventory": 60,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-trousers/400/600",
+              "altText": "Men's Formal Trousers"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "70.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "85.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "3",
+          "node": {
+            "id": "gid://shopify/Product/24",
+            "title": "Men's Leather Wallet",
+            "handle": "mens-leather-wallet",
+            "availableForSale": true,
+            "totalInventory": 110,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-wallet/400/600",
+              "altText": "Men's Leather Wallet"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "38.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "4",
+          "node": {
+            "id": "gid://shopify/Product/25",
+            "title": "Men's Sports Shorts",
+            "handle": "mens-sports-shorts",
+            "availableForSale": true,
+            "totalInventory": 95,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-shorts/400/600",
+              "altText": "Men's Sports Shorts"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "25.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "5",
+          "node": {
+            "id": "gid://shopify/Product/26",
+            "title": "Men's Running Shoes",
+            "handle": "mens-running-shoes",
+            "availableForSale": true,
+            "totalInventory": 75,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-shoes/400/600",
+              "altText": "Men's Running Shoes"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "110.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "130.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "5"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/6",
+    "title": "Women's Collection",
+    "description": "Curated collection for women.",
+    "handle": "womens-collection",
+    "image": {
+      "url": "https://picsum.photos/seed/womens-collection/400/600",
+      "altText": "Women's Collection"
+    },
+    "seo": {
+      "title": "Women's Collection",
+      "description": "Curated collection for women."
+    },
+    "products": {
+      "edges": [
+        {
+          "cursor": "1",
+          "node": {
+            "id": "gid://shopify/Product/8",
+            "title": "Women's Summer Dress",
+            "handle": "womens-summer-dress",
+            "availableForSale": true,
+            "totalInventory": 90,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-dress/400/600",
+              "altText": "Women's Summer Dress"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "60.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "70.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "2",
+          "node": {
+            "id": "gid://shopify/Product/27",
+            "title": "Women's Casual Top",
+            "handle": "womens-casual-top",
+            "availableForSale": true,
+            "totalInventory": 110,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-top/400/600",
+              "altText": "Women's Casual Top"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "35.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "3",
+          "node": {
+            "id": "gid://shopify/Product/28",
+            "title": "Women's Leggings",
+            "handle": "womens-leggings",
+            "availableForSale": true,
+            "totalInventory": 130,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-leggings/400/600",
+              "altText": "Women's Leggings"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "25.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "4",
+          "node": {
+            "id": "gid://shopify/Product/29",
+            "title": "Women's Handbag",
+            "handle": "womens-handbag",
+            "availableForSale": true,
+            "totalInventory": 50,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-handbag/400/600",
+              "altText": "Women's Handbag"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "90.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "110.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "5",
+          "node": {
+            "id": "gid://shopify/Product/30",
+            "title": "Women's Sandals",
+            "handle": "womens-sandals",
+            "availableForSale": true,
+            "totalInventory": 80,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-sandals/400/600",
+              "altText": "Women's Sandals"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "65.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "75.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "5"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/4",
+    "title": "New Arrivals",
+    "description": "The latest products in our store.",
+    "handle": "new-arrivals",
+    "image": {
+      "url": "https://picsum.photos/seed/new-arrivals/400/600",
+      "altText": "New Arrivals"
+    },
+    "seo": {
+      "title": "New Arrivals",
+      "description": "The latest products in our store."
+    },
+    "products": {
+      "edges": [
+        {
+          "cursor": "1",
+          "node": {
+            "id": "gid://shopify/Product/6",
+            "title": "New T-Shirt Design",
+            "handle": "new-t-shirt-design",
+            "availableForSale": true,
+            "totalInventory": 120,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/new-tshirt/400/600",
+              "altText": "New T-Shirt Design"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "35.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "2",
+          "node": {
+            "id": "gid://shopify/Product/19",
+            "title": "Trendy Hoodie",
+            "handle": "trendy-hoodie",
+            "availableForSale": true,
+            "totalInventory": 100,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/trendy-hoodie/400/600",
+              "altText": "Trendy Hoodie"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "50.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "60.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "3",
+          "node": {
+            "id": "gid://shopify/Product/20",
+            "title": "Stylish Cap",
+            "handle": "stylish-cap",
+            "availableForSale": true,
+            "totalInventory": 150,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/stylish-cap/400/600",
+              "altText": "Stylish Cap"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "20.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "25.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "4",
+          "node": {
+            "id": "gid://shopify/Product/21",
+            "title": "Graphic Socks",
+            "handle": "graphic-socks",
+            "availableForSale": true,
+            "totalInventory": 200,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/graphic-socks/400/600",
+              "altText": "Graphic Socks"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "10.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "12.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "5",
+          "node": {
+            "id": "gid://shopify/Product/22",
+            "title": "Designer Backpack",
+            "handle": "designer-backpack",
+            "availableForSale": true,
+            "totalInventory": 60,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/designer-backpack/400/600",
+              "altText": "Designer Backpack"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "180.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "200.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "5"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/5",
+    "title": "Men's Collection",
+    "description": "Curated collection for men.",
+    "handle": "mens-collection",
+    "image": {
+      "url": "https://picsum.photos/seed/mens-collection/400/600",
+      "altText": "Men's Collection"
+    },
+    "seo": {
+      "title": "Men's Collection",
+      "description": "Curated collection for men."
+    },
+    "products": {
+      "edges": [
+        {
+          "cursor": "1",
+          "node": {
+            "id": "gid://shopify/Product/7",
+            "title": "Men's Casual Shirt",
+            "handle": "mens-casual-shirt",
+            "availableForSale": true,
+            "totalInventory": 80,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-shirt/400/600",
+              "altText": "Men's Casual Shirt"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "2",
+          "node": {
+            "id": "gid://shopify/Product/23",
+            "title": "Men's Formal Trousers",
+            "handle": "mens-formal-trousers",
+            "availableForSale": true,
+            "totalInventory": 60,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-trousers/400/600",
+              "altText": "Men's Formal Trousers"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "70.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "85.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "3",
+          "node": {
+            "id": "gid://shopify/Product/24",
+            "title": "Men's Leather Wallet",
+            "handle": "mens-leather-wallet",
+            "availableForSale": true,
+            "totalInventory": 110,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-wallet/400/600",
+              "altText": "Men's Leather Wallet"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "38.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "4",
+          "node": {
+            "id": "gid://shopify/Product/25",
+            "title": "Men's Sports Shorts",
+            "handle": "mens-sports-shorts",
+            "availableForSale": true,
+            "totalInventory": 95,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-shorts/400/600",
+              "altText": "Men's Sports Shorts"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "25.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "5",
+          "node": {
+            "id": "gid://shopify/Product/26",
+            "title": "Men's Running Shoes",
+            "handle": "mens-running-shoes",
+            "availableForSale": true,
+            "totalInventory": 75,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-shoes/400/600",
+              "altText": "Men's Running Shoes"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "110.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "130.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "5"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/6",
+    "title": "Women's Collection",
+    "description": "Curated collection for women.",
+    "handle": "womens-collection",
+    "image": {
+      "url": "https://picsum.photos/seed/womens-collection/400/600",
+      "altText": "Women's Collection"
+    },
+    "seo": {
+      "title": "Women's Collection",
+      "description": "Curated collection for women."
+    },
+    "products": {
+      "edges": [
+        {
+          "cursor": "1",
+          "node": {
+            "id": "gid://shopify/Product/8",
+            "title": "Women's Summer Dress",
+            "handle": "womens-summer-dress",
+            "availableForSale": true,
+            "totalInventory": 90,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-dress/400/600",
+              "altText": "Women's Summer Dress"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "60.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "70.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "2",
+          "node": {
+            "id": "gid://shopify/Product/27",
+            "title": "Women's Casual Top",
+            "handle": "womens-casual-top",
+            "availableForSale": true,
+            "totalInventory": 110,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-top/400/600",
+              "altText": "Women's Casual Top"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "35.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "3",
+          "node": {
+            "id": "gid://shopify/Product/28",
+            "title": "Women's Leggings",
+            "handle": "womens-leggings",
+            "availableForSale": true,
+            "totalInventory": 130,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-leggings/400/600",
+              "altText": "Women's Leggings"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "25.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "4",
+          "node": {
+            "id": "gid://shopify/Product/29",
+            "title": "Women's Handbag",
+            "handle": "womens-handbag",
+            "availableForSale": true,
+            "totalInventory": 50,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-handbag/400/600",
+              "altText": "Women's Handbag"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "90.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "110.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "5",
+          "node": {
+            "id": "gid://shopify/Product/30",
+            "title": "Women's Sandals",
+            "handle": "womens-sandals",
+            "availableForSale": true,
+            "totalInventory": 80,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-sandals/400/600",
+              "altText": "Women's Sandals"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "65.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "75.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "5"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/4",
+    "title": "New Arrivals",
+    "description": "The latest products in our store.",
+    "handle": "new-arrivals",
+    "image": {
+      "url": "https://picsum.photos/seed/new-arrivals/400/600",
+      "altText": "New Arrivals"
+    },
+    "seo": {
+      "title": "New Arrivals",
+      "description": "The latest products in our store."
+    },
+    "products": {
+      "edges": [
+        {
+          "cursor": "1",
+          "node": {
+            "id": "gid://shopify/Product/6",
+            "title": "New T-Shirt Design",
+            "handle": "new-t-shirt-design",
+            "availableForSale": true,
+            "totalInventory": 120,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/new-tshirt/400/600",
+              "altText": "New T-Shirt Design"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "35.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "2",
+          "node": {
+            "id": "gid://shopify/Product/19",
+            "title": "Trendy Hoodie",
+            "handle": "trendy-hoodie",
+            "availableForSale": true,
+            "totalInventory": 100,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/trendy-hoodie/400/600",
+              "altText": "Trendy Hoodie"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "50.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "60.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "3",
+          "node": {
+            "id": "gid://shopify/Product/20",
+            "title": "Stylish Cap",
+            "handle": "stylish-cap",
+            "availableForSale": true,
+            "totalInventory": 150,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/stylish-cap/400/600",
+              "altText": "Stylish Cap"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "20.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "25.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "4",
+          "node": {
+            "id": "gid://shopify/Product/21",
+            "title": "Graphic Socks",
+            "handle": "graphic-socks",
+            "availableForSale": true,
+            "totalInventory": 200,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/graphic-socks/400/600",
+              "altText": "Graphic Socks"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "10.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "12.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "5",
+          "node": {
+            "id": "gid://shopify/Product/22",
+            "title": "Designer Backpack",
+            "handle": "designer-backpack",
+            "availableForSale": true,
+            "totalInventory": 60,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/designer-backpack/400/600",
+              "altText": "Designer Backpack"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "180.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "200.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "5"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/5",
+    "title": "Men's Collection",
+    "description": "Curated collection for men.",
+    "handle": "mens-collection",
+    "image": {
+      "url": "https://picsum.photos/seed/mens-collection/400/600",
+      "altText": "Men's Collection"
+    },
+    "seo": {
+      "title": "Men's Collection",
+      "description": "Curated collection for men."
+    },
+    "products": {
+      "edges": [
+        {
+          "cursor": "1",
+          "node": {
+            "id": "gid://shopify/Product/7",
+            "title": "Men's Casual Shirt",
+            "handle": "mens-casual-shirt",
+            "availableForSale": true,
+            "totalInventory": 80,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-shirt/400/600",
+              "altText": "Men's Casual Shirt"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "2",
+          "node": {
+            "id": "gid://shopify/Product/23",
+            "title": "Men's Formal Trousers",
+            "handle": "mens-formal-trousers",
+            "availableForSale": true,
+            "totalInventory": 60,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-trousers/400/600",
+              "altText": "Men's Formal Trousers"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "70.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "85.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "3",
+          "node": {
+            "id": "gid://shopify/Product/24",
+            "title": "Men's Leather Wallet",
+            "handle": "mens-leather-wallet",
+            "availableForSale": true,
+            "totalInventory": 110,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-wallet/400/600",
+              "altText": "Men's Leather Wallet"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "38.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "4",
+          "node": {
+            "id": "gid://shopify/Product/25",
+            "title": "Men's Sports Shorts",
+            "handle": "mens-sports-shorts",
+            "availableForSale": true,
+            "totalInventory": 95,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-shorts/400/600",
+              "altText": "Men's Sports Shorts"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "25.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "5",
+          "node": {
+            "id": "gid://shopify/Product/26",
+            "title": "Men's Running Shoes",
+            "handle": "mens-running-shoes",
+            "availableForSale": true,
+            "totalInventory": 75,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-shoes/400/600",
+              "altText": "Men's Running Shoes"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "110.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "130.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "5"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/6",
+    "title": "Women's Collection",
+    "description": "Curated collection for women.",
+    "handle": "womens-collection",
+    "image": {
+      "url": "https://picsum.photos/seed/womens-collection/400/600",
+      "altText": "Women's Collection"
+    },
+    "seo": {
+      "title": "Women's Collection",
+      "description": "Curated collection for women."
+    },
+    "products": {
+      "edges": [
+        {
+          "cursor": "1",
+          "node": {
+            "id": "gid://shopify/Product/8",
+            "title": "Women's Summer Dress",
+            "handle": "womens-summer-dress",
+            "availableForSale": true,
+            "totalInventory": 90,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-dress/400/600",
+              "altText": "Women's Summer Dress"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "60.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "70.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "2",
+          "node": {
+            "id": "gid://shopify/Product/27",
+            "title": "Women's Casual Top",
+            "handle": "womens-casual-top",
+            "availableForSale": true,
+            "totalInventory": 110,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-top/400/600",
+              "altText": "Women's Casual Top"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "35.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "3",
+          "node": {
+            "id": "gid://shopify/Product/28",
+            "title": "Women's Leggings",
+            "handle": "womens-leggings",
+            "availableForSale": true,
+            "totalInventory": 130,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-leggings/400/600",
+              "altText": "Women's Leggings"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "25.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "4",
+          "node": {
+            "id": "gid://shopify/Product/29",
+            "title": "Women's Handbag",
+            "handle": "womens-handbag",
+            "availableForSale": true,
+            "totalInventory": 50,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-handbag/400/600",
+              "altText": "Women's Handbag"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "90.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "110.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "5",
+          "node": {
+            "id": "gid://shopify/Product/30",
+            "title": "Women's Sandals",
+            "handle": "womens-sandals",
+            "availableForSale": true,
+            "totalInventory": 80,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-sandals/400/600",
+              "altText": "Women's Sandals"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "65.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "75.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "5"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/4",
+    "title": "New Arrivals",
+    "description": "The latest products in our store.",
+    "handle": "new-arrivals",
+    "image": {
+      "url": "https://picsum.photos/seed/new-arrivals/400/600",
+      "altText": "New Arrivals"
+    },
+    "seo": {
+      "title": "New Arrivals",
+      "description": "The latest products in our store."
+    },
+    "products": {
+      "edges": [
+        {
+          "cursor": "1",
+          "node": {
+            "id": "gid://shopify/Product/6",
+            "title": "New T-Shirt Design",
+            "handle": "new-t-shirt-design",
+            "availableForSale": true,
+            "totalInventory": 120,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/new-tshirt/400/600",
+              "altText": "New T-Shirt Design"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "35.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "2",
+          "node": {
+            "id": "gid://shopify/Product/19",
+            "title": "Trendy Hoodie",
+            "handle": "trendy-hoodie",
+            "availableForSale": true,
+            "totalInventory": 100,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/trendy-hoodie/400/600",
+              "altText": "Trendy Hoodie"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "50.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "60.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "3",
+          "node": {
+            "id": "gid://shopify/Product/20",
+            "title": "Stylish Cap",
+            "handle": "stylish-cap",
+            "availableForSale": true,
+            "totalInventory": 150,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/stylish-cap/400/600",
+              "altText": "Stylish Cap"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "20.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "25.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "4",
+          "node": {
+            "id": "gid://shopify/Product/21",
+            "title": "Graphic Socks",
+            "handle": "graphic-socks",
+            "availableForSale": true,
+            "totalInventory": 200,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/graphic-socks/400/600",
+              "altText": "Graphic Socks"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "10.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "12.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "5",
+          "node": {
+            "id": "gid://shopify/Product/22",
+            "title": "Designer Backpack",
+            "handle": "designer-backpack",
+            "availableForSale": true,
+            "totalInventory": 60,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/designer-backpack/400/600",
+              "altText": "Designer Backpack"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "180.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "200.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "5"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/5",
+    "title": "Men's Collection",
+    "description": "Curated collection for men.",
+    "handle": "mens-collection",
+    "image": {
+      "url": "https://picsum.photos/seed/mens-collection/400/600",
+      "altText": "Men's Collection"
+    },
+    "seo": {
+      "title": "Men's Collection",
+      "description": "Curated collection for men."
+    },
+    "products": {
+      "edges": [
+        {
+          "cursor": "1",
+          "node": {
+            "id": "gid://shopify/Product/7",
+            "title": "Men's Casual Shirt",
+            "handle": "mens-casual-shirt",
+            "availableForSale": true,
+            "totalInventory": 80,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-shirt/400/600",
+              "altText": "Men's Casual Shirt"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "2",
+          "node": {
+            "id": "gid://shopify/Product/23",
+            "title": "Men's Formal Trousers",
+            "handle": "mens-formal-trousers",
+            "availableForSale": true,
+            "totalInventory": 60,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-trousers/400/600",
+              "altText": "Men's Formal Trousers"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "70.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "85.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "3",
+          "node": {
+            "id": "gid://shopify/Product/24",
+            "title": "Men's Leather Wallet",
+            "handle": "mens-leather-wallet",
+            "availableForSale": true,
+            "totalInventory": 110,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-wallet/400/600",
+              "altText": "Men's Leather Wallet"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "38.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "4",
+          "node": {
+            "id": "gid://shopify/Product/25",
+            "title": "Men's Sports Shorts",
+            "handle": "mens-sports-shorts",
+            "availableForSale": true,
+            "totalInventory": 95,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-shorts/400/600",
+              "altText": "Men's Sports Shorts"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "25.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "5",
+          "node": {
+            "id": "gid://shopify/Product/26",
+            "title": "Men's Running Shoes",
+            "handle": "mens-running-shoes",
+            "availableForSale": true,
+            "totalInventory": 75,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/mens-shoes/400/600",
+              "altText": "Men's Running Shoes"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "110.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "130.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "5"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/6",
+    "title": "Women's Collection",
+    "description": "Curated collection for women.",
+    "handle": "womens-collection",
+    "image": {
+      "url": "https://picsum.photos/seed/womens-collection/400/600",
+      "altText": "Women's Collection"
+    },
+    "seo": {
+      "title": "Women's Collection",
+      "description": "Curated collection for women."
+    },
+    "products": {
+      "edges": [
+        {
+          "cursor": "1",
+          "node": {
+            "id": "gid://shopify/Product/8",
+            "title": "Women's Summer Dress",
+            "handle": "womens-summer-dress",
+            "availableForSale": true,
+            "totalInventory": 90,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-dress/400/600",
+              "altText": "Women's Summer Dress"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "60.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "70.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "2",
+          "node": {
+            "id": "gid://shopify/Product/27",
+            "title": "Women's Casual Top",
+            "handle": "womens-casual-top",
+            "availableForSale": true,
+            "totalInventory": 110,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-top/400/600",
+              "altText": "Women's Casual Top"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "35.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "3",
+          "node": {
+            "id": "gid://shopify/Product/28",
+            "title": "Women's Leggings",
+            "handle": "womens-leggings",
+            "availableForSale": true,
+            "totalInventory": 130,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-leggings/400/600",
+              "altText": "Women's Leggings"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "25.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "4",
+          "node": {
+            "id": "gid://shopify/Product/29",
+            "title": "Women's Handbag",
+            "handle": "womens-handbag",
+            "availableForSale": true,
+            "totalInventory": 50,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-handbag/400/600",
+              "altText": "Women's Handbag"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "90.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "110.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "5",
+          "node": {
+            "id": "gid://shopify/Product/30",
+            "title": "Women's Sandals",
+            "handle": "womens-sandals",
+            "availableForSale": true,
+            "totalInventory": 80,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/womens-sandals/400/600",
+              "altText": "Women's Sandals"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "65.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "75.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "5"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/7",
+    "title": "Best Sellers",
+    "description": "Our most popular products.",
+    "handle": "best-sellers",
+    "image": {
+      "url": "https://picsum.photos/seed/best-sellers/400/600",
+      "altText": "Best Sellers"
+    },
+    "seo": {
+      "title": "Best Sellers",
+      "description": "Our most popular products."
+    },
+    "products": {
+      "edges": [
+        {
+          "cursor": "1",
+          "node": {
+            "id": "gid://shopify/Product/9",
+            "title": "Unisex Hoodie",
+            "handle": "unisex-hoodie",
+            "availableForSale": true,
+            "totalInventory": 150,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/unisex-hoodie/400/600",
+              "altText": "Unisex Hoodie"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "80.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "95.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "2",
+          "node": {
+            "id": "gid://shopify/Product/31",
+            "title": "Classic Denim Jacket",
+            "handle": "classic-denim-jacket",
+            "availableForSale": true,
+            "totalInventory": 70,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/denim-jacket/400/600",
+              "altText": "Classic Denim Jacket"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "150.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "180.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "3",
+          "node": {
+            "id": "gid://shopify/Product/32",
+            "title": "Comfortable Sweatpants",
+            "handle": "comfortable-sweatpants",
+            "availableForSale": true,
+            "totalInventory": 100,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/sweatpants/400/600",
+              "altText": "Comfortable Sweatpants"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "60.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "70.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "4",
+          "node": {
+            "id": "gid://shopify/Product/33",
+            "title": "Stylish Sunglasses",
+            "handle": "stylish-sunglasses",
+            "availableForSale": true,
+            "totalInventory": 120,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/sunglasses/400/600",
+              "altText": "Stylish Sunglasses"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "40.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "50.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "5",
+          "node": {
+            "id": "gid://shopify/Product/34",
+            "title": "Premium Leather Belt",
+            "handle": "premium-leather-belt",
+            "availableForSale": true,
+            "totalInventory": 80,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/leather-belt/400/600",
+              "altText": "Premium Leather Belt"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "70.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "85.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "5"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/8",
+    "title": "Stories of Us",
+    "description": "Products with a unique story.",
+    "handle": "stories-of-us",
+    "image": {
+      "url": "https://picsum.photos/seed/stories-of-us/400/600",
+      "altText": "Stories of Us"
+    },
+    "seo": {
+      "title": "Stories of Us",
+      "description": "Products with a unique story."
+    },
+    "products": {
+      "edges": [
+        {
+          "cursor": "1",
+          "node": {
+            "id": "gid://shopify/Product/10",
+            "title": "Handcrafted Scarf",
+            "handle": "handcrafted-scarf",
+            "availableForSale": true,
+            "totalInventory": 30,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/handcrafted-scarf/400/600",
+              "altText": "Handcrafted Scarf"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "120.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "150.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "2",
+          "node": {
+            "id": "gid://shopify/Product/35",
+            "title": "Artisan Ceramic Mug",
+            "handle": "artisan-ceramic-mug",
+            "availableForSale": true,
+            "totalInventory": 40,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/ceramic-mug/400/600",
+              "altText": "Artisan Ceramic Mug"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "3",
+          "node": {
+            "id": "gid://shopify/Product/36",
+            "title": "Hand-painted Canvas",
+            "handle": "hand-painted-canvas",
+            "availableForSale": true,
+            "totalInventory": 20,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/painted-canvas/400/600",
+              "altText": "Hand-painted Canvas"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "200.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "250.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "4",
+          "node": {
+            "id": "gid://shopify/Product/37",
+            "title": "Ethically Sourced Coffee",
+            "handle": "ethically-sourced-coffee",
+            "availableForSale": true,
+            "totalInventory": 100,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/coffee/400/600",
+              "altText": "Ethically Sourced Coffee"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "35.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        },
+        {
+          "cursor": "5",
+          "node": {
+            "id": "gid://shopify/Product/38",
+            "title": "Recycled Glass Vase",
+            "handle": "recycled-glass-vase",
+            "availableForSale": true,
+            "totalInventory": 50,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/glass-vase/400/600",
+              "altText": "Recycled Glass Vase"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "70.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "80.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "5"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Collection/9",
+    "title": "Kids",
+    "description": "A collection of kids' clothing.",
+    "handle": "kids",
+    "image": {
+      "url": "https://picsum.photos/seed/kids-collection/400/600",
+      "altText": "Kids' Collection"
+    },
+    "seo": {
+      "title": "Kids' Collection",
+      "description": "A collection of kids' clothing."
+    },
+    "products": {
+      "edges": [
+        {
+          "cursor": "1",
+          "node": {
+            "id": "gid://shopify/Product/3",
+            "title": "Kids Hoodie",
+            "handle": "kids-hoodie",
+            "availableForSale": true,
+            "totalInventory": 75,
+            "featuredImage": {
+              "url": "https://picsum.photos/seed/kids/400/600",
+              "altText": "Kids Hoodie"
+            },
+            "priceRange": {
+              "minVariantPrice": {
+                "amount": "35.0",
+                "currencyCode": "INR"
+              }
+            },
+            "compareAtPriceRange": {
+              "minVariantPrice": {
+                "amount": "40.0",
+                "currencyCode": "INR"
+              }
+            }
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "1"
+      }
+    }
+  }
+]

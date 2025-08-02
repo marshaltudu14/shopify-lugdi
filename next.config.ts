@@ -7,9 +7,9 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "cdn.shopify.com",
+        hostname: "picsum.photos", // Demo images from Picsum
       },
-      // Removed localhost entry for production
+      // Removed Shopify CDN for demo mode
     ],
   },
 };

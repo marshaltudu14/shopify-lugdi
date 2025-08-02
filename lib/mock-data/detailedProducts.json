@@ -1,0 +1,3808 @@
+[
+  {
+    "product": {
+      "id": "gid://shopify/Product/1",
+      "title": "Classic T-Shirt",
+      "availableForSale": true,
+      "description": "A classic t-shirt made from 100% cotton. Perfect for everyday wear with a comfortable fit and timeless design.",
+      "descriptionHtml": "<p>A classic t-shirt made from 100% cotton. Perfect for everyday wear with a comfortable fit and timeless design.</p>",
+      "handle": "classic-t-shirt",
+      "productType": "Apparel",
+      "totalInventory": 100,
+      "tags": [
+        "T-shirt",
+        "Classic",
+        "Cotton",
+        "Men"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/classic-t-shirt/400/600",
+        "altText": "Classic T-Shirt"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/classic-t-shirt/400/600",
+              "altText": "Classic T-Shirt"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            },
+            {
+              "id": "4",
+              "name": "XL",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/1",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 25,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/classic-t-shirt/400/600",
+                "altText": "Classic T-Shirt"
+              },
+              "price": {
+                "amount": "20.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "25.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/1",
+                "title": "Classic T-Shirt",
+                "handle": "classic-t-shirt",
+                "description": "A classic t-shirt made from 100% cotton. Perfect for everyday wear with a comfortable fit and timeless design.",
+                "seo": {
+                  "title": "Classic T-Shirt - Quality and Style",
+                  "description": "A classic t-shirt made from 100% cotton. Perfect for everyday wear with a comfortable fit and timeless design."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/classic-t-shirt/400/600",
+                  "altText": "Classic T-Shirt"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Classic T-Shirt - Quality and Style",
+        "description": "A classic t-shirt made from 100% cotton. Perfect for everyday wear with a comfortable fit and timeless design."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/11",
+      "title": "Men's Polo Shirt",
+      "availableForSale": true,
+      "description": "Classic polo shirt for men. Made from premium cotton with a comfortable collar design.",
+      "descriptionHtml": "<p>Classic polo shirt for men. Made from premium cotton with a comfortable collar design.</p>",
+      "handle": "mens-polo-shirt",
+      "productType": "Apparel",
+      "totalInventory": 80,
+      "tags": [
+        "Polo",
+        "Men",
+        "Cotton",
+        "Classic"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/mens-polo-shirt/400/600",
+        "altText": "Men's Polo Shirt"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/mens-polo-shirt/400/600",
+              "altText": "Men's Polo Shirt"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            },
+            {
+              "id": "4",
+              "name": "XL",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/11",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 20,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/mens-polo-shirt/400/600",
+                "altText": "Men's Polo Shirt"
+              },
+              "price": {
+                "amount": "35.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/11",
+                "title": "Men's Polo Shirt",
+                "handle": "mens-polo-shirt",
+                "description": "Classic polo shirt for men. Made from premium cotton with a comfortable collar design.",
+                "seo": {
+                  "title": "Men's Polo Shirt - Quality and Style",
+                  "description": "Classic polo shirt for men. Made from premium cotton with a comfortable collar design."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/mens-polo-shirt/400/600",
+                  "altText": "Men's Polo Shirt"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Men's Polo Shirt - Quality and Style",
+        "description": "Classic polo shirt for men. Made from premium cotton with a comfortable collar design."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/12",
+      "title": "Men's Jeans",
+      "availableForSale": true,
+      "description": "Comfortable denim jeans for men. Classic fit with durable construction.",
+      "descriptionHtml": "<p>Comfortable denim jeans for men. Classic fit with durable construction.</p>",
+      "handle": "mens-jeans",
+      "productType": "Apparel",
+      "totalInventory": 70,
+      "tags": [
+        "Jeans",
+        "Men",
+        "Denim",
+        "Casual"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/mens-jeans/400/600",
+        "altText": "Men's Jeans"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/mens-jeans/400/600",
+              "altText": "Men's Jeans"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            },
+            {
+              "id": "4",
+              "name": "XL",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/12",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 17,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/mens-jeans/400/600",
+                "altText": "Men's Jeans"
+              },
+              "price": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "70.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/12",
+                "title": "Men's Jeans",
+                "handle": "mens-jeans",
+                "description": "Comfortable denim jeans for men. Classic fit with durable construction.",
+                "seo": {
+                  "title": "Men's Jeans - Quality and Style",
+                  "description": "Comfortable denim jeans for men. Classic fit with durable construction."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/mens-jeans/400/600",
+                  "altText": "Men's Jeans"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Men's Jeans - Quality and Style",
+        "description": "Comfortable denim jeans for men. Classic fit with durable construction."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/13",
+      "title": "Men's Jacket",
+      "availableForSale": true,
+      "description": "Stylish jacket for men. Perfect for layering in cooler weather.",
+      "descriptionHtml": "<p>Stylish jacket for men. Perfect for layering in cooler weather.</p>",
+      "handle": "mens-jacket",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Jacket",
+        "Men",
+        "Outerwear",
+        "Warm"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/mens-jacket/400/600",
+        "altText": "Men's Jacket"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/mens-jacket/400/600",
+              "altText": "Men's Jacket"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            },
+            {
+              "id": "4",
+              "name": "XL",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/13",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 12,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/mens-jacket/400/600",
+                "altText": "Men's Jacket"
+              },
+              "price": {
+                "amount": "85.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "100.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/13",
+                "title": "Men's Jacket",
+                "handle": "mens-jacket",
+                "description": "Stylish jacket for men. Perfect for layering in cooler weather.",
+                "seo": {
+                  "title": "Men's Jacket - Quality and Style",
+                  "description": "Stylish jacket for men. Perfect for layering in cooler weather."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/mens-jacket/400/600",
+                  "altText": "Men's Jacket"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Men's Jacket - Quality and Style",
+        "description": "Stylish jacket for men. Perfect for layering in cooler weather."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/14",
+      "title": "Men's Sneakers",
+      "availableForSale": true,
+      "description": "Comfortable sneakers for men. Perfect for everyday wear and light activities.",
+      "descriptionHtml": "<p>Comfortable sneakers for men. Perfect for everyday wear and light activities.</p>",
+      "handle": "mens-sneakers",
+      "productType": "Footwear",
+      "totalInventory": 90,
+      "tags": [
+        "Sneakers",
+        "Men",
+        "Shoes",
+        "Casual"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/mens-sneakers/400/600",
+        "altText": "Men's Sneakers"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/mens-sneakers/400/600",
+              "altText": "Men's Sneakers"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            },
+            {
+              "id": "4",
+              "name": "XL",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/14",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 22,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/mens-sneakers/400/600",
+                "altText": "Men's Sneakers"
+              },
+              "price": {
+                "amount": "75.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "90.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/14",
+                "title": "Men's Sneakers",
+                "handle": "mens-sneakers",
+                "description": "Comfortable sneakers for men. Perfect for everyday wear and light activities.",
+                "seo": {
+                  "title": "Men's Sneakers - Quality and Style",
+                  "description": "Comfortable sneakers for men. Perfect for everyday wear and light activities."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/mens-sneakers/400/600",
+                  "altText": "Men's Sneakers"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Men's Sneakers - Quality and Style",
+        "description": "Comfortable sneakers for men. Perfect for everyday wear and light activities."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/2",
+      "title": "Denim Jeans",
+      "availableForSale": true,
+      "description": "Premium denim jeans with a modern fit. Made from high-quality denim fabric for durability and comfort.",
+      "descriptionHtml": "<p>Premium denim jeans with a modern fit. Made from high-quality denim fabric for durability and comfort.</p>",
+      "handle": "denim-jeans",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Jeans",
+        "Denim",
+        "Women",
+        "Casual"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/denim-jeans/400/600",
+        "altText": "Denim Jeans"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/denim-jeans/400/600",
+              "altText": "Denim Jeans"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            },
+            {
+              "id": "4",
+              "name": "XL",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/2",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 12,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/denim-jeans/400/600",
+                "altText": "Denim Jeans"
+              },
+              "price": {
+                "amount": "50.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "60.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/2",
+                "title": "Denim Jeans",
+                "handle": "denim-jeans",
+                "description": "Premium denim jeans with a modern fit. Made from high-quality denim fabric for durability and comfort.",
+                "seo": {
+                  "title": "Denim Jeans - Quality and Style",
+                  "description": "Premium denim jeans with a modern fit. Made from high-quality denim fabric for durability and comfort."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/denim-jeans/400/600",
+                  "altText": "Denim Jeans"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Denim Jeans - Quality and Style",
+        "description": "Premium denim jeans with a modern fit. Made from high-quality denim fabric for durability and comfort."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/15",
+      "title": "Women's Summer Dress",
+      "availableForSale": true,
+      "description": "Light and breezy summer dress for women. Perfect for warm weather with a flattering fit.",
+      "descriptionHtml": "<p>Light and breezy summer dress for women. Perfect for warm weather with a flattering fit.</p>",
+      "handle": "womens-summer-dress",
+      "productType": "Apparel",
+      "totalInventory": 70,
+      "tags": [
+        "Dress",
+        "Women",
+        "Summer",
+        "Elegant"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/womens-summer-dress/400/600",
+        "altText": "Women's Summer Dress"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/womens-summer-dress/400/600",
+              "altText": "Women's Summer Dress"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            },
+            {
+              "id": "4",
+              "name": "XL",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/15",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 17,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/womens-summer-dress/400/600",
+                "altText": "Women's Summer Dress"
+              },
+              "price": {
+                "amount": "65.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "80.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/15",
+                "title": "Women's Summer Dress",
+                "handle": "womens-summer-dress",
+                "description": "Light and breezy summer dress for women. Perfect for warm weather with a flattering fit.",
+                "seo": {
+                  "title": "Women's Summer Dress - Quality and Style",
+                  "description": "Light and breezy summer dress for women. Perfect for warm weather with a flattering fit."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/womens-summer-dress/400/600",
+                  "altText": "Women's Summer Dress"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Women's Summer Dress - Quality and Style",
+        "description": "Light and breezy summer dress for women. Perfect for warm weather with a flattering fit."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/16",
+      "title": "Women's Blouse",
+      "availableForSale": true,
+      "description": "Elegant blouse for women. Perfect for professional and formal occasions.",
+      "descriptionHtml": "<p>Elegant blouse for women. Perfect for professional and formal occasions.</p>",
+      "handle": "womens-blouse",
+      "productType": "Apparel",
+      "totalInventory": 90,
+      "tags": [
+        "Blouse",
+        "Women",
+        "Formal",
+        "Elegant"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/womens-blouse/400/600",
+        "altText": "Women's Blouse"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/womens-blouse/400/600",
+              "altText": "Women's Blouse"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            },
+            {
+              "id": "4",
+              "name": "XL",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/16",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 22,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/womens-blouse/400/600",
+                "altText": "Women's Blouse"
+              },
+              "price": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/16",
+                "title": "Women's Blouse",
+                "handle": "womens-blouse",
+                "description": "Elegant blouse for women. Perfect for professional and formal occasions.",
+                "seo": {
+                  "title": "Women's Blouse - Quality and Style",
+                  "description": "Elegant blouse for women. Perfect for professional and formal occasions."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/womens-blouse/400/600",
+                  "altText": "Women's Blouse"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Women's Blouse - Quality and Style",
+        "description": "Elegant blouse for women. Perfect for professional and formal occasions."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/17",
+      "title": "Women's Skirt",
+      "availableForSale": true,
+      "description": "Stylish skirt for women. Versatile piece for various occasions.",
+      "descriptionHtml": "<p>Stylish skirt for women. Versatile piece for various occasions.</p>",
+      "handle": "womens-skirt",
+      "productType": "Apparel",
+      "totalInventory": 60,
+      "tags": [
+        "Skirt",
+        "Women",
+        "Formal",
+        "Elegant"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/womens-skirt/400/600",
+        "altText": "Women's Skirt"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/womens-skirt/400/600",
+              "altText": "Women's Skirt"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            },
+            {
+              "id": "4",
+              "name": "XL",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/17",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/womens-skirt/400/600",
+                "altText": "Women's Skirt"
+              },
+              "price": {
+                "amount": "40.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "50.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/17",
+                "title": "Women's Skirt",
+                "handle": "womens-skirt",
+                "description": "Stylish skirt for women. Versatile piece for various occasions.",
+                "seo": {
+                  "title": "Women's Skirt - Quality and Style",
+                  "description": "Stylish skirt for women. Versatile piece for various occasions."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/womens-skirt/400/600",
+                  "altText": "Women's Skirt"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Women's Skirt - Quality and Style",
+        "description": "Stylish skirt for women. Versatile piece for various occasions."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/18",
+      "title": "Women's Heels",
+      "availableForSale": true,
+      "description": "Elegant heels for women. Perfect for formal occasions and special events.",
+      "descriptionHtml": "<p>Elegant heels for women. Perfect for formal occasions and special events.</p>",
+      "handle": "womens-heels",
+      "productType": "Footwear",
+      "totalInventory": 40,
+      "tags": [
+        "Heels",
+        "Women",
+        "Shoes",
+        "Formal"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/womens-heels/400/600",
+        "altText": "Women's Heels"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/womens-heels/400/600",
+              "altText": "Women's Heels"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            },
+            {
+              "id": "4",
+              "name": "XL",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/18",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 10,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/womens-heels/400/600",
+                "altText": "Women's Heels"
+              },
+              "price": {
+                "amount": "95.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "120.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/18",
+                "title": "Women's Heels",
+                "handle": "womens-heels",
+                "description": "Elegant heels for women. Perfect for formal occasions and special events.",
+                "seo": {
+                  "title": "Women's Heels - Quality and Style",
+                  "description": "Elegant heels for women. Perfect for formal occasions and special events."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/womens-heels/400/600",
+                  "altText": "Women's Heels"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Women's Heels - Quality and Style",
+        "description": "Elegant heels for women. Perfect for formal occasions and special events."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/6",
+      "title": "New T-Shirt Design",
+      "availableForSale": true,
+      "description": "Latest t-shirt design with modern graphics. Made from premium cotton for ultimate comfort.",
+      "descriptionHtml": "<p>Latest t-shirt design with modern graphics. Made from premium cotton for ultimate comfort.</p>",
+      "handle": "new-t-shirt-design",
+      "productType": "Apparel",
+      "totalInventory": 120,
+      "tags": [
+        "T-shirt",
+        "New",
+        "Design",
+        "Cotton"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/new-t-shirt-design/400/600",
+        "altText": "New T-Shirt Design"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/new-t-shirt-design/400/600",
+              "altText": "New T-Shirt Design"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            },
+            {
+              "id": "4",
+              "name": "XL",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/6",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 30,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/new-t-shirt-design/400/600",
+                "altText": "New T-Shirt Design"
+              },
+              "price": {
+                "amount": "25.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/6",
+                "title": "New T-Shirt Design",
+                "handle": "new-t-shirt-design",
+                "description": "Latest t-shirt design with modern graphics. Made from premium cotton for ultimate comfort.",
+                "seo": {
+                  "title": "New T-Shirt Design - Quality and Style",
+                  "description": "Latest t-shirt design with modern graphics. Made from premium cotton for ultimate comfort."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/new-t-shirt-design/400/600",
+                  "altText": "New T-Shirt Design"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "New T-Shirt Design - Quality and Style",
+        "description": "Latest t-shirt design with modern graphics. Made from premium cotton for ultimate comfort."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/19",
+      "title": "Trendy Hoodie",
+      "availableForSale": true,
+      "description": "Trendy hoodie with modern design. Comfortable and stylish for everyday wear.",
+      "descriptionHtml": "<p>Trendy hoodie with modern design. Comfortable and stylish for everyday wear.</p>",
+      "handle": "trendy-hoodie",
+      "productType": "Apparel",
+      "totalInventory": 100,
+      "tags": [
+        "Hoodie",
+        "Trendy",
+        "Cotton",
+        "Casual"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/trendy-hoodie/400/600",
+        "altText": "Trendy Hoodie"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/trendy-hoodie/400/600",
+              "altText": "Trendy Hoodie"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            },
+            {
+              "id": "4",
+              "name": "XL",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/19",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 25,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/trendy-hoodie/400/600",
+                "altText": "Trendy Hoodie"
+              },
+              "price": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "70.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/19",
+                "title": "Trendy Hoodie",
+                "handle": "trendy-hoodie",
+                "description": "Trendy hoodie with modern design. Comfortable and stylish for everyday wear.",
+                "seo": {
+                  "title": "Trendy Hoodie - Quality and Style",
+                  "description": "Trendy hoodie with modern design. Comfortable and stylish for everyday wear."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/trendy-hoodie/400/600",
+                  "altText": "Trendy Hoodie"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Trendy Hoodie - Quality and Style",
+        "description": "Trendy hoodie with modern design. Comfortable and stylish for everyday wear."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/20",
+      "title": "Stylish Cap",
+      "availableForSale": true,
+      "description": "Stylish cap perfect for casual outings. Adjustable fit for maximum comfort.",
+      "descriptionHtml": "<p>Stylish cap perfect for casual outings. Adjustable fit for maximum comfort.</p>",
+      "handle": "stylish-cap",
+      "productType": "Accessories",
+      "totalInventory": 150,
+      "tags": [
+        "Cap",
+        "Hat",
+        "Stylish",
+        "Casual"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/stylish-cap/400/600",
+        "altText": "Stylish Cap"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/stylish-cap/400/600",
+              "altText": "Stylish Cap"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            },
+            {
+              "id": "4",
+              "name": "XL",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/20",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 37,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/stylish-cap/400/600",
+                "altText": "Stylish Cap"
+              },
+              "price": {
+                "amount": "25.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "30.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/20",
+                "title": "Stylish Cap",
+                "handle": "stylish-cap",
+                "description": "Stylish cap perfect for casual outings. Adjustable fit for maximum comfort.",
+                "seo": {
+                  "title": "Stylish Cap - Quality and Style",
+                  "description": "Stylish cap perfect for casual outings. Adjustable fit for maximum comfort."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/stylish-cap/400/600",
+                  "altText": "Stylish Cap"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Stylish Cap - Quality and Style",
+        "description": "Stylish cap perfect for casual outings. Adjustable fit for maximum comfort."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/21",
+      "title": "Graphic Socks",
+      "availableForSale": true,
+      "description": "Fun graphic socks with unique designs. Comfortable cotton blend material.",
+      "descriptionHtml": "<p>Fun graphic socks with unique designs. Comfortable cotton blend material.</p>",
+      "handle": "graphic-socks",
+      "productType": "Accessories",
+      "totalInventory": 200,
+      "tags": [
+        "Socks",
+        "Graphic",
+        "Fun",
+        "Cotton"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/graphic-socks/400/600",
+        "altText": "Graphic Socks"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/graphic-socks/400/600",
+              "altText": "Graphic Socks"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            },
+            {
+              "id": "4",
+              "name": "XL",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/21",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 50,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/graphic-socks/400/600",
+                "altText": "Graphic Socks"
+              },
+              "price": {
+                "amount": "15.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "20.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/21",
+                "title": "Graphic Socks",
+                "handle": "graphic-socks",
+                "description": "Fun graphic socks with unique designs. Comfortable cotton blend material.",
+                "seo": {
+                  "title": "Graphic Socks - Quality and Style",
+                  "description": "Fun graphic socks with unique designs. Comfortable cotton blend material."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/graphic-socks/400/600",
+                  "altText": "Graphic Socks"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Graphic Socks - Quality and Style",
+        "description": "Fun graphic socks with unique designs. Comfortable cotton blend material."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/22",
+      "title": "Designer Backpack",
+      "availableForSale": true,
+      "description": "Designer backpack with multiple compartments. Perfect for travel and daily use.",
+      "descriptionHtml": "<p>Designer backpack with multiple compartments. Perfect for travel and daily use.</p>",
+      "handle": "designer-backpack",
+      "productType": "Accessories",
+      "totalInventory": 60,
+      "tags": [
+        "Backpack",
+        "Designer",
+        "Travel",
+        "Durable"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/designer-backpack/400/600",
+        "altText": "Designer Backpack"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/designer-backpack/400/600",
+              "altText": "Designer Backpack"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            },
+            {
+              "id": "4",
+              "name": "XL",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/22",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/designer-backpack/400/600",
+                "altText": "Designer Backpack"
+              },
+              "price": {
+                "amount": "120.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "150.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/22",
+                "title": "Designer Backpack",
+                "handle": "designer-backpack",
+                "description": "Designer backpack with multiple compartments. Perfect for travel and daily use.",
+                "seo": {
+                  "title": "Designer Backpack - Quality and Style",
+                  "description": "Designer backpack with multiple compartments. Perfect for travel and daily use."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/designer-backpack/400/600",
+                  "altText": "Designer Backpack"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Designer Backpack - Quality and Style",
+        "description": "Designer backpack with multiple compartments. Perfect for travel and daily use."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/115",
+      "title": "Mens Casual Shirt",
+      "availableForSale": true,
+      "description": "High-quality mens casual shirt with excellent craftsmanship and attention to detail.",
+      "descriptionHtml": "<p>High-quality mens casual shirt with excellent craftsmanship and attention to detail.</p>",
+      "handle": "mens-casual-shirt",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Mens",
+        "Quality",
+        "Comfortable"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/mens-casual-shirt/400/600",
+        "altText": "Mens Casual Shirt"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/mens-casual-shirt/400/600",
+              "altText": "Mens Casual Shirt"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/115",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/mens-casual-shirt/400/600",
+                "altText": "Mens Casual Shirt"
+              },
+              "price": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/115",
+                "title": "Mens Casual Shirt",
+                "handle": "mens-casual-shirt",
+                "description": "High-quality mens casual shirt with excellent craftsmanship and attention to detail.",
+                "seo": {
+                  "title": "Mens Casual Shirt - Quality and Comfort",
+                  "description": "Shop our high-quality mens casual shirt. Excellent craftsmanship and attention to detail."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/mens-casual-shirt/400/600",
+                  "altText": "Mens Casual Shirt"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Mens Casual Shirt - Quality and Comfort",
+        "description": "Shop our high-quality mens casual shirt. Excellent craftsmanship and attention to detail."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/116",
+      "title": "Mens Formal Trousers",
+      "availableForSale": true,
+      "description": "High-quality mens formal trousers with excellent craftsmanship and attention to detail.",
+      "descriptionHtml": "<p>High-quality mens formal trousers with excellent craftsmanship and attention to detail.</p>",
+      "handle": "mens-formal-trousers",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Mens",
+        "Quality",
+        "Comfortable"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/mens-formal-trousers/400/600",
+        "altText": "Mens Formal Trousers"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/mens-formal-trousers/400/600",
+              "altText": "Mens Formal Trousers"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/116",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/mens-formal-trousers/400/600",
+                "altText": "Mens Formal Trousers"
+              },
+              "price": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/116",
+                "title": "Mens Formal Trousers",
+                "handle": "mens-formal-trousers",
+                "description": "High-quality mens formal trousers with excellent craftsmanship and attention to detail.",
+                "seo": {
+                  "title": "Mens Formal Trousers - Quality and Comfort",
+                  "description": "Shop our high-quality mens formal trousers. Excellent craftsmanship and attention to detail."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/mens-formal-trousers/400/600",
+                  "altText": "Mens Formal Trousers"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Mens Formal Trousers - Quality and Comfort",
+        "description": "Shop our high-quality mens formal trousers. Excellent craftsmanship and attention to detail."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/117",
+      "title": "Mens Leather Wallet",
+      "availableForSale": true,
+      "description": "High-quality mens leather wallet with excellent craftsmanship and attention to detail.",
+      "descriptionHtml": "<p>High-quality mens leather wallet with excellent craftsmanship and attention to detail.</p>",
+      "handle": "mens-leather-wallet",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Mens",
+        "Quality",
+        "Comfortable"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/mens-leather-wallet/400/600",
+        "altText": "Mens Leather Wallet"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/mens-leather-wallet/400/600",
+              "altText": "Mens Leather Wallet"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/117",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/mens-leather-wallet/400/600",
+                "altText": "Mens Leather Wallet"
+              },
+              "price": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/117",
+                "title": "Mens Leather Wallet",
+                "handle": "mens-leather-wallet",
+                "description": "High-quality mens leather wallet with excellent craftsmanship and attention to detail.",
+                "seo": {
+                  "title": "Mens Leather Wallet - Quality and Comfort",
+                  "description": "Shop our high-quality mens leather wallet. Excellent craftsmanship and attention to detail."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/mens-leather-wallet/400/600",
+                  "altText": "Mens Leather Wallet"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Mens Leather Wallet - Quality and Comfort",
+        "description": "Shop our high-quality mens leather wallet. Excellent craftsmanship and attention to detail."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/118",
+      "title": "Mens Sports Shorts",
+      "availableForSale": true,
+      "description": "High-quality mens sports shorts with excellent craftsmanship and attention to detail.",
+      "descriptionHtml": "<p>High-quality mens sports shorts with excellent craftsmanship and attention to detail.</p>",
+      "handle": "mens-sports-shorts",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Mens",
+        "Quality",
+        "Comfortable"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/mens-sports-shorts/400/600",
+        "altText": "Mens Sports Shorts"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/mens-sports-shorts/400/600",
+              "altText": "Mens Sports Shorts"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/118",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/mens-sports-shorts/400/600",
+                "altText": "Mens Sports Shorts"
+              },
+              "price": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/118",
+                "title": "Mens Sports Shorts",
+                "handle": "mens-sports-shorts",
+                "description": "High-quality mens sports shorts with excellent craftsmanship and attention to detail.",
+                "seo": {
+                  "title": "Mens Sports Shorts - Quality and Comfort",
+                  "description": "Shop our high-quality mens sports shorts. Excellent craftsmanship and attention to detail."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/mens-sports-shorts/400/600",
+                  "altText": "Mens Sports Shorts"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Mens Sports Shorts - Quality and Comfort",
+        "description": "Shop our high-quality mens sports shorts. Excellent craftsmanship and attention to detail."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/119",
+      "title": "Mens Running Shoes",
+      "availableForSale": true,
+      "description": "High-quality mens running shoes with excellent craftsmanship and attention to detail.",
+      "descriptionHtml": "<p>High-quality mens running shoes with excellent craftsmanship and attention to detail.</p>",
+      "handle": "mens-running-shoes",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Mens",
+        "Quality",
+        "Comfortable"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/mens-running-shoes/400/600",
+        "altText": "Mens Running Shoes"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/mens-running-shoes/400/600",
+              "altText": "Mens Running Shoes"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/119",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/mens-running-shoes/400/600",
+                "altText": "Mens Running Shoes"
+              },
+              "price": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/119",
+                "title": "Mens Running Shoes",
+                "handle": "mens-running-shoes",
+                "description": "High-quality mens running shoes with excellent craftsmanship and attention to detail.",
+                "seo": {
+                  "title": "Mens Running Shoes - Quality and Comfort",
+                  "description": "Shop our high-quality mens running shoes. Excellent craftsmanship and attention to detail."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/mens-running-shoes/400/600",
+                  "altText": "Mens Running Shoes"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Mens Running Shoes - Quality and Comfort",
+        "description": "Shop our high-quality mens running shoes. Excellent craftsmanship and attention to detail."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/120",
+      "title": "Womens Casual Top",
+      "availableForSale": true,
+      "description": "High-quality womens casual top with excellent craftsmanship and attention to detail.",
+      "descriptionHtml": "<p>High-quality womens casual top with excellent craftsmanship and attention to detail.</p>",
+      "handle": "womens-casual-top",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Womens",
+        "Quality",
+        "Comfortable"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/womens-casual-top/400/600",
+        "altText": "Womens Casual Top"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/womens-casual-top/400/600",
+              "altText": "Womens Casual Top"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/120",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/womens-casual-top/400/600",
+                "altText": "Womens Casual Top"
+              },
+              "price": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/120",
+                "title": "Womens Casual Top",
+                "handle": "womens-casual-top",
+                "description": "High-quality womens casual top with excellent craftsmanship and attention to detail.",
+                "seo": {
+                  "title": "Womens Casual Top - Quality and Comfort",
+                  "description": "Shop our high-quality womens casual top. Excellent craftsmanship and attention to detail."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/womens-casual-top/400/600",
+                  "altText": "Womens Casual Top"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Womens Casual Top - Quality and Comfort",
+        "description": "Shop our high-quality womens casual top. Excellent craftsmanship and attention to detail."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/121",
+      "title": "Womens Leggings",
+      "availableForSale": true,
+      "description": "High-quality womens leggings with excellent craftsmanship and attention to detail.",
+      "descriptionHtml": "<p>High-quality womens leggings with excellent craftsmanship and attention to detail.</p>",
+      "handle": "womens-leggings",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Womens",
+        "Quality",
+        "Comfortable"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/womens-leggings/400/600",
+        "altText": "Womens Leggings"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/womens-leggings/400/600",
+              "altText": "Womens Leggings"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/121",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/womens-leggings/400/600",
+                "altText": "Womens Leggings"
+              },
+              "price": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/121",
+                "title": "Womens Leggings",
+                "handle": "womens-leggings",
+                "description": "High-quality womens leggings with excellent craftsmanship and attention to detail.",
+                "seo": {
+                  "title": "Womens Leggings - Quality and Comfort",
+                  "description": "Shop our high-quality womens leggings. Excellent craftsmanship and attention to detail."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/womens-leggings/400/600",
+                  "altText": "Womens Leggings"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Womens Leggings - Quality and Comfort",
+        "description": "Shop our high-quality womens leggings. Excellent craftsmanship and attention to detail."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/122",
+      "title": "Womens Handbag",
+      "availableForSale": true,
+      "description": "High-quality womens handbag with excellent craftsmanship and attention to detail.",
+      "descriptionHtml": "<p>High-quality womens handbag with excellent craftsmanship and attention to detail.</p>",
+      "handle": "womens-handbag",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Womens",
+        "Quality",
+        "Comfortable"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/womens-handbag/400/600",
+        "altText": "Womens Handbag"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/womens-handbag/400/600",
+              "altText": "Womens Handbag"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/122",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/womens-handbag/400/600",
+                "altText": "Womens Handbag"
+              },
+              "price": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/122",
+                "title": "Womens Handbag",
+                "handle": "womens-handbag",
+                "description": "High-quality womens handbag with excellent craftsmanship and attention to detail.",
+                "seo": {
+                  "title": "Womens Handbag - Quality and Comfort",
+                  "description": "Shop our high-quality womens handbag. Excellent craftsmanship and attention to detail."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/womens-handbag/400/600",
+                  "altText": "Womens Handbag"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Womens Handbag - Quality and Comfort",
+        "description": "Shop our high-quality womens handbag. Excellent craftsmanship and attention to detail."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/123",
+      "title": "Womens Sandals",
+      "availableForSale": true,
+      "description": "High-quality womens sandals with excellent craftsmanship and attention to detail.",
+      "descriptionHtml": "<p>High-quality womens sandals with excellent craftsmanship and attention to detail.</p>",
+      "handle": "womens-sandals",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Womens",
+        "Quality",
+        "Comfortable"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/womens-sandals/400/600",
+        "altText": "Womens Sandals"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/womens-sandals/400/600",
+              "altText": "Womens Sandals"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/123",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/womens-sandals/400/600",
+                "altText": "Womens Sandals"
+              },
+              "price": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/123",
+                "title": "Womens Sandals",
+                "handle": "womens-sandals",
+                "description": "High-quality womens sandals with excellent craftsmanship and attention to detail.",
+                "seo": {
+                  "title": "Womens Sandals - Quality and Comfort",
+                  "description": "Shop our high-quality womens sandals. Excellent craftsmanship and attention to detail."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/womens-sandals/400/600",
+                  "altText": "Womens Sandals"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Womens Sandals - Quality and Comfort",
+        "description": "Shop our high-quality womens sandals. Excellent craftsmanship and attention to detail."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/124",
+      "title": "Unisex Hoodie",
+      "availableForSale": true,
+      "description": "High-quality unisex hoodie with excellent craftsmanship and attention to detail.",
+      "descriptionHtml": "<p>High-quality unisex hoodie with excellent craftsmanship and attention to detail.</p>",
+      "handle": "unisex-hoodie",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Unisex",
+        "Quality",
+        "Comfortable"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/unisex-hoodie/400/600",
+        "altText": "Unisex Hoodie"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/unisex-hoodie/400/600",
+              "altText": "Unisex Hoodie"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/124",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/unisex-hoodie/400/600",
+                "altText": "Unisex Hoodie"
+              },
+              "price": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/124",
+                "title": "Unisex Hoodie",
+                "handle": "unisex-hoodie",
+                "description": "High-quality unisex hoodie with excellent craftsmanship and attention to detail.",
+                "seo": {
+                  "title": "Unisex Hoodie - Quality and Comfort",
+                  "description": "Shop our high-quality unisex hoodie. Excellent craftsmanship and attention to detail."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/unisex-hoodie/400/600",
+                  "altText": "Unisex Hoodie"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Unisex Hoodie - Quality and Comfort",
+        "description": "Shop our high-quality unisex hoodie. Excellent craftsmanship and attention to detail."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/125",
+      "title": "Classic Denim Jacket",
+      "availableForSale": true,
+      "description": "High-quality classic denim jacket with excellent craftsmanship and attention to detail.",
+      "descriptionHtml": "<p>High-quality classic denim jacket with excellent craftsmanship and attention to detail.</p>",
+      "handle": "classic-denim-jacket",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Classic",
+        "Quality",
+        "Comfortable"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/classic-denim-jacket/400/600",
+        "altText": "Classic Denim Jacket"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/classic-denim-jacket/400/600",
+              "altText": "Classic Denim Jacket"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/125",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/classic-denim-jacket/400/600",
+                "altText": "Classic Denim Jacket"
+              },
+              "price": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/125",
+                "title": "Classic Denim Jacket",
+                "handle": "classic-denim-jacket",
+                "description": "High-quality classic denim jacket with excellent craftsmanship and attention to detail.",
+                "seo": {
+                  "title": "Classic Denim Jacket - Quality and Comfort",
+                  "description": "Shop our high-quality classic denim jacket. Excellent craftsmanship and attention to detail."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/classic-denim-jacket/400/600",
+                  "altText": "Classic Denim Jacket"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Classic Denim Jacket - Quality and Comfort",
+        "description": "Shop our high-quality classic denim jacket. Excellent craftsmanship and attention to detail."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/126",
+      "title": "Comfortable Sweatpants",
+      "availableForSale": true,
+      "description": "High-quality comfortable sweatpants with excellent craftsmanship and attention to detail.",
+      "descriptionHtml": "<p>High-quality comfortable sweatpants with excellent craftsmanship and attention to detail.</p>",
+      "handle": "comfortable-sweatpants",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Comfortable",
+        "Quality",
+        "Comfortable"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/comfortable-sweatpants/400/600",
+        "altText": "Comfortable Sweatpants"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/comfortable-sweatpants/400/600",
+              "altText": "Comfortable Sweatpants"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/126",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/comfortable-sweatpants/400/600",
+                "altText": "Comfortable Sweatpants"
+              },
+              "price": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/126",
+                "title": "Comfortable Sweatpants",
+                "handle": "comfortable-sweatpants",
+                "description": "High-quality comfortable sweatpants with excellent craftsmanship and attention to detail.",
+                "seo": {
+                  "title": "Comfortable Sweatpants - Quality and Comfort",
+                  "description": "Shop our high-quality comfortable sweatpants. Excellent craftsmanship and attention to detail."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/comfortable-sweatpants/400/600",
+                  "altText": "Comfortable Sweatpants"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Comfortable Sweatpants - Quality and Comfort",
+        "description": "Shop our high-quality comfortable sweatpants. Excellent craftsmanship and attention to detail."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/127",
+      "title": "Stylish Sunglasses",
+      "availableForSale": true,
+      "description": "High-quality stylish sunglasses with excellent craftsmanship and attention to detail.",
+      "descriptionHtml": "<p>High-quality stylish sunglasses with excellent craftsmanship and attention to detail.</p>",
+      "handle": "stylish-sunglasses",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Stylish",
+        "Quality",
+        "Comfortable"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/stylish-sunglasses/400/600",
+        "altText": "Stylish Sunglasses"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/stylish-sunglasses/400/600",
+              "altText": "Stylish Sunglasses"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/127",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/stylish-sunglasses/400/600",
+                "altText": "Stylish Sunglasses"
+              },
+              "price": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/127",
+                "title": "Stylish Sunglasses",
+                "handle": "stylish-sunglasses",
+                "description": "High-quality stylish sunglasses with excellent craftsmanship and attention to detail.",
+                "seo": {
+                  "title": "Stylish Sunglasses - Quality and Comfort",
+                  "description": "Shop our high-quality stylish sunglasses. Excellent craftsmanship and attention to detail."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/stylish-sunglasses/400/600",
+                  "altText": "Stylish Sunglasses"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Stylish Sunglasses - Quality and Comfort",
+        "description": "Shop our high-quality stylish sunglasses. Excellent craftsmanship and attention to detail."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/128",
+      "title": "Premium Leather Belt",
+      "availableForSale": true,
+      "description": "High-quality premium leather belt with excellent craftsmanship and attention to detail.",
+      "descriptionHtml": "<p>High-quality premium leather belt with excellent craftsmanship and attention to detail.</p>",
+      "handle": "premium-leather-belt",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Premium",
+        "Quality",
+        "Comfortable"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/premium-leather-belt/400/600",
+        "altText": "Premium Leather Belt"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/premium-leather-belt/400/600",
+              "altText": "Premium Leather Belt"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/128",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/premium-leather-belt/400/600",
+                "altText": "Premium Leather Belt"
+              },
+              "price": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/128",
+                "title": "Premium Leather Belt",
+                "handle": "premium-leather-belt",
+                "description": "High-quality premium leather belt with excellent craftsmanship and attention to detail.",
+                "seo": {
+                  "title": "Premium Leather Belt - Quality and Comfort",
+                  "description": "Shop our high-quality premium leather belt. Excellent craftsmanship and attention to detail."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/premium-leather-belt/400/600",
+                  "altText": "Premium Leather Belt"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Premium Leather Belt - Quality and Comfort",
+        "description": "Shop our high-quality premium leather belt. Excellent craftsmanship and attention to detail."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/129",
+      "title": "Handcrafted Scarf",
+      "availableForSale": true,
+      "description": "High-quality handcrafted scarf with excellent craftsmanship and attention to detail.",
+      "descriptionHtml": "<p>High-quality handcrafted scarf with excellent craftsmanship and attention to detail.</p>",
+      "handle": "handcrafted-scarf",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Handcrafted",
+        "Quality",
+        "Comfortable"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/handcrafted-scarf/400/600",
+        "altText": "Handcrafted Scarf"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/handcrafted-scarf/400/600",
+              "altText": "Handcrafted Scarf"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/129",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/handcrafted-scarf/400/600",
+                "altText": "Handcrafted Scarf"
+              },
+              "price": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/129",
+                "title": "Handcrafted Scarf",
+                "handle": "handcrafted-scarf",
+                "description": "High-quality handcrafted scarf with excellent craftsmanship and attention to detail.",
+                "seo": {
+                  "title": "Handcrafted Scarf - Quality and Comfort",
+                  "description": "Shop our high-quality handcrafted scarf. Excellent craftsmanship and attention to detail."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/handcrafted-scarf/400/600",
+                  "altText": "Handcrafted Scarf"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Handcrafted Scarf - Quality and Comfort",
+        "description": "Shop our high-quality handcrafted scarf. Excellent craftsmanship and attention to detail."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/130",
+      "title": "Artisan Ceramic Mug",
+      "availableForSale": true,
+      "description": "High-quality artisan ceramic mug with excellent craftsmanship and attention to detail.",
+      "descriptionHtml": "<p>High-quality artisan ceramic mug with excellent craftsmanship and attention to detail.</p>",
+      "handle": "artisan-ceramic-mug",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Artisan",
+        "Quality",
+        "Comfortable"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/artisan-ceramic-mug/400/600",
+        "altText": "Artisan Ceramic Mug"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/artisan-ceramic-mug/400/600",
+              "altText": "Artisan Ceramic Mug"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/130",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/artisan-ceramic-mug/400/600",
+                "altText": "Artisan Ceramic Mug"
+              },
+              "price": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/130",
+                "title": "Artisan Ceramic Mug",
+                "handle": "artisan-ceramic-mug",
+                "description": "High-quality artisan ceramic mug with excellent craftsmanship and attention to detail.",
+                "seo": {
+                  "title": "Artisan Ceramic Mug - Quality and Comfort",
+                  "description": "Shop our high-quality artisan ceramic mug. Excellent craftsmanship and attention to detail."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/artisan-ceramic-mug/400/600",
+                  "altText": "Artisan Ceramic Mug"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Artisan Ceramic Mug - Quality and Comfort",
+        "description": "Shop our high-quality artisan ceramic mug. Excellent craftsmanship and attention to detail."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/131",
+      "title": "Hand Painted Canvas",
+      "availableForSale": true,
+      "description": "High-quality hand painted canvas with excellent craftsmanship and attention to detail.",
+      "descriptionHtml": "<p>High-quality hand painted canvas with excellent craftsmanship and attention to detail.</p>",
+      "handle": "hand-painted-canvas",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Hand",
+        "Quality",
+        "Comfortable"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/hand-painted-canvas/400/600",
+        "altText": "Hand Painted Canvas"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/hand-painted-canvas/400/600",
+              "altText": "Hand Painted Canvas"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/131",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/hand-painted-canvas/400/600",
+                "altText": "Hand Painted Canvas"
+              },
+              "price": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/131",
+                "title": "Hand Painted Canvas",
+                "handle": "hand-painted-canvas",
+                "description": "High-quality hand painted canvas with excellent craftsmanship and attention to detail.",
+                "seo": {
+                  "title": "Hand Painted Canvas - Quality and Comfort",
+                  "description": "Shop our high-quality hand painted canvas. Excellent craftsmanship and attention to detail."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/hand-painted-canvas/400/600",
+                  "altText": "Hand Painted Canvas"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Hand Painted Canvas - Quality and Comfort",
+        "description": "Shop our high-quality hand painted canvas. Excellent craftsmanship and attention to detail."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/132",
+      "title": "Ethically Sourced Coffee",
+      "availableForSale": true,
+      "description": "High-quality ethically sourced coffee with excellent craftsmanship and attention to detail.",
+      "descriptionHtml": "<p>High-quality ethically sourced coffee with excellent craftsmanship and attention to detail.</p>",
+      "handle": "ethically-sourced-coffee",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Ethically",
+        "Quality",
+        "Comfortable"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/ethically-sourced-coffee/400/600",
+        "altText": "Ethically Sourced Coffee"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/ethically-sourced-coffee/400/600",
+              "altText": "Ethically Sourced Coffee"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/132",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/ethically-sourced-coffee/400/600",
+                "altText": "Ethically Sourced Coffee"
+              },
+              "price": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/132",
+                "title": "Ethically Sourced Coffee",
+                "handle": "ethically-sourced-coffee",
+                "description": "High-quality ethically sourced coffee with excellent craftsmanship and attention to detail.",
+                "seo": {
+                  "title": "Ethically Sourced Coffee - Quality and Comfort",
+                  "description": "Shop our high-quality ethically sourced coffee. Excellent craftsmanship and attention to detail."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/ethically-sourced-coffee/400/600",
+                  "altText": "Ethically Sourced Coffee"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Ethically Sourced Coffee - Quality and Comfort",
+        "description": "Shop our high-quality ethically sourced coffee. Excellent craftsmanship and attention to detail."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/133",
+      "title": "Recycled Glass Vase",
+      "availableForSale": true,
+      "description": "High-quality recycled glass vase with excellent craftsmanship and attention to detail.",
+      "descriptionHtml": "<p>High-quality recycled glass vase with excellent craftsmanship and attention to detail.</p>",
+      "handle": "recycled-glass-vase",
+      "productType": "Apparel",
+      "totalInventory": 50,
+      "tags": [
+        "Recycled",
+        "Quality",
+        "Comfortable"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/recycled-glass-vase/400/600",
+        "altText": "Recycled Glass Vase"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/recycled-glass-vase/400/600",
+              "altText": "Recycled Glass Vase"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/133",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 15,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/recycled-glass-vase/400/600",
+                "altText": "Recycled Glass Vase"
+              },
+              "price": {
+                "amount": "45.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "55.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/133",
+                "title": "Recycled Glass Vase",
+                "handle": "recycled-glass-vase",
+                "description": "High-quality recycled glass vase with excellent craftsmanship and attention to detail.",
+                "seo": {
+                  "title": "Recycled Glass Vase - Quality and Comfort",
+                  "description": "Shop our high-quality recycled glass vase. Excellent craftsmanship and attention to detail."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/recycled-glass-vase/400/600",
+                  "altText": "Recycled Glass Vase"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Recycled Glass Vase - Quality and Comfort",
+        "description": "Shop our high-quality recycled glass vase. Excellent craftsmanship and attention to detail."
+      }
+    }
+  },
+  {
+    "product": {
+      "id": "gid://shopify/Product/3",
+      "title": "Kids Hoodie",
+      "availableForSale": true,
+      "description": "Comfortable and warm hoodie for kids. Made from soft cotton blend fabric with a cozy hood.",
+      "descriptionHtml": "<p>Comfortable and warm hoodie for kids. Made from soft cotton blend fabric with a cozy hood.</p>",
+      "handle": "kids-hoodie",
+      "productType": "Apparel",
+      "totalInventory": 75,
+      "tags": [
+        "Hoodie",
+        "Kids",
+        "Cotton",
+        "Warm"
+      ],
+      "featuredImage": {
+        "url": "https://picsum.photos/seed/kids-hoodie/400/600",
+        "altText": "Kids Hoodie"
+      },
+      "images": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "url": "https://picsum.photos/seed/kids-hoodie/400/600",
+              "altText": "Kids Hoodie"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "1",
+          "name": "Size",
+          "optionValues": [
+            {
+              "id": "1",
+              "name": "S",
+              "swatch": null
+            },
+            {
+              "id": "2",
+              "name": "M",
+              "swatch": null
+            },
+            {
+              "id": "3",
+              "name": "L",
+              "swatch": null
+            },
+            {
+              "id": "4",
+              "name": "XL",
+              "swatch": null
+            }
+          ]
+        }
+      ],
+      "variants": {
+        "edges": [
+          {
+            "cursor": "1",
+            "node": {
+              "id": "gid://shopify/ProductVariant/3",
+              "title": "M",
+              "availableForSale": true,
+              "quantityAvailable": 18,
+              "taxable": true,
+              "currentlyNotInStock": false,
+              "selectedOptions": [
+                {
+                  "name": "Size",
+                  "value": "M"
+                }
+              ],
+              "image": {
+                "url": "https://picsum.photos/seed/kids-hoodie/400/600",
+                "altText": "Kids Hoodie"
+              },
+              "price": {
+                "amount": "35.0",
+                "currencyCode": "INR"
+              },
+              "compareAtPrice": {
+                "amount": "40.0",
+                "currencyCode": "INR"
+              },
+              "product": {
+                "id": "gid://shopify/Product/3",
+                "title": "Kids Hoodie",
+                "handle": "kids-hoodie",
+                "description": "Comfortable and warm hoodie for kids. Made from soft cotton blend fabric with a cozy hood.",
+                "seo": {
+                  "title": "Kids Hoodie - Quality and Style",
+                  "description": "Comfortable and warm hoodie for kids. Made from soft cotton blend fabric with a cozy hood."
+                },
+                "featuredImage": {
+                  "url": "https://picsum.photos/seed/kids-hoodie/400/600",
+                  "altText": "Kids Hoodie"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "seo": {
+        "title": "Kids Hoodie - Quality and Style",
+        "description": "Comfortable and warm hoodie for kids. Made from soft cotton blend fabric with a cozy hood."
+      }
+    }
+  }
+]

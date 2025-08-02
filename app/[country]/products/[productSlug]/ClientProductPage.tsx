@@ -92,8 +92,16 @@ export default function ClientProductPage({
 
 
   useEffect(() => {
-    // Add check for product before accessing options
-    if (product && product.options?.length > 0) {
+    if (product && product.variants?.edges?.length > 0) {
+      // Initialize selectedOptions to match the first variant's selected options
+      const firstVariant = product.variants.edges[0].node;
+      const initialOptions: Record<string, string> = {};
+      firstVariant.selectedOptions.forEach(option => {
+        initialOptions[option.name] = option.value;
+      });
+      setSelectedOptions(initialOptions);
+    } else if (product && product.options?.length > 0) {
+      // Fallback to initializing with first option values if no variants exist (though this case should ideally not happen with valid product data)
       const initialOptions = product.options.reduce(
         (acc, option) => ({
           ...acc,

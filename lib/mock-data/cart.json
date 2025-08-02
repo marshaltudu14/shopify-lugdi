@@ -1,0 +1,117 @@
+
+{
+  "id": "gid://shopify/Cart/1",
+  "checkoutUrl": "",
+  "cost": {
+    "subtotalAmount": {
+      "amount": "70.0",
+      "currencyCode": "INR"
+    },
+    "totalAmount": {
+      "amount": "70.0",
+      "currencyCode": "INR"
+    },
+    "totalTaxAmount": {
+      "amount": "0.0",
+      "currencyCode": "INR"
+    },
+    "totalDutyAmount": {
+      "amount": "0.0",
+      "currencyCode": "INR"
+    }
+  },
+  "lines": {
+    "edges": [
+      {
+        "node": {
+          "id": "1",
+          "quantity": 1,
+          "cost": {
+            "totalAmount": {
+              "amount": "20.0",
+              "currencyCode": "INR"
+            },
+            "compareAtAmountPerQuantity": {
+              "amount": "25.0",
+              "currencyCode": "INR"
+            }
+          },
+          "merchandise": {
+            "id": "gid://shopify/ProductVariant/1",
+            "title": "S",
+            "availableForSale": true,
+            "selectedOptions": [
+              {
+                "name": "Size",
+                "value": "S"
+              }
+            ],
+            "image": {
+              "url": "/collections/Men Category.webp",
+              "altText": "Classic T-Shirt"
+            },
+            "product": {
+              "id": "gid://shopify/Product/1",
+              "title": "Classic T-Shirt",
+              "handle": "classic-t-shirt"
+            },
+            "price": {
+              "amount": "20.0",
+              "currencyCode": "INR"
+            },
+            "compareAtPrice": {
+              "amount": "25.0",
+              "currencyCode": "INR"
+            }
+          }
+        }
+      },
+      {
+        "node": {
+          "id": "2",
+          "quantity": 1,
+          "cost": {
+            "totalAmount": {
+              "amount": "50.0",
+              "currencyCode": "INR"
+            },
+            "compareAtAmountPerQuantity": {
+              "amount": "60.0",
+              "currencyCode": "INR"
+            }
+          },
+          "merchandise": {
+            "id": "gid://shopify/ProductVariant/4",
+            "title": "M",
+            "availableForSale": true,
+            "selectedOptions": [
+              {
+                "name": "Size",
+                "value": "M"
+              }
+            ],
+            "image": {
+              "url": "https://picsum.photos/seed/women/400/600",
+              "altText": "Denim Jeans"
+            },
+            "product": {
+              "id": "gid://shopify/Product/2",
+              "title": "Denim Jeans",
+              "handle": "denim-jeans"
+            },
+            "price": {
+              "amount": "50.0",
+              "currencyCode": "INR"
+            },
+            "compareAtPrice": {
+              "amount": "60.0",
+              "currencyCode": "INR"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "discountCodes": [],
+  "totalQuantity": 2
+}

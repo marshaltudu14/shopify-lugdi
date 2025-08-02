@@ -1,0 +1,133 @@
+
+{
+  "id": "gid://shopify/Product/1",
+  "title": "Classic T-Shirt",
+  "availableForSale": true,
+  "description": "A classic t-shirt made from 100% cotton.",
+  "descriptionHtml": "<p>A classic t-shirt made from 100% cotton.</p>",
+  "handle": "classic-t-shirt",
+  "productType": "Apparel",
+  "totalInventory": 100,
+  "tags": ["T-shirt", "Classic", "Cotton"],
+  "featuredImage": {
+    "url": "https://picsum.photos/seed/men/400/600",
+    "altText": "Classic T-Shirt"
+  },
+  "images": {
+    "edges": [
+      {
+        "cursor": "1",
+        "node": {
+          "url": "https://picsum.photos/seed/men/400/600",
+          "altText": "Classic T-Shirt"
+        }
+      }
+    ]
+  },
+  "options": [
+    {
+      "id": "1",
+      "name": "Size",
+      "optionValues": [
+        {"id": "1", "name": "S"},
+        {"id": "2", "name": "M"},
+        {"id": "3", "name": "L"}
+      ]
+    }
+  ],
+  "variants": {
+    "edges": [
+      {
+        "cursor": "1",
+        "node": {
+          "id": "gid://shopify/ProductVariant/1",
+          "title": "S",
+          "availableForSale": true,
+          "quantityAvailable": 50,
+          "taxable": true,
+          "currentlyNotInStock": false,
+          "selectedOptions": [
+            {
+              "name": "Size",
+              "value": "S"
+            }
+          ],
+          "image": {
+            "url": "https://picsum.photos/seed/men/400/600",
+            "altText": "Classic T-Shirt"
+          },
+          "price": {
+            "amount": "20.0",
+            "currencyCode": "INR"
+          },
+          "compareAtPrice": {
+            "amount": "25.0",
+            "currencyCode": "INR"
+          }
+        }
+      },
+      {
+        "cursor": "2",
+        "node": {
+          "id": "gid://shopify/ProductVariant/2",
+          "title": "M",
+          "availableForSale": true,
+          "quantityAvailable": 50,
+          "taxable": true,
+          "currentlyNotInStock": false,
+          "selectedOptions": [
+            {
+              "name": "Size",
+              "value": "M"
+            }
+          ],
+          "image": {
+            "url": "https://picsum.photos/seed/men/400/600",
+            "altText": "Classic T-Shirt"
+          },
+          "price": {
+            "amount": "20.0",
+            "currencyCode": "INR"
+          },
+          "compareAtPrice": {
+            "amount": "25.0",
+            "currencyCode": "INR"
+          }
+        }
+      },
+      {
+        "cursor": "3",
+        "node": {
+          "id": "gid://shopify/ProductVariant/3",
+          "title": "L",
+          "availableForSale": true,
+          "quantityAvailable": 0,
+          "taxable": true,
+          "currentlyNotInStock": true,
+          "selectedOptions": [
+            {
+              "name": "Size",
+              "value": "L"
+            }
+          ],
+          "image": {
+            "url": "https://picsum.photos/seed/men/400/600",
+            "altText": "Classic T-Shirt"
+          },
+          "price": {
+            "amount": "20.0",
+            "currencyCode": "INR"
+          },
+          "compareAtPrice": {
+            "amount": "25.0",
+            "currencyCode": "INR"
+          }
+        }
+      }
+    ]
+  },
+  "seo": {
+    "title": "Classic T-Shirt",
+    "description": "A classic t-shirt made from 100% cotton."
+  }
+}

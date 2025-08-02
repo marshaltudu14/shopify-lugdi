@@ -1,0 +1,72 @@
+
+[
+  {
+    "id": "gid://shopify/Product/1",
+    "title": "Classic T-Shirt",
+    "handle": "classic-t-shirt",
+    "availableForSale": true,
+    "totalInventory": 100,
+    "featuredImage": {
+      "url": "https://picsum.photos/400/600?random=1",
+      "altText": "Classic T-Shirt"
+    },
+    "priceRange": {
+      "minVariantPrice": {
+        "amount": "20.0",
+        "currencyCode": "INR"
+      }
+    },
+    "compareAtPriceRange": {
+      "minVariantPrice": {
+        "amount": "25.0",
+        "currencyCode": "INR"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Product/2",
+    "title": "Denim Jeans",
+    "handle": "denim-jeans",
+    "availableForSale": true,
+    "totalInventory": 50,
+    "featuredImage": {
+      "url": "https://picsum.photos/400/600?random=2",
+      "altText": "Denim Jeans"
+    },
+    "priceRange": {
+      "minVariantPrice": {
+        "amount": "50.0",
+        "currencyCode": "INR"
+      }
+    },
+    "compareAtPriceRange": {
+      "minVariantPrice": {
+        "amount": "60.0",
+        "currencyCode": "INR"
+      }
+    }
+  },
+  {
+    "id": "gid://shopify/Product/3",
+    "title": "Kids Hoodie",
+    "handle": "kids-hoodie",
+    "availableForSale": true,
+    "totalInventory": 75,
+    "featuredImage": {
+      "url": "https://picsum.photos/400/600?random=3",
+      "altText": "Kids Hoodie"
+    },
+    "priceRange": {
+      "minVariantPrice": {
+        "amount": "35.0",
+        "currencyCode": "INR"
+      }
+    },
+    "compareAtPriceRange": {
+      "minVariantPrice": {
+        "amount": "40.0",
+        "currencyCode": "INR"
+      }
+    }
+  }
+]
