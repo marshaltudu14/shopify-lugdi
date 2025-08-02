@@ -1,49 +1,27 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from "react";
-import Link from "next/link";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
-import LugdiUtils from "@/utils/LugdiUtils";
+import { useState, useMemo, useRef } from "react";
 import SortSelect from "@/app/components/SortSelect";
 import { getSortConfig, SortOption } from "@/lib/SortConfig";
-import { Frown, Loader2 } from "lucide-react";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import {
-  AnimatedSection,
-  buttonHoverVariants,
-  itemVariants,
-} from "@/app/components/FramerMotion";
-import { CollectionData, CollectionProductNode } from "@/lib/types/collection";
+import { Loader2 } from "lucide-react";
+import { CollectionProductNode, CollectionNode } from "@/lib/types/collection";
 import ProductGrid from "@/app/components/collection/ProductGrid";
-import getCollectionProducts from "@/lib/mock-data/getCollectionProducts.json";
 
-interface QueryVariables {
-  handle: string;
-  first: number;
-  sortKey: "RELEVANCE" | "BEST_SELLING" | "CREATED" | "PRICE";
-  reverse?: boolean;
-  after?: string | null;
-  country: string;
-}
 
 interface ClientCollectionPageProps {
-  initialData: CollectionData | null;
   collectionSlug: string;
+  initialData: CollectionNode;
   isoCountryCode: string;
 }
 
 export default function ClientCollectionPage({
   initialData,
-  collectionSlug,
-  isoCountryCode: serverCountryCode, // Renamed for clarity
 }: ClientCollectionPageProps) {
-  const params = useParams();
   const [isSorting, setIsSorting] = useState(false);
   const [sortOption, setSortOption] = useState<SortOption>("relevance");
   const sentinelRef = useRef(null);
 
-  const collectionData = (getCollectionProducts as any[]).find(c => c.handle === collectionSlug);
+  const collectionData = initialData;
 
   const handleSortChange = (value: SortOption) => {
     setIsSorting(true); // Start sorting loader
@@ -57,12 +35,12 @@ export default function ClientCollectionPage({
   const allProducts = useMemo<CollectionProductNode[]>(() => {
     if (!collectionData || !collectionData.products || !collectionData.products.edges) return [];
 
-    let products = collectionData.products.edges.map((edge: any) => edge.node);
+    const products = collectionData.products.edges.map((edge) => edge.node);
 
     const sortConfig = getSortConfig(sortOption);
 
     // Apply sorting
-    products.sort((a: any, b: any) => {
+    products.sort((a: CollectionProductNode, b: CollectionProductNode) => {
       if (sortConfig.sortKey === "PRICE") {
         const priceA = parseFloat(a.priceRange.minVariantPrice.amount);
         const priceB = parseFloat(b.priceRange.minVariantPrice.amount);

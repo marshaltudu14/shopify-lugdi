@@ -25,13 +25,8 @@ export async function generateMetadata({
   };
 }
 
-export default async function WishlistPage({
-  params,
-}: {
-  params: Promise<{ country: string }>;
-}) {
+export default async function WishlistPage() {
   // This server component simply renders the client component
   // The client component will handle fetching and displaying wishlist items
-  const { country } = await params;
   return <ClientWishlistPage />;
 }

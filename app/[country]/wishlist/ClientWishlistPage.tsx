@@ -4,7 +4,7 @@ import React from "react";
 import { useWishlist } from "@/lib/contexts/WishlistContext";
 import detailedProductsData from "@/lib/mock-data/detailedProducts.json";
 import { ProductVariant } from "@/lib/types/product"; // Assuming ProductVariant type is suitable
-import { Loader2, Trash2, HeartCrack } from "lucide-react";
+import { Trash2, HeartCrack } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {

@@ -61,7 +61,7 @@ export type GetCollectionsByMenuResponse = {
 // Mock function to simulate Apollo Client query
 export const initializeApollo = () => {
   return {
-    query: async ({ query, variables }: { query: DocumentNode; variables: Record<string, any> }) => {
+    query: async ({ query }: { query: DocumentNode; variables?: Record<string, unknown> }) => {
       if (query === GET_MENU) {
         return { data: { menu: mockMenuData } };
       }

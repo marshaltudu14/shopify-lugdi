@@ -1,11 +1,10 @@
 import { Metadata } from "next";
 import React from "react";
 import { convertSlugToTitle } from "@/utils/SlugToTitle";
-import { CollectionData, CollectionProductEdge } from "@/lib/types/collection";
+import { CollectionProductEdge } from "@/lib/types/collection";
 import ClientCollectionPage from "./ClientCollectionPage";
 import { notFound } from "next/navigation";
-import LugdiUtils from "@/utils/LugdiUtils";
-import getCollectionProducts from "@/lib/mock-data/getCollectionProducts.json";
+import { getMockCollectionProducts } from "@/lib/utils/mockDataParser";
 
 export async function generateMetadata({
   params,
@@ -14,18 +13,16 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { collectionSlug, country } = await params;
 
-  const isoCountryCode = country ? country.toUpperCase() : "IN";
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lugdi.store";
   const canonicalUrl = `${siteUrl}/${country}/collections/${collectionSlug}`;
 
-  const collection = (getCollectionProducts as any[]).find(c => c.handle === collectionSlug);
+  const collection = getMockCollectionProducts().find(c => c.handle === collectionSlug);
 
   if (!collection) return notFound();
 
   const seoTitle =
     collection?.seo?.title ||
     `Buy ${collection?.title} Fashion Apparels & Accessories Online`;
-  // Implement description fallback: SEO -> Collection Description -> Default
   const seoDescription =
     collection?.seo?.description ??
     collection?.description ??
@@ -60,7 +57,7 @@ export default async function CollectionPage({
   const isoCountryCode = country ? country.toUpperCase() : "IN";
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lugdi.store";
 
-  const initialData = (getCollectionProducts as any[]).find(c => c.handle === collectionSlug);
+  const initialData = getMockCollectionProducts().find(c => c.handle === collectionSlug);
 
   if (!initialData) {
     return notFound();

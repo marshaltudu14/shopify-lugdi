@@ -5,30 +5,27 @@ export interface CollectionProductNode {
   title: string;
   handle: string;
   availableForSale: boolean;
-  description: string;
-  seo: SEO;
+  description?: string; // Made optional
+  seo?: SEO; // Made optional
   priceRange: {
     minVariantPrice: Price;
   };
   compareAtPriceRange: {
     minVariantPrice: Price;
   };
-  featuredImage?: ImageNode | null; // Made optional/nullable
+  featuredImage?: ImageNode | null;
   totalInventory: number;
-  options: {
-    // Added options field
+  options?: { // Made optional
     id: string;
     name: string;
     values: string[];
   }[];
-  // Updated variants field for filtering
-  variants: {
+  variants?: { // Made optional
     edges: {
       node: {
         id: string;
-        availableForSale: boolean; // Added availableForSale
+        availableForSale: boolean;
         selectedOptions: {
-          // Added selectedOptions
           name: string;
           value: string;
         }[];
@@ -55,6 +52,7 @@ export interface CollectionPageInfo {
 export interface CollectionNode {
   id: string;
   title: string;
+  handle: string;
   description: string; // Added collection description
   seo: SEO;
   image: ImageNode;
